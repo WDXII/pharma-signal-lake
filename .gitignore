@@ -1,0 +1,106 @@
+# ============================================================
+# PharmaSignalLake — .gitignore
+# ============================================================
+
+# ── FAERS Raw Data Files ─────────────────────────────────────
+# Raw FAERS files are large (~1.8 GB per quarter) and are
+# public data — no need to store in the repo.
+# Download directly from:
+# https://www.fda.gov/drugs/...faers-latest-quarterly-data-files
+
+data/
+!data/.gitignore
+!data/README.md
+
+
+# ── Exported CSVs (Power BI inputs) ─────────────────────────
+# Gold-layer CSV exports are derived outputs — regenerate
+# them by running 04_export.py. Do not commit large CSVs.
+
+exports/
+*.csv
+
+
+# ── Databricks Artifacts ────────────────────────────────────
+# Databricks generates these locally when you export notebooks.
+
+.databricks/
+*.dbc
+
+
+# ── Python ──────────────────────────────────────────────────
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+
+# ── Jupyter / IPython ────────────────────────────────────────
+# If you export Databricks notebooks as .ipynb locally
+
+.ipynb_checkpoints/
+*.ipynb
+
+
+# ── Power BI ─────────────────────────────────────────────────
+# .pbix files can be large — keep them if small enough,
+# or store in OneDrive/SharePoint and link from README.
+# Uncomment the line below if you want to exclude .pbix:
+# powerbi/*.pbix
+
+
+# ── OS Files ─────────────────────────────────────────────────
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+
+# ── Editor / IDE ─────────────────────────────────────────────
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+
+
+# ── Secrets and Credentials ──────────────────────────────────
+# Never commit tokens, keys, or credentials.
+
+.env
+.env.*
+secrets.py
+config_local.py
+*.pem
+*.key
