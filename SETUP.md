@@ -76,7 +76,7 @@ Complete all items before starting Step 1.
 
 Your workspace path will be:
 ```
-/Workspace/Users/williamdataworks@gmail.com/PharmaSignalLake/notebooks/
+/Workspace/Users/williamdataworks@gmail.com/PharmaSignalLake/files/
 ```
 
 This is where all your `.py` notebooks will live.
@@ -191,7 +191,7 @@ No other changes required — `00_config.py` handles the rest.
 
 ## 7. Step 6 — Set Up the Notebook Folder Structure
 
-Create the following empty notebooks inside your `PharmaSignalLake/notebooks/` workspace folder.
+Create the following empty notebooks inside your `PharmaSignalLake/files/` workspace folder (synced via VS Code Databricks extension).
 
 | Notebook Name | Purpose |
 |---------------|---------|

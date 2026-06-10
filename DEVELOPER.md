@@ -78,11 +78,11 @@ If successful, you will see your workspace name appear in the Databricks panel.
 ### Step 4 — Sync Your Local Notebooks to Databricks
 
 1. In the Databricks panel, locate your workspace folder:
-   `/Workspace/Users/williamdataworks@gmail.com/PharmaSignalLake`
+   `/Workspace/Users/williamdataworks@gmail.com/PharmaSignalLake/files`
 2. Right-click the `notebooks/` folder in VS Code Explorer
 3. Select **Upload to Databricks Workspace**
 4. Map it to your Databricks workspace path:
-   `/Workspace/Users/williamdataworks@gmail.com/PharmaSignalLake`
+   `/Workspace/Users/williamdataworks@gmail.com/PharmaSignalLake/files`
 
 After the initial upload, you can sync individual files by right-clicking them and selecting **Upload to Databricks Workspace**.
 
