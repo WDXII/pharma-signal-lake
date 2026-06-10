@@ -42,7 +42,8 @@ A PAT is how the VS Code extension authenticates to your workspace.
 3. In the left sidebar, click **Developer**
 4. Under **Access tokens**, click **Manage**
 5. Click **Generate new token**
-6. Set a description (e.g., `vscode-pharma`) and an expiry (90 days is reasonable)
+6. Set a description (e.g., `vscode-databricks` or `local-dev`) and an expiry (90 days is reasonable)
+   - Use a generic name — one PAT works for all projects in your workspace
 7. Click **Generate**
 8. **Copy the token immediately** — it is only shown once
 
