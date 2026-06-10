@@ -8,7 +8,8 @@ This file is a living log — add new entries as issues are found and resolved.
 ## Table of Contents
 
 1. [Environment Notes](#1-environment-notes)
-2. [Known Issues and Resolutions](#2-known-issues-and-resolutions)
+2. [VS Code + Databricks Sync Setup](#2-vs-code--databricks-sync-setup)
+3. [Known Issues and Resolutions](#3-known-issues-and-resolutions)
    - [Issue 1 — DBFS Root Disabled on Free Edition (Unity Catalog)](#issue-1--dbfs-root-disabled-on-free-edition-unity-catalog)
 
 ---
@@ -27,7 +28,105 @@ This file is a living log — add new entries as issues are found and resolved.
 
 ---
 
-## 2. Known Issues and Resolutions
+## 2. VS Code + Databricks Sync Setup
+
+Edit notebooks locally in VS Code and sync them to Databricks without manual copy-paste.
+This is the recommended development workflow for this project.
+
+### Step 1 — Generate a Personal Access Token (PAT) in Databricks
+
+A PAT is how the VS Code extension authenticates to your workspace.
+
+1. Log in to your Databricks workspace
+2. Click your profile icon (top right) → **Settings**
+3. In the left sidebar, click **Developer**
+4. Under **Access tokens**, click **Manage**
+5. Click **Generate new token**
+6. Set a description (e.g., `vscode-pharma`) and an expiry (90 days is reasonable)
+7. Click **Generate**
+8. **Copy the token immediately** — it is only shown once
+
+Store the token somewhere safe (password manager). If you lose it, generate a new one.
+
+---
+
+### Step 2 — Install the Databricks Extension in VS Code
+
+1. Open VS Code
+2. Go to the **Extensions** panel (`Ctrl+Shift+X`)
+3. Search for `Databricks`
+4. Install the extension published by **Databricks** (official, not third-party)
+5. Reload VS Code if prompted
+
+---
+
+### Step 3 — Connect the Extension to Your Workspace
+
+1. Click the **Databricks icon** in the VS Code left sidebar (appears after install)
+2. Click **Configure Databricks**
+3. Enter your workspace URL — format: `https://dbc-xxxxxxxx.cloud.databricks.com`
+   - Find this in your browser address bar when logged into Databricks
+4. When prompted for authentication, choose **Personal Access Token**
+5. Paste the PAT you generated in Step 1
+6. Click **Connect** — the extension will verify the connection
+
+If successful, you will see your workspace name appear in the Databricks panel.
+
+---
+
+### Step 4 — Sync Your Local Notebooks to Databricks
+
+1. In the Databricks panel, locate your workspace folder:
+   `/Users/your@email.com/PharmaSignalLake/notebooks`
+2. Right-click the `notebooks/` folder in VS Code Explorer
+3. Select **Upload to Databricks Workspace**
+4. Map it to your Databricks workspace path:
+   `/Users/your@email.com/PharmaSignalLake/notebooks`
+
+After the initial upload, you can sync individual files by right-clicking them and selecting **Upload to Databricks Workspace**.
+
+---
+
+### Step 5 — Run Notebooks from VS Code (Optional)
+
+The extension allows you to run notebooks and see output inside VS Code:
+
+1. Open a `.py` notebook file in VS Code
+2. Click the **Run** button in the Databricks panel, or right-click → **Run on Databricks**
+3. Select your serverless compute
+4. Output streams back to VS Code
+
+---
+
+### Recommended Workflow
+
+```
+Edit .py file in VS Code
+        │
+        ▼
+Right-click → Upload to Databricks Workspace
+        │
+        ▼
+Run notebook in Databricks (browser or VS Code)
+        │
+        ▼
+Commit and push to GitHub from VS Code Source Control
+```
+
+---
+
+### Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| Extension shows "Connection failed" | Verify workspace URL has no trailing slash; re-paste the PAT |
+| PAT rejected | Token may have expired — generate a new one in Databricks Settings → Developer |
+| Upload greyed out | Ensure the file has a `.py` extension; Databricks extension only syncs Python notebooks |
+| Notebook runs but uses old code | Re-upload the file before running — the extension does not auto-sync on save |
+
+---
+
+## 3. Known Issues and Resolutions
 
 ---
 
