@@ -70,11 +70,13 @@ You already know the concepts. The tools just have different names.
 | Compute | Databricks Free Edition | Industry-standard platform for lakehouse engineering; zero cost |
 | Processing engine | Apache Spark (PySpark) | Handles multi-million-row FAERS files; distributed processing |
 | Storage format | Delta Lake | ACID transactions, time travel, schema enforcement on Parquet |
-| File storage | DBFS (Databricks File System) | Built-in distributed file system on Free Edition |
+| File storage | Unity Catalog Managed Volume | Free Edition enforces Unity Catalog by default, which disables DBFS root access. Raw files are stored in a Unity Catalog Volume at `/Volumes/workspace/default/pharma_raw`. |
 | Orchestration | Manual notebook execution | Free Edition has no job scheduler |
 | Reporting | Power BI Desktop | Free; connects to exported Gold data; industry standard |
 | Version control | GitHub | All notebooks exported and committed after each session |
 | Language | Python (PySpark) + Spark SQL | Industry standard for Databricks pipelines |
+
+> **Note — Unity Catalog and DBFS:** Databricks Free Edition defaults to Unity Catalog governance, which disables DBFS root access (`DBFS_DISABLED` / `SQLSTATE 56038`). Raw FAERS files cannot be stored at `/FileStore/...`. Instead, a Unity Catalog Managed Volume is used. The Volume path `/Volumes/<catalog>/<schema>/<volume>` is the Unity Catalog equivalent of a DBFS folder for raw file storage and is fully accessible from PySpark notebooks.
 
 ---
 
@@ -88,7 +90,7 @@ FDA FAERS ZIP (public download)
   (DEMO, DRUG, REAC, INDI, OUTC, RPSR, THER)
         │
         ▼
-  Upload to DBFS /FileStore/pharma_signal_lake/raw/2026Q1/
+  Upload to Unity Catalog Volume /Volumes/workspace/default/pharma_raw/2026Q1/
         │
         ▼
 ┌─────────────────────────────────────────────────────────────┐

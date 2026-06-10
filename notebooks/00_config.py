@@ -23,11 +23,12 @@ QUARTER = "2026Q1"
 
 # COMMAND ----------
 
-BASE_RAW    = f"/FileStore/pharma_signal_lake/raw/{QUARTER}"
-BASE_BRONZE = "/FileStore/pharma_signal_lake/bronze"
-BASE_SILVER = "/FileStore/pharma_signal_lake/silver"
-BASE_GOLD   = "/FileStore/pharma_signal_lake/gold"
-BASE_EXPORT = "/FileStore/pharma_signal_lake/exports"
+# Unity Catalog Volume — DBFS root is disabled on Free Edition (Unity Catalog default)
+BASE_RAW    = f"/Volumes/workspace/default/pharma_raw/{QUARTER}"
+BASE_BRONZE = "/Volumes/workspace/default/pharma_raw/bronze"
+BASE_SILVER = "/Volumes/workspace/default/pharma_raw/silver"
+BASE_GOLD   = "/Volumes/workspace/default/pharma_raw/gold"
+BASE_EXPORT = "/Volumes/workspace/default/pharma_raw/exports"
 
 # COMMAND ----------
 # MAGIC %md
