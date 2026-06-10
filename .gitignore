@@ -104,3 +104,5 @@ secrets.py
 config_local.py
 *.pem
 *.key
+
+.databricks
