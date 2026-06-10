@@ -101,7 +101,7 @@ ROR = (A / (B - A)) / ((C - A) / (N - B - C + A))
 | Cloud Platform | Databricks Free Edition (AWS) |
 | Processing Engine | Apache Spark 3.5 (PySpark) |
 | Storage Format | Delta Lake |
-| File Storage | DBFS (Databricks File System) |
+| File Storage | Unity Catalog Volumes |
 | Language | Python 3 / Spark SQL |
 | Dashboard | Power BI Desktop |
 | Version Control | GitHub |
@@ -183,7 +183,7 @@ See **[SETUP.md](SETUP.md)** for complete step-by-step setup instructions includ
 2. Under **FAERS ASCII Files**, download the most recent quarter ZIP (e.g., `faers_ascii_2026Q1.zip`)
 3. Extract the ZIP — you will get 7 `.txt` files
 4. Place them in the `data/2026Q1/` folder of this repository (they are gitignored — they will not be committed)
-5. Upload the same files to DBFS at `/FileStore/pharma_signal_lake/raw/2026Q1/`
+5. Upload the same files to Unity Catalog Volume at `/Volumes/workspace/default/pharma_raw/2026Q1/`
 
 See **[SETUP.md § Step 5](SETUP.md#6-step-5--upload-data-to-dbfs)** for upload instructions.
 
@@ -212,7 +212,7 @@ Run in this order. Each notebook depends on the previous layer being complete.
 ### Adding a New Quarter
 
 1. Download the new quarter's FAERS files
-2. Upload to DBFS at `/FileStore/pharma_signal_lake/raw/{QUARTER}/`
+2. Upload to Unity Catalog Volume at `/Volumes/workspace/default/pharma_raw/{QUARTER}/`
 3. In `00_config.py`, change one line:
    ```python
    QUARTER = "2025Q4"   # ← update this
@@ -264,7 +264,7 @@ This is a portfolio project. The following simplifications are documented and in
 |----------|---------|
 | [BRD.md](BRD.md) | Business requirements — problem statement, functional requirements, stakeholders, risks |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Technical design — data flow, Medallion layers, signal math, design decisions |
-| [SETUP.md](SETUP.md) | Environment setup — Databricks account, DBFS upload, GitHub, Power BI |
+| [SETUP.md](SETUP.md) | Environment setup — Databricks account, Unity Catalog Volume upload, GitHub, Power BI |
 
 ---
 

@@ -11,6 +11,7 @@ targets:
     default: true
     workspace:
       host: https://dbc-9f801969-0055.cloud.databricks.com
+      root_path: /Workspace/Users/williamdataworks@gmail.com/PharmaSignalLake
 
   ## Optionally, there could be 'staging' or 'prod' targets here.
   #

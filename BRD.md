@@ -133,7 +133,7 @@ This project addresses all three problems with a structured, reproducible, scala
 
 | ID | Requirement |
 |----|-------------|
-| FR-01 | The system shall read all seven FAERS `$`-delimited source files from DBFS using PySpark |
+| FR-01 | The system shall read all seven FAERS `$`-delimited source files from a Unity Catalog Volume using PySpark |
 | FR-02 | Each file shall be written to a Bronze Delta table partitioned by `source_quarter` |
 | FR-03 | Bronze ingestion shall preserve all source columns without transformation |
 | FR-04 | Each Bronze record shall include a `load_timestamp` and `source_quarter` audit column |

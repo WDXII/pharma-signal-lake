@@ -14,7 +14,7 @@
 3. [Step 2 — Set Up Your Workspace](#3-step-2--set-up-your-workspace)
 4. [Step 3 — Create the Compute Cluster](#4-step-3--create-the-compute-cluster)
 5. [Step 4 — Download the FAERS Data](#5-step-4--download-the-faers-data)
-6. [Step 5 — Upload Data to DBFS](#6-step-5--upload-data-to-dbfs)
+6. [Step 5 — Upload Data to Unity Catalog Volume](#6-step-5--upload-data-to-unity-catalog-volume)
 7. [Step 6 — Set Up the Notebook Folder Structure](#7-step-6--set-up-the-notebook-folder-structure)
 8. [Step 7 — Connect GitHub for Version Control](#8-step-7--connect-github-for-version-control)
 9. [Step 8 — Set Up Power BI Desktop](#9-step-8--set-up-power-bi-desktop)
@@ -58,7 +58,7 @@ Complete all items before starting Step 1.
 
 - A pre-provisioned workspace on AWS
 - Serverless compute with a daily usage quota
-- DBFS (Databricks File System) for storing data files
+- Unity Catalog Volumes for storing data files (DBFS root is disabled on Free Edition)
 - Full notebook environment
 - Unity Catalog (managed metadata)
 - No credit card required
@@ -76,7 +76,7 @@ Complete all items before starting Step 1.
 
 Your workspace path will be:
 ```
-/Users/your-email@example.com/PharmaSignalLake/notebooks/
+/Workspace/Users/williamdataworks@gmail.com/PharmaSignalLake/notebooks/
 ```
 
 This is where all your `.py` notebooks will live.
@@ -145,30 +145,41 @@ Total extracted: approximately 1.8 GB for one quarter.
 
 ---
 
-## 6. Step 5 — Upload Data to DBFS
+## 6. Step 5 — Upload Data to Unity Catalog Volume
 
-DBFS (Databricks File System) is the storage layer that your notebooks read from. You must upload the FAERS files here.
+Unity Catalog Volumes are the storage layer that your notebooks read from. DBFS root is disabled on Free Edition due to Unity Catalog enforcement.
 
-### Steps
+### Create the Volume (One-Time Setup)
 
-1. In the left sidebar, click **Data** (the cylinder icon)
-2. Click **Add Data** → **Upload Files**
-3. In the upload dialog, set the DBFS target path to:
-   ```
-   /FileStore/pharma_signal_lake/raw/2026Q1/
-   ```
-4. Upload all seven `.txt` files one by one (or select all and upload together if your browser allows)
-5. After upload, confirm the files are visible by going to **Catalog** → **DBFS** → **FileStore** → **pharma_signal_lake** → **raw** → **2026Q1**
+1. In the left sidebar, click **Catalog**
+2. Navigate to **workspace** → **default** (or create a schema if needed)
+3. Click **Create** → **Volume**
+4. Name it: `pharma_raw`
+5. Volume type: **Managed**
+6. Click **Create**
+
+Your Volume path will be: `/Volumes/workspace/default/pharma_raw`
+
+### Upload Files
+
+1. In **Catalog**, navigate to your Volume: **workspace** → **default** → **pharma_raw**
+2. Click **Upload** (or drag and drop files)
+3. Create a folder for the quarter: `2026Q1`
+4. Upload all seven `.txt` files into that folder
+5. Confirm files are visible at `/Volumes/workspace/default/pharma_raw/2026Q1/`
 
 ### Alternative: Upload via Notebook
 
-You can also upload via a notebook cell using `dbutils.fs.cp` if you have the files accessible as a URL or mounted storage. This is covered in the `00_config.py` notebook comments.
+```python
+# List files to confirm upload
+display(dbutils.fs.ls("/Volumes/workspace/default/pharma_raw/2026Q1/"))
+```
 
 ### Naming Convention for Additional Quarters
 
 When you add a second quarter later:
 ```
-/FileStore/pharma_signal_lake/raw/2025Q4/
+/Volumes/workspace/default/pharma_raw/2025Q4/
     DEMO25Q4.txt
     DRUG25Q4.txt
     ...
@@ -242,14 +253,14 @@ This protects your work and builds a visible commit history on GitHub — which 
 
 After `04_export.py` has run, your Gold CSV files will be available at:
 ```
-/FileStore/pharma_signal_lake/exports/gold_signals.csv
-/FileStore/pharma_signal_lake/exports/gold_demographics.csv
-/FileStore/pharma_signal_lake/exports/gold_outcomes.csv
+/Volumes/workspace/default/pharma_raw/exports/gold_signals.csv
+/Volumes/workspace/default/pharma_raw/exports/gold_demographics.csv
+/Volumes/workspace/default/pharma_raw/exports/gold_outcomes.csv
 ```
 
-### Downloading Exports from DBFS to Local
+### Downloading Exports from Unity Catalog Volume to Local
 
-1. In Databricks, go to **Data** → **DBFS** → navigate to `/FileStore/pharma_signal_lake/exports/`
+1. In Databricks, go to **Catalog** → **workspace** → **default** → **pharma_raw** → **exports**
 2. Click each CSV file → **Download**
 3. Save to a local folder, e.g.: `C:\PharmaSignalLake\exports\`
 
@@ -277,16 +288,16 @@ print(spark.version)
 ```
 Expected output: a version string like `3.5.x`
 
-**Cell 2 — Check DBFS files are visible:**
+**Cell 2 — Check Unity Catalog Volume files are visible:**
 ```python
-display(dbutils.fs.ls("/FileStore/pharma_signal_lake/raw/2026Q1/"))
+display(dbutils.fs.ls("/Volumes/workspace/default/pharma_raw/2026Q1/"))
 ```
 Expected output: a table listing all 7 `.txt` files
 
 **Cell 3 — Check you can read a file:**
 ```python
 df = spark.read.option("header", True).option("sep", "$").csv(
-    "/FileStore/pharma_signal_lake/raw/2026Q1/DEMO26Q1.txt"
+    "/Volumes/workspace/default/pharma_raw/2026Q1/DEMO26Q1.txt"
 )
 print(f"Row count: {df.count()}")
 df.printSchema()
@@ -296,7 +307,7 @@ Expected output: row count > 0 and a schema showing all DEMO columns
 **Cell 4 — Check Delta Lake is available:**
 ```python
 df.limit(10).write.format("delta").mode("overwrite").save(
-    "/FileStore/pharma_signal_lake/test_delta/"
+    "/Volumes/workspace/default/pharma_raw/test_delta/"
 )
 print("Delta write successful")
 ```
@@ -318,7 +329,7 @@ Expected output: `Delta write successful`
 |------------|--------|------------|
 | No job scheduling | Cannot automate pipeline runs | Use `99_run_pipeline.py` to run all notebooks manually in one click |
 | Daily compute quota | Pipeline may pause mid-run | Run one notebook at a time; Delta tables preserve state between sessions |
-| No persistent cluster | Cluster restarts on inactivity | All state is in Delta tables on DBFS — re-attach to serverless and continue |
+| No persistent cluster | Cluster restarts on inactivity | All state is in Delta tables in Unity Catalog Volumes — re-attach to serverless and continue |
 | No production-grade Unity Catalog | Limited governance features | Sufficient for portfolio; document what you would do differently at enterprise scale |
 | No direct Power BI connector | Cannot use live Databricks connection | Export Gold to CSV; load into Power BI Desktop locally |
 | Session timeout | Variables in memory are lost on restart | `00_config.py` re-initializes all variables; run it first each session |
@@ -329,9 +340,9 @@ Expected output: `Delta write successful`
 
 ### "File not found" error when reading raw files
 
-- Verify the file was uploaded to the exact path: `/FileStore/pharma_signal_lake/raw/2026Q1/`
-- File names are case-sensitive on DBFS. `DEMO26Q1.txt` ≠ `demo26q1.txt`
-- Run `dbutils.fs.ls("/FileStore/pharma_signal_lake/raw/2026Q1/")` to confirm what is there
+- Verify the file was uploaded to the exact path: `/Volumes/workspace/default/pharma_raw/2026Q1/`
+- File names are case-sensitive. `DEMO26Q1.txt` ≠ `demo26q1.txt`
+- Run `dbutils.fs.ls("/Volumes/workspace/default/pharma_raw/2026Q1/")` to confirm what is there
 
 ### Row count is zero after reading a file
 

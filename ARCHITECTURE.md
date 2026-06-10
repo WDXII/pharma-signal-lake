@@ -47,7 +47,7 @@ You already know the concepts. The tools just have different names.
 | What You Know | PharmaSignalLake Equivalent | Notes |
 |---------------|----------------------------|-------|
 | SQL Server database | Databricks Catalog / Unity Catalog | Holds schemas and tables |
-| SQL Server table | Delta Lake table | Parquet files + transaction log on DBFS |
+| SQL Server table | Delta Lake table | Parquet files + transaction log in Unity Catalog Volume |
 | SSMS query window | Databricks notebook (SQL or Python cell) | Notebooks are the primary dev surface |
 | SSIS package | Databricks notebook | One notebook = one pipeline stage |
 | SSIS flat file source | Bronze ingestion notebook | Reads raw delimited files, no transforms |
@@ -138,40 +138,38 @@ FDA FAERS ZIP (public download)
 
 ## 5. Project Folder Structure
 
-### DBFS File Storage
+### Unity Catalog Volume Storage
 
 ```
-/FileStore/
-└── pharma_signal_lake/
-    ├── raw/
-    │   └── 2026Q1/
-    │       ├── DEMO26Q1.txt
-    │       ├── DRUG26Q1.txt
-    │       ├── INDI26Q1.txt
-    │       ├── OUTC26Q1.txt
-    │       ├── REAC26Q1.txt
-    │       ├── RPSR26Q1.txt
-    │       └── THER26Q1.txt
-    ├── bronze/
-    │   ├── bronze_demo/        ← Delta table
-    │   ├── bronze_drug/
-    │   ├── bronze_reac/
-    │   ├── bronze_indi/
-    │   ├── bronze_outc/
-    │   ├── bronze_rpsr/
-    │   └── bronze_ther/
-    ├── silver/
-    │   ├── silver_cases/
-    │   ├── silver_drug_reactions/
-    │   └── silver_therapy/
-    ├── gold/
-    │   ├── gold_signals/
-    │   ├── gold_demographics/
-    │   └── gold_outcomes/
-    └── exports/
-        ├── gold_signals.csv
-        ├── gold_demographics.csv
-        └── gold_outcomes.csv
+/Volumes/workspace/default/pharma_raw/
+├── 2026Q1/
+│   ├── DEMO26Q1.txt
+│   ├── DRUG26Q1.txt
+│   ├── INDI26Q1.txt
+│   ├── OUTC26Q1.txt
+│   ├── REAC26Q1.txt
+│   ├── RPSR26Q1.txt
+│   └── THER26Q1.txt
+├── bronze/
+│   ├── bronze_demo/        ← Delta table
+│   ├── bronze_drug/
+│   ├── bronze_reac/
+│   ├── bronze_indi/
+│   ├── bronze_outc/
+│   ├── bronze_rpsr/
+│   └── bronze_ther/
+├── silver/
+│   ├── silver_cases/
+│   ├── silver_drug_reactions/
+│   └── silver_therapy/
+├── gold/
+│   ├── gold_signals/
+│   ├── gold_demographics/
+│   └── gold_outcomes/
+└── exports/
+    ├── gold_signals.csv
+    ├── gold_demographics.csv
+    └── gold_outcomes.csv
 ```
 
 ### GitHub Repository Structure
@@ -218,7 +216,7 @@ The Medallion Architecture is a three-layer pattern for organizing data in a lak
 
 ### What Happens
 
-1. Read each `.txt` file from DBFS using PySpark with `$` as the delimiter
+1. Read each `.txt` file from the Unity Catalog Volume using PySpark with `$` as the delimiter
 2. Add two audit columns to every row: `load_timestamp` (current time) and `source_quarter` (e.g., `"2026Q1"`)
 3. Write to a Delta table at the Bronze path, partitioned by `source_quarter`
 4. Log the row count; raise an error if zero rows were read
