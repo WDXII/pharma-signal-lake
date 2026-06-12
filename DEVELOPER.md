@@ -77,14 +77,29 @@ If successful, you will see your workspace name appear in the Databricks panel.
 
 ### Step 4 — Sync Your Local Notebooks to Databricks
 
-1. In the Databricks panel, locate your workspace folder:
-   `/Workspace/Users/williamdataworks@gmail.com/PharmaSignalLake/files`
-2. Right-click the `notebooks/` folder in VS Code Explorer
-3. Select **Upload to Databricks Workspace**
-4. Map it to your Databricks workspace path:
-   `/Workspace/Users/williamdataworks@gmail.com/PharmaSignalLake/files`
+The project uses a **Databricks Asset Bundle (DAB)** config (`databricks.yml`) to control what gets synced and where. This replaces the manual right-click upload approach.
 
-After the initial upload, you can sync individual files by right-clicking them and selecting **Upload to Databricks Workspace**.
+**`databricks.yml` is already configured** with:
+- `sync.paths: [notebooks]` — only the `notebooks/` folder is synced (docs, README, etc. are excluded)
+- `root_path: /Workspace/Users/williamdataworks@gmail.com/PharmaSignalLake` — DAB automatically appends `/files`, so notebooks land at `.../PharmaSignalLake/files/notebooks/`
+
+**How DAB constructs the remote path:**
+
+| Part | Value |
+|------|-------|
+| `root_path` | `.../PharmaSignalLake` |
+| DAB always appends | `/files` |
+| `sync.paths` adds | `/notebooks` |
+| **Final remote path** | `.../PharmaSignalLake/files/notebooks/` |
+
+**To start syncing:**
+
+In the VS Code Databricks panel, click **Sync State: STOPPED** to start continuous sync. After that, any save to a `.py` file in `notebooks/` is automatically pushed to Databricks.
+
+Alternatively, run from the terminal:
+```powershell
+databricks bundle sync
+```
 
 ---
 
@@ -97,6 +112,8 @@ The extension allows you to run notebooks and see output inside VS Code:
 3. Select your serverless compute
 4. Output streams back to VS Code
 
+**Note:** Running from VS Code requires a Python environment with `databricks-connect`. See Issue 2 below before attempting this. Running notebooks directly in the **Databricks web UI** is simpler and has no local Python requirement.
+
 ---
 
 ### Recommended Workflow
@@ -105,10 +122,10 @@ The extension allows you to run notebooks and see output inside VS Code:
 Edit .py file in VS Code
         │
         ▼
-Right-click → Upload to Databricks Workspace
+Auto-synced to Databricks (sync must be running in VS Code panel)
         │
         ▼
-Run notebook in Databricks (browser or VS Code)
+Run notebook in Databricks web UI
         │
         ▼
 Commit and push to GitHub from VS Code Source Control
@@ -122,8 +139,9 @@ Commit and push to GitHub from VS Code Source Control
 |---------|-----|
 | Extension shows "Connection failed" | Verify workspace URL has no trailing slash; re-paste the PAT |
 | PAT rejected | Token may have expired — generate a new one in Databricks Settings → Developer |
-| Upload greyed out | Ensure the file has a `.py` extension; Databricks extension only syncs Python notebooks |
-| Notebook runs but uses old code | Re-upload the file before running — the extension does not auto-sync on save |
+| Sync State shows STOPPED | Click it in the Databricks panel to start — it does not auto-start |
+| Notebooks land at wrong path (e.g. `/files/notebooks/files`) | Check `databricks.yml` — `root_path` must NOT end in `/notebooks`; DAB appends `/files` automatically |
+| Notebook runs but uses old code | Confirm sync is running (not STOPPED) before running the notebook |
 
 ---
 
@@ -222,6 +240,50 @@ The `workspace` catalog is the default catalog provisioned by Databricks Free Ed
 
 - [Databricks Unity Catalog Volumes documentation](https://docs.databricks.com/en/connect/unity-catalog/volumes.html)
 - [DBFS deprecation in Unity Catalog workspaces](https://docs.databricks.com/en/dbfs/index.html)
+
+---
+
+### Issue 2 — databricks-connect Is Not Required for This Workflow
+
+**Status:** Resolved (by not installing it)
+**Date encountered:** June 2026
+
+#### Symptom
+
+The VS Code Databricks panel shows two warnings:
+```
+⚠ Activate an environment with Python 3.12 or greater
+⚠ Can't install databricks-connect without an active Python environment
+```
+
+Attempting to install `databricks-connect` on Python 3.13 fails because it pins `numpy<2`, and numpy 1.26.x has no pre-built wheel for Python 3.13 — it requires a C compiler (MSVC or GCC) to build from source, which is not installed.
+
+#### Root Cause
+
+`databricks-connect` is only needed for one specific workflow: executing Spark code **locally on your laptop** and sending it to a remote Databricks cluster. This is not how this project works.
+
+#### Resolution
+
+**Do nothing.** The warnings are advisory and can be ignored.
+
+This project's workflow is:
+1. Edit `.py` files locally in VS Code
+2. Auto-sync to Databricks via the extension (no Python env required)
+3. Run notebooks in the **Databricks web UI** (no Python env required)
+
+No `.venv`, no `databricks-connect`, no local Python environment is needed. The `.venv` folder was created during troubleshooting and subsequently deleted.
+
+#### If You Want Local Notebook Execution in the Future
+
+You would need Python 3.12 (not 3.13) installed, since `databricks-connect 15.4` requires `numpy<2` which has no Python 3.13 wheel. Install Python 3.12 from python.org, then:
+
+```powershell
+py -3.12 -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install databricks-connect==15.4.*
+```
+
+This is optional and not part of the standard development workflow for this project.
 
 ---
 

@@ -189,28 +189,35 @@ No other changes required — `00_config.py` handles the rest.
 
 ---
 
-## 7. Step 6 — Set Up the Notebook Folder Structure
+## 7. Step 6 — Sync Notebooks to Databricks
 
-Create the following empty notebooks inside your `PharmaSignalLake/files/` workspace folder (synced via VS Code Databricks extension).
+Notebooks are maintained locally and synced to Databricks using the VS Code Databricks extension with the `databricks.yml` Asset Bundle config already included in the repository. **Do not create notebooks manually in the Databricks UI.**
 
-| Notebook Name | Purpose |
-|---------------|---------|
-| `00_config` | All configuration variables — paths, file names, settings |
-| `01_bronze_ingest` | Read raw files → write Bronze Delta tables |
-| `02_silver_clean` | Clean and integrate → write Silver Delta tables |
-| `03_gold_signals` | Compute PRR/ROR → write Gold Delta tables |
-| `04_export` | Export Gold tables to CSV for Power BI |
-| `99_run_pipeline` | Run all notebooks in order via `%run` |
+### Notebooks in This Project
 
-### How to Create a Notebook
+| Notebook | Purpose |
+|----------|---------|
+| `00_config.py` | All configuration variables — paths, file names, settings |
+| `01_bronze_ingest.py` | Read raw files → write Bronze Delta tables |
+| `02_silver_clean.py` | Clean and integrate → write Silver Delta tables |
+| `03_gold_signals.py` | Compute PRR/ROR → write Gold Delta tables |
+| `04_export.py` | Export Gold tables to CSV for Power BI |
+| `99_run_pipeline.py` | Run all notebooks in order via `%run` |
 
-1. Right-click on the `notebooks` folder in the Workspace pane
-2. Select **Create** → **Notebook**
-3. Set **Default Language** to **Python**
-4. Name the notebook (e.g., `00_config`)
-5. Click **Create**
+### How to Sync
 
-Repeat for each of the six notebooks listed above.
+1. Open the project folder in VS Code (`pharma-signal-lake/`)
+2. Install the **Databricks** VS Code extension (see DEVELOPER.md Step 2)
+3. Connect the extension to your workspace using a PAT (see DEVELOPER.md Steps 1 and 3)
+4. In the Databricks panel, click **Sync State: STOPPED** to start continuous sync
+5. Notebooks are automatically pushed to Databricks on every save
+
+Notebooks land at:
+```
+/Workspace/Users/<your-email>/PharmaSignalLake/files/notebooks/
+```
+
+> **No Python environment required.** The sync uses the Databricks API directly — no local PySpark or `databricks-connect` installation is needed. See DEVELOPER.md Issue 2 for details.
 
 ---
 

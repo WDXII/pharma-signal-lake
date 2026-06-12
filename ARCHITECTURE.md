@@ -180,6 +180,8 @@ pharma-signal-lake/
 ├── BRD.md
 ├── ARCHITECTURE.md
 ├── SETUP.md
+├── DEVELOPER.md              ← Dev environment notes and known issues
+├── databricks.yml            ← Databricks Asset Bundle config (sync target + workspace host)
 ├── notebooks/
 │   ├── 00_config.py
 │   ├── 01_bronze_ingest.py
