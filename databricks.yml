@@ -5,6 +5,10 @@
 bundle:
   name: pharma-signal-lake
 
+sync:
+  paths:
+    - notebooks
+
 targets:
   dev:
     mode: development
