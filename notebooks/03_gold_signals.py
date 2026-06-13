@@ -16,6 +16,13 @@
 # MAGIC %run ./00_config
 
 # COMMAND ----------
+
+# Photon enforces ANSI SQL mode and throws on divide-by-zero even inside when()
+# guards. Our PRR/ROR when() conditions are logically correct — this setting makes
+# Spark return NULL instead of raising, which is the intended behavior.
+spark.conf.set("spark.sql.ansi.enabled", "false")
+
+# COMMAND ----------
 # MAGIC %md
 # MAGIC ## Imports
 

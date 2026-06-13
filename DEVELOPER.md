@@ -450,4 +450,40 @@ There is no separate `.nulls_first()` or `.nulls_last()` method. Chaining `.desc
 
 ---
 
+### Issue 7 — Photon ANSI Mode Throws DIVIDE_BY_ZERO Inside `when()` Guards
+
+**Status:** Resolved  
+**Date encountered:** June 2026  
+**Affected files:** `notebooks/03_gold_signals.py`
+
+#### Symptom
+
+`gold_signals` failed during the Delta write with:
+
+```
+[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0
+and return NULL instead. If necessary set "spark.sql.ansi.enabled" to "false".
+SQLSTATE: 22012
+```
+
+#### Root Cause
+
+Databricks Serverless uses the **Photon** execution engine, which enforces **ANSI SQL mode** by default. In ANSI mode, division by zero raises a hard error at the physical execution layer — even when the division expression is wrapped inside a `when()` condition that should logically prevent it from executing.
+
+The PRR and ROR `when()` guards in the code are logically correct (they check denominators before dividing), but Photon evaluates all expressions at the row level and can still encounter the division before the condition short-circuits.
+
+#### Resolution
+
+Added `spark.conf.set("spark.sql.ansi.enabled", "false")` at the top of `03_gold_signals.py`, immediately after `%run ./00_config`. This makes Spark return `NULL` on divide-by-zero instead of throwing — which is the intended behavior for our division guards.
+
+#### Why Not Use `try_divide`?
+
+`try_divide(a, b)` is the ANSI-safe alternative, but it requires restructuring nested expressions like `(A/B) / ((C-A)/(N-B))` into multiple intermediate columns. Disabling ANSI mode for this notebook is simpler and appropriate here — the division guards are correct, we just need NULL-safe arithmetic.
+
+#### Rule to Remember
+
+Databricks Serverless + Photon enforces ANSI SQL mode by default. Any notebook performing division must either use `try_divide`, pre-filter to exclude zero denominators, or disable ANSI mode with `spark.conf.set("spark.sql.ansi.enabled", "false")`. The `when()` guard alone is not sufficient in Photon ANSI mode.
+
+---
+
 *Add new issues below this line using the same format.*
