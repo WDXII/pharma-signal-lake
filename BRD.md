@@ -58,7 +58,7 @@ This project addresses all three problems with a structured, reproducible, scala
 | OBJ-02 | Cleanse, standardize, deduplicate, and integrate source files into a unified Silver layer |
 | OBJ-03 | Compute PRR and ROR disproportionality metrics for all qualifying drug-event pairs |
 | OBJ-04 | Classify signals using Evans Criteria and surface results in a structured Gold layer |
-| OBJ-05 | Deliver a Power BI dashboard with three report pages: Signal Leaderboard, Demographics, and Case Timeline |
+| OBJ-05 | Deliver a Power BI dashboard with three report pages: Signal Leaderboard, Demographics, and Case Outcomes |
 | OBJ-06 | Design the pipeline to be quarter-agnostic and extensible to N quarters via configuration only |
 | OBJ-07 | Produce professional documentation (BRD, ARCHITECTURE.md, SETUP.md, README) suitable for a portfolio |
 
@@ -110,13 +110,13 @@ This project addresses all three problems with a structured, reproducible, scala
 
 | File | Description | Key Fields | Approx. Rows (1 Quarter) |
 |------|-------------|-----------|--------------------------|
-| **DEMO** | Patient demographics per case | `primaryid`, `age`, `sex`, `reporter_country`, `occp_cod`, `event_dt` | ~700,000 |
-| **DRUG** | All drugs reported per case | `primaryid`, `drug_seq`, `role_cod`, `drugname`, `prod_ai`, `route`, `dose_amt` | ~3,000,000 |
-| **REAC** | Adverse reactions (MedDRA PT) | `primaryid`, `pt`, `drug_rec_act` | ~1,500,000 |
-| **INDI** | Drug indications | `primaryid`, `indi_drug_seq`, `indi_pt` | ~900,000 |
-| **OUTC** | Case outcomes | `primaryid`, `outc_cod` | ~700,000 |
-| **RPSR** | Report sources | `primaryid`, `rpsr_cod` | ~700,000 |
-| **THER** | Therapy start/end dates | `primaryid`, `dsg_drug_seq`, `start_dt`, `end_dt`, `dur` | ~2,000,000 |
+| **DEMO** | Patient demographics per case | `primaryid`, `age`, `sex`, `reporter_country`, `occp_cod`, `event_dt` | ~400,000 |
+| **DRUG** | All drugs reported per case | `primaryid`, `drug_seq`, `role_cod`, `drugname`, `prod_ai`, `route`, `dose_amt` | ~1,700,000 |
+| **REAC** | Adverse reactions (MedDRA PT) | `primaryid`, `pt`, `drug_rec_act` | ~1,300,000 |
+| **INDI** | Drug indications | `primaryid`, `indi_drug_seq`, `indi_pt` | ~1,100,000 |
+| **OUTC** | Case outcomes | `primaryid`, `outc_cod` | ~300,000 |
+| **RPSR** | Report sources | `primaryid`, `rpsr_cod` | ~12,000 |
+| **THER** | Therapy start/end dates | `primaryid`, `dsg_drug_seq`, `start_dt`, `end_dt`, `dur` | ~400,000 |
 
 ### Key Relationships
 

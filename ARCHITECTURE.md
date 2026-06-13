@@ -417,7 +417,7 @@ Run notebooks in this sequence. Each notebook depends on the previous layer bein
 99_run_pipeline.py     ← (Optional) Runs 01 through 04 in sequence via %run magic
 ```
 
-**Adding a new quarter:** Update `source_quarter` in `00_config.py` and the raw file path. Run notebooks 01 through 04. New data is appended to existing Delta tables via partition.
+**Adding a new quarter:** Update `QUARTER` in `00_config.py` and upload the new files to the Volume. Run notebooks 01 through 04. New data is written as a new partition; existing quarters are untouched.
 
 ---
 

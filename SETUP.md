@@ -129,19 +129,19 @@ faers_ascii_2026Q1/
 └── THER26Q1.txt
 ```
 
-### File Sizes (Approximate — 1 Quarter)
+### File Sizes (2026Q1 — Observed Actuals)
 
-| File | Approx. Size |
-|------|-------------|
-| DEMO26Q1.txt | ~150 MB |
-| DRUG26Q1.txt | ~600 MB |
-| REAC26Q1.txt | ~300 MB |
-| INDI26Q1.txt | ~200 MB |
-| OUTC26Q1.txt | ~80 MB |
-| RPSR26Q1.txt | ~60 MB |
-| THER26Q1.txt | ~400 MB |
+| File | Size |
+|------|------|
+| DEMO26Q1.txt | 56 MB |
+| DRUG26Q1.txt | 157 MB |
+| REAC26Q1.txt | 48 MB |
+| INDI26Q1.txt | 52 MB |
+| OUTC26Q1.txt | 6 MB |
+| RPSR26Q1.txt | 0.25 MB |
+| THER26Q1.txt | 14 MB |
 
-Total extracted: approximately 1.8 GB for one quarter.
+Total extracted: approximately 333 MB for 2026Q1. File sizes vary by quarter.
 
 ---
 
@@ -227,23 +227,16 @@ Connecting GitHub ensures your work is never lost if your Free Edition account b
 
 ### Steps
 
-1. In the top-right corner of your Databricks workspace, click your profile icon
-2. Go to **Settings** → **Linked accounts**
-3. Under **GitHub**, click **Connect**
-4. Authorize Databricks to access your GitHub account (read/write to repositories)
-5. Create a new GitHub repository named `pharma-signal-lake` (public or private — your choice)
-6. In Databricks, open a notebook → click the **Git** button in the top toolbar
-7. Link the notebook to your GitHub repository
+1. Create a GitHub repository named `pharma-signal-lake` (public or private — your choice)
+2. Clone the repository locally or initialize it in the project folder
+3. All notebooks are maintained locally and synced to Databricks via the VS Code extension (see Step 6)
+4. Commit and push from **VS Code Source Control** after each working session
 
 ### Best Practice: Commit After Every Session
 
-After each working session:
+After each working session, commit from VS Code Source Control with a descriptive message. This protects your work and builds a visible commit history on GitHub — which recruiters and hiring managers look at.
 
-1. Open each notebook you modified
-2. Click **Git** → **Commit and push**
-3. Write a brief commit message (e.g., `"Complete bronze ingestion notebook"`)
-
-This protects your work and builds a visible commit history on GitHub — which recruiters and hiring managers look at.
+> **Note:** Databricks has a built-in Git integration (Settings → Linked accounts → GitHub), but this project uses VS Code + the Databricks extension for the development workflow. Commits are made from VS Code, not from within the Databricks UI.
 
 ---
 
@@ -358,8 +351,7 @@ Expected output: `Delta write successful`
 
 ### Delta write fails with "path already exists"
 
-- This is expected on a re-run. Always use `.mode("overwrite")` for Bronze and Silver writes
-- Gold tables use `.mode("append")` if adding new quarters — confirm the mode is correct
+- This is expected on a re-run. All tables (Bronze, Silver, and Gold) use `.mode("overwrite")` partitioned by `source_quarter` — re-running for the same quarter is safe and idempotent
 
 ### Compute shows "quota exceeded"
 

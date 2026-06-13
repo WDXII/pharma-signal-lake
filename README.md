@@ -17,7 +17,7 @@ Pharmaceutical companies are legally required to monitor their drugs for safety 
 
 PharmaSignalLake is an end-to-end **data lakehouse pipeline** that:
 
-1. **Ingests** raw FAERS quarterly data (7 source files, ~600K–900K cases per quarter)
+1. **Ingests** raw FAERS quarterly data (7 source files, ~400K cases per quarter)
 2. **Cleanses and integrates** across all source files into a unified analytical layer
 3. **Detects safety signals** using industry-standard disproportionality algorithms (PRR and ROR)
 4. **Classifies signals** using Evans Criteria — the same threshold used in real pharma signal detection
@@ -131,7 +131,7 @@ https://www.fda.gov/drugs/questions-and-answers-fdas-adverse-event-reporting-sys
 | `RPSR` | Report sources — healthcare professional, consumer |
 | `THER` | Therapy dates — start, end, duration |
 
-> **Note:** Raw FAERS data files are not included in this repository due to their large size (~1.8 GB per quarter). See [Getting the Data](#getting-the-data) below.
+> **Note:** Raw FAERS data files are not included in this repository (~330 MB per quarter for 2026Q1). See [Getting the Data](#getting-the-data) below.
 
 ---
 
@@ -185,7 +185,7 @@ See **[SETUP.md](SETUP.md)** for complete step-by-step setup instructions includ
 4. Place them in the `data/2026Q1/` folder of this repository (they are gitignored — they will not be committed)
 5. Upload the same files to Unity Catalog Volume at `/Volumes/workspace/default/pharma_raw/2026Q1/`
 
-See **[SETUP.md § Step 5](SETUP.md#6-step-5--upload-data-to-dbfs)** for upload instructions.
+See **[SETUP.md § Step 5](SETUP.md#6-step-5--upload-data-to-unity-catalog-volume)** for upload instructions.
 
 ---
 
