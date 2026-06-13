@@ -235,6 +235,7 @@ def build_silver_drug_reactions() -> DataFrame:
             "dose_unit",
             "dose_form",
             "dose_freq",
+            "source_quarter",
         )
     )
 

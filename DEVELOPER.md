@@ -375,4 +375,35 @@ FDA FAERS filenames always use 2-digit years regardless of the century. When bui
 
 ---
 
+### Issue 5 — `source_quarter` Dropped in `silver_drug_reactions` Intermediate Select
+
+**Status:** Resolved  
+**Date encountered:** June 2026  
+**Affected files:** `notebooks/02_silver_clean.py`
+
+#### Symptom
+
+`silver_drug_reactions` failed with:
+
+```
+[UNRESOLVED_COLUMN.WITH_SUGGESTION] A column, variable, or function parameter
+with name `source_quarter` cannot be resolved.
+```
+
+`silver_cases` and `silver_therapy` succeeded; only `silver_drug_reactions` failed.
+
+#### Root Cause
+
+In `build_silver_drug_reactions()`, the intermediate `.select()` on the `drug` DataFrame (after filtering to PS and uppercasing) explicitly listed columns but omitted `source_quarter`. Since `source_quarter` was not carried forward into the join, it was unavailable when the final `.select()` referenced it.
+
+#### Resolution
+
+Added `"source_quarter"` to the intermediate `.select()` on the `drug` DataFrame so it is present in the joined result.
+
+#### Rule to Remember
+
+When chaining `.select()` → `.join()` → `.select()`, every column needed in the final output must survive each intermediate projection. Audit trail columns (`source_quarter`, `load_timestamp`) are easy to silently drop if not explicitly included at every select step.
+
+---
+
 *Add new issues below this line using the same format.*
