@@ -412,8 +412,8 @@ gold_log = {}
 print("\n[GOLD_SIGNALS]  Computing PRR and ROR...")
 try:
     df_signals = build_gold_signals()
-    count      = write_gold(df_signals, "signals")
-    gold_log["gold_signals"] = {"status": "SUCCESS", "rows": count}
+    n_rows     = write_gold(df_signals, "signals")
+    gold_log["gold_signals"] = {"status": "SUCCESS", "rows": n_rows}
 except Exception as e:
     print(f"  ✗ ERROR: {e}")
     gold_log["gold_signals"] = {"status": "FAILED", "rows": 0, "error": str(e)}
@@ -422,8 +422,8 @@ except Exception as e:
 print("\n[GOLD_DEMOGRAPHICS]  Aggregating demographics...")
 try:
     df_demo = build_gold_demographics()
-    count   = write_gold(df_demo, "demographics")
-    gold_log["gold_demographics"] = {"status": "SUCCESS", "rows": count}
+    n_rows  = write_gold(df_demo, "demographics")
+    gold_log["gold_demographics"] = {"status": "SUCCESS", "rows": n_rows}
 except Exception as e:
     print(f"  ✗ ERROR: {e}")
     gold_log["gold_demographics"] = {"status": "FAILED", "rows": 0, "error": str(e)}
@@ -432,8 +432,8 @@ except Exception as e:
 print("\n[GOLD_OUTCOMES]  Aggregating outcomes...")
 try:
     df_outc = build_gold_outcomes()
-    count   = write_gold(df_outc, "outcomes")
-    gold_log["gold_outcomes"] = {"status": "SUCCESS", "rows": count}
+    n_rows  = write_gold(df_outc, "outcomes")
+    gold_log["gold_outcomes"] = {"status": "SUCCESS", "rows": n_rows}
 except Exception as e:
     print(f"  ✗ ERROR: {e}")
     gold_log["gold_outcomes"] = {"status": "FAILED", "rows": 0, "error": str(e)}

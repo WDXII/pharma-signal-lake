@@ -486,4 +486,42 @@ Databricks Serverless + Photon enforces ANSI SQL mode by default. Any notebook p
 
 ---
 
+### Issue 8 — Notebook-Level `count` Assignment Shadows PySpark `count` Function
+
+**Status:** Resolved  
+**Date encountered:** June 2026  
+**Affected files:** `notebooks/03_gold_signals.py`
+
+#### Symptom
+
+Signal detection stats section failed with:
+
+```
+TypeError: 'int' object is not callable
+```
+
+immediately after the Gold layer summary printed successfully.
+
+#### Root Cause
+
+The execution block used `count` as a local variable name to capture the return value of `write_gold()`:
+
+```python
+count = write_gold(df_signals, "signals")   # count = 373012 (int)
+count = write_gold(df_demo, "demographics") # count = 34 (int)
+count = write_gold(df_outc, "outcomes")     # count = 11 (int)
+```
+
+These assignments are at **notebook scope** (not inside a function), so they overwrite the `count` name imported from `pyspark.sql.functions`. When the summary section later called `count("*")` in `.agg()`, `count` was the integer `11`, not the aggregation function.
+
+#### Resolution
+
+Renamed the local variable from `count` to `n_rows` in all three execution block assignments.
+
+#### Rule to Remember
+
+In Databricks notebooks, all cell code runs in a shared global namespace. Assigning a variable at notebook level (outside a function) will shadow any imported name with the same identifier for all subsequent cells. Never use the same name as an imported function for a local result variable at notebook scope. Common collisions: `count`, `sum`, `max`, `min`, `round`, `filter`, `map`.
+
+---
+
 *Add new issues below this line using the same format.*
