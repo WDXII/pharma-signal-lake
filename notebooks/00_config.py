@@ -37,14 +37,17 @@ BASE_EXPORT = "/Volumes/workspace/default/pharma_raw/exports"
 
 # COMMAND ----------
 
+# FDA FAERS filenames use 2-digit years: "2026Q1" → "26Q1"
+QUARTER_SHORT = QUARTER[2:]
+
 RAW_FILES = {
-    "demo" : f"{BASE_RAW}/DEMO{QUARTER}.txt",
-    "drug" : f"{BASE_RAW}/DRUG{QUARTER}.txt",
-    "reac" : f"{BASE_RAW}/REAC{QUARTER}.txt",
-    "indi" : f"{BASE_RAW}/INDI{QUARTER}.txt",
-    "outc" : f"{BASE_RAW}/OUTC{QUARTER}.txt",
-    "rpsr" : f"{BASE_RAW}/RPSR{QUARTER}.txt",
-    "ther" : f"{BASE_RAW}/THER{QUARTER}.txt",
+    "demo" : f"{BASE_RAW}/DEMO{QUARTER_SHORT}.txt",
+    "drug" : f"{BASE_RAW}/DRUG{QUARTER_SHORT}.txt",
+    "reac" : f"{BASE_RAW}/REAC{QUARTER_SHORT}.txt",
+    "indi" : f"{BASE_RAW}/INDI{QUARTER_SHORT}.txt",
+    "outc" : f"{BASE_RAW}/OUTC{QUARTER_SHORT}.txt",
+    "rpsr" : f"{BASE_RAW}/RPSR{QUARTER_SHORT}.txt",
+    "ther" : f"{BASE_RAW}/THER{QUARTER_SHORT}.txt",
 }
 
 # COMMAND ----------

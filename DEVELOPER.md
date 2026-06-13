@@ -335,4 +335,44 @@ In Databricks `.py` source files, every magic command (`%run`, `%sql`, `%md`, `%
 
 ---
 
+### Issue 4 — FAERS Filenames Use 2-Digit Years; Config Was Generating 4-Digit
+
+**Status:** Resolved  
+**Date encountered:** June 2026  
+**Affected files:** `notebooks/00_config.py`
+
+#### Symptom
+
+Bronze ingestion failed with `PATH_NOT_FOUND` for all 7 FAERS files:
+
+```
+Path does not exist: dbfs:/Volumes/workspace/default/pharma_raw/2026Q1/DEMO2026Q1.txt
+```
+
+#### Root Cause
+
+FDA FAERS filenames use **2-digit years**, not 4-digit. For quarter `2026Q1`, the actual files are:
+```
+DEMO26Q1.txt   DRUG26Q1.txt   REAC26Q1.txt   INDI26Q1.txt
+OUTC26Q1.txt   RPSR26Q1.txt   THER26Q1.txt
+```
+
+The original `RAW_FILES` config built paths using `QUARTER` directly (`DEMO{QUARTER}.txt` → `DEMO2026Q1.txt`), which doesn't match the FDA naming convention.
+
+Confirmed by running `dbutils.fs.ls("/Volumes/workspace/default/pharma_raw/2026Q1/")` — all 7 files were present with 2-digit year names.
+
+#### Note on `dbfs:/Volumes/` Path Display
+
+`dbutils.fs.ls()` displays Volume paths with a `dbfs:` prefix (`dbfs:/Volumes/...`). This is Databricks' internal representation and is correct — it does NOT indicate DBFS root access. `spark.read` correctly resolves these paths.
+
+#### Resolution
+
+Added `QUARTER_SHORT = QUARTER[2:]` in `00_config.py` to strip the century digits (`"2026Q1"` → `"26Q1"`), then used `QUARTER_SHORT` in all `RAW_FILES` path definitions.
+
+#### Rule to Remember
+
+FDA FAERS filenames always use 2-digit years regardless of the century. When building file paths, use `QUARTER[2:]` to match the FDA convention. This applies to all quarters: `2024Q3` → `24Q3`, `2025Q1` → `25Q1`, etc.
+
+---
+
 *Add new issues below this line using the same format.*
