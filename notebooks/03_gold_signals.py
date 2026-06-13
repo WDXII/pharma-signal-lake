@@ -218,7 +218,7 @@ def build_gold_signals() -> DataFrame:
             "source_quarter",
             "gold_load_timestamp",
         )
-        .orderBy(col("prr").desc().nulls_last())
+        .orderBy(col("prr").desc_nulls_last())
     )
 
     return gold_signals

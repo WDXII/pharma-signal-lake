@@ -406,4 +406,48 @@ When chaining `.select()` → `.join()` → `.select()`, every column needed in 
 
 ---
 
+### Issue 6 — `Column.desc().nulls_last()` Is Not Valid PySpark Syntax
+
+**Status:** Resolved  
+**Date encountered:** June 2026  
+**Affected files:** `notebooks/03_gold_signals.py`
+
+#### Symptom
+
+`gold_signals` failed with:
+
+```
+'Column' object is not callable
+```
+
+`gold_demographics` and `gold_outcomes` succeeded.
+
+#### Root Cause
+
+`col("prr").desc()` returns a PySpark `Column` object. Calling `.nulls_last()` on that result fails because `nulls_last` is not a method on `Column` — it is not callable. PySpark does not chain null-ordering as a separate method after `desc()`.
+
+#### Resolution
+
+Replaced `.desc().nulls_last()` with the combined method `.desc_nulls_last()`:
+
+```python
+# Wrong
+.orderBy(col("prr").desc().nulls_last())
+
+# Correct
+.orderBy(col("prr").desc_nulls_last())
+```
+
+#### Rule to Remember
+
+PySpark null-ordering is set via combined methods directly on `Column`:
+- `col("x").asc_nulls_first()`
+- `col("x").asc_nulls_last()`
+- `col("x").desc_nulls_first()`
+- `col("x").desc_nulls_last()`
+
+There is no separate `.nulls_first()` or `.nulls_last()` method. Chaining `.desc().nulls_last()` will always raise `'Column' object is not callable`.
+
+---
+
 *Add new issues below this line using the same format.*
