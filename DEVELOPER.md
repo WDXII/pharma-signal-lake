@@ -287,4 +287,52 @@ This is optional and not part of the standard development workflow for this proj
 
 ---
 
+### Issue 3 — `%run` Magic Commands Must Use `# MAGIC` Prefix
+
+**Status:** Resolved  
+**Date encountered:** June 2026  
+**Affected files:** `notebooks/01_bronze_ingest.py`, `02_silver_clean.py`, `03_gold_signals.py`, `04_export.py`, `99_run_pipeline.py`
+
+#### Symptom
+
+Running any notebook after `00_config.py` raised:
+
+```
+NameError: name 'QUARTER' is not defined
+```
+
+Despite `00_config.py` running successfully and all variables appearing to be defined there.
+
+#### Root Cause
+
+Databricks `.py` notebook source files use a special comment syntax to encode magic commands. A line like `%run ./00_config` must be written as:
+
+```python
+# MAGIC %run ./00_config
+```
+
+Without the `# MAGIC` prefix, Databricks treats the line as a plain Python comment — it is never executed, so `00_config` is never loaded and none of its variables (`QUARTER`, `RAW_FILES`, `BRONZE`, etc.) exist in the notebook's scope.
+
+All five downstream notebooks had the `%run` line commented out as a plain comment (`# %run ./00_config`), not as a magic command.
+
+#### Resolution
+
+Changed the `%run` line in all five notebooks from:
+
+```python
+# %run ./00_config
+```
+
+to:
+
+```python
+# MAGIC %run ./00_config
+```
+
+#### Rule to Remember
+
+In Databricks `.py` source files, every magic command (`%run`, `%sql`, `%md`, `%pip`, etc.) must be prefixed with `# MAGIC `. Without it, the line is inert Python source and will never execute.
+
+---
+
 *Add new issues below this line using the same format.*
