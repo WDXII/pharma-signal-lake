@@ -3,14 +3,14 @@
 # MAGIC # 04_export — Export Gold Layer for Power BI
 # MAGIC **Project:** PharmaSignalLake
 # MAGIC **Purpose:** Export the three Gold Delta tables to single CSV files
-# MAGIC on DBFS so they can be downloaded and loaded into Power BI Desktop.
+# MAGIC in a Unity Catalog Volume so they can be downloaded and loaded into Power BI Desktop.
 # MAGIC
 # MAGIC Spark writes CSVs as partitioned part-files by default.
 # MAGIC This notebook merges those part-files into a single CSV per table
 # MAGIC using `coalesce(1)` — appropriate at Gold scale (aggregated, small).
 # MAGIC
 # MAGIC **Run after:** `03_gold_signals`
-# MAGIC **Output:** `/FileStore/pharma_signal_lake/exports/`
+# MAGIC **Output:** `/Volumes/workspace/default/pharma_raw/exports/`
 
 # COMMAND ----------
 
@@ -147,23 +147,18 @@ if failures:
 # MAGIC %md
 # MAGIC ## How to Download to Your Local Machine
 # MAGIC
-# MAGIC 1. In the Databricks left sidebar, click **Data** → **DBFS**
-# MAGIC 2. Navigate to: `FileStore/pharma_signal_lake/exports/`
+# MAGIC 1. In the Databricks left sidebar, click **Catalog**
+# MAGIC 2. Navigate to: **workspace → default → pharma_raw → Files tab → exports/**
 # MAGIC 3. Click each CSV file → **Download**
-# MAGIC 4. Save to: `C:\PharmaSignalLake\exports\` (or your preferred local folder)
+# MAGIC 4. Save to a local folder (e.g. `C:\PharmaSignalLake\exports\`)
 # MAGIC 5. Open Power BI Desktop → **Get Data** → **Text/CSV** → load each file
-# MAGIC
-# MAGIC Alternatively, use the direct download URL pattern:
-# MAGIC ```
-# MAGIC https://<your-workspace>.cloud.databricks.com/files/pharma_signal_lake/exports/gold_signals.csv
-# MAGIC ```
 
 # COMMAND ----------
 
 print("\n  ✓ All Gold tables exported successfully.")
 print(f"  Files are at: {BASE_EXPORT}/")
 print("\n  Next steps:")
-print("  1. Download CSV files from DBFS FileStore to your local machine")
+print("  1. Download CSVs: Catalog → workspace → default → pharma_raw → Files → exports/")
 print("  2. Open Power BI Desktop")
 print("  3. Get Data → Text/CSV → load gold_signals.csv, gold_demographics.csv, gold_outcomes.csv")
 print("  4. Build the three dashboard pages as specified in ARCHITECTURE.md")
