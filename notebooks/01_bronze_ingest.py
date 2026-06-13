@@ -12,7 +12,7 @@
 # COMMAND ----------
 
 # Load configuration
-# %run ./00_config
+# MAGIC %run ./00_config
 
 # COMMAND ----------
 # MAGIC %md

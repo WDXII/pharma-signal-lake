@@ -42,7 +42,7 @@ print("=" * 60)
 stage_start = datetime.now()
 print("\n[STAGE 0] Loading configuration...")
 
-# %run ./00_config
+# MAGIC %run ./00_config
 
 print(f"  ✓ Configuration loaded ({(datetime.now()-stage_start).seconds}s)")
 
