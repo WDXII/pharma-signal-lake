@@ -32,6 +32,10 @@ full Evans thresholds.
 signal — rejected for having no literature basis and for the risk of
 over-signaling from an arbitrary threshold.
 
+**Confirmed on 2026Q1 (2026-09-28):** `05_profile.py` (`run_label="after"`)
+shows only `gold_signal_flag_NO_SIGNAL` (323,028) and
+`gold_signal_flag_SIGNAL` (49,984) — no `WEAK_SIGNAL` key at all.
+
 ---
 
 ## D2 — Haldane Correction for Zero Cells
@@ -43,8 +47,9 @@ over-signaling from an arbitrary threshold.
 `d`) is zero — most commonly `c = 0`, an exclusive drug-event pair where
 `case_count == event_total` — PRR/ROR are undefined. The original code left
 these as `NULL`, which meant the most clinically interesting, most exclusive
-pairs were silently excluded from signal detection (see Issue 10, once
-Step 2 lands).
+pairs were silently excluded from signal detection. Logged in `DEVELOPER.md`
+in Step 7's documentation sweep (the exact issue number depends on what else
+is logged before then — see the numbering note in project memory).
 
 **Decision:** Apply the Haldane-Anscombe correction — add 0.5 to all four
 cells — whenever any cell is 0, before computing PRR/ROR only. Record this
@@ -61,6 +66,15 @@ falling out of the classification entirely.
 like `EXCLUSIVE_REPORT` instead of computing a corrected ratio — rejected
 because it still leaves no quantitative signal strength for exactly the
 pairs Haldane exists to handle.
+
+**Confirmed on 2026Q1 (2026-09-28):** `gold_null_prr` and `gold_null_ror`
+both dropped from 2,978 / 7,197 (baseline) to 0 (after). `haldane_applied`
+is `true` for exactly 7,197 pairs, matching the baseline's null-ROR count
+and the profile's `gold_pairs_with_zero_cell` count exactly. Of those, 106
+pairs have `case_count >= 3` (`gold_null_prr_case_count_ge_min` was >0
+before the fix, now 0) — these are pairs that were previously structurally
+incapable of ever being flagged `SIGNAL`, since a null PRR always fails a
+`>=` comparison, and can now be evaluated properly.
 
 ---
 
@@ -87,6 +101,12 @@ screening.
 
 **Alternatives rejected:** PRR-only classification (the prior behavior) —
 rejected as statistically incomplete.
+
+**Confirmed on 2026Q1 (2026-09-28):** `SIGNAL` count is 49,984 after the
+fix, down from the old combined `SIGNAL` (56,491) + `WEAK_SIGNAL` (5,562) =
+62,053 — even after also rescuing the 106 previously-null-PRR exclusive
+pairs (D2). Net effect: the added `chi_sq >= 4.0` gate removes more
+low-confidence pairs than the Haldane correction adds back.
 
 ---
 
@@ -115,6 +135,11 @@ updates.
 
 **Alternatives rejected:** None — the original dedup key was a latent bug,
 not an intentional tradeoff between options.
+
+**Confirmed on 2026Q1 (2026-09-28):** re-ran after the fix — still
+397,224 → 397,224, 0 superseded, identical to baseline. Zero numeric impact
+this quarter as predicted; the fix is validated structurally (Issue 9,
+Issue 12) but not yet exercised by a quarter with an actual case update.
 
 ---
 
