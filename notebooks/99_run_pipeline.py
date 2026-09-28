@@ -10,6 +10,12 @@
 # MAGIC re-running earlier steps.
 # MAGIC
 # MAGIC **Usage:** Open this notebook and click "Run All".
+# MAGIC
+# MAGIC Each `%run` below is deliberately alone in its own cell — Databricks
+# MAGIC requires this; mixing `%run` with other Python statements in the same
+# MAGIC cell silently falls back to IPython's unsupported `%run` line magic
+# MAGIC instead of Databricks' notebook-chaining `%run` (see DEVELOPER.md
+# MAGIC Issue 3 and Issue 12).
 
 # COMMAND ----------
 # MAGIC %md
@@ -42,7 +48,11 @@ print("=" * 60)
 stage_start = datetime.now()
 print("\n[STAGE 0] Loading configuration...")
 
+# COMMAND ----------
+
 # MAGIC %run ./00_config
+
+# COMMAND ----------
 
 print(f"  ✓ Configuration loaded ({(datetime.now()-stage_start).seconds}s)")
 
@@ -55,7 +65,11 @@ print(f"  ✓ Configuration loaded ({(datetime.now()-stage_start).seconds}s)")
 stage_start = datetime.now()
 print("\n[STAGE 1] Bronze ingestion...")
 
+# COMMAND ----------
+
 # MAGIC %run ./01_bronze_ingest
+
+# COMMAND ----------
 
 print(f"  ✓ Bronze complete ({(datetime.now()-stage_start).seconds}s)")
 
@@ -68,7 +82,11 @@ print(f"  ✓ Bronze complete ({(datetime.now()-stage_start).seconds}s)")
 stage_start = datetime.now()
 print("\n[STAGE 2] Silver cleansing and integration...")
 
+# COMMAND ----------
+
 # MAGIC %run ./02_silver_clean
+
+# COMMAND ----------
 
 print(f"  ✓ Silver complete ({(datetime.now()-stage_start).seconds}s)")
 
@@ -81,7 +99,11 @@ print(f"  ✓ Silver complete ({(datetime.now()-stage_start).seconds}s)")
 stage_start = datetime.now()
 print("\n[STAGE 3] Gold signal detection...")
 
+# COMMAND ----------
+
 # MAGIC %run ./03_gold_signals
+
+# COMMAND ----------
 
 print(f"  ✓ Gold complete ({(datetime.now()-stage_start).seconds}s)")
 
@@ -94,7 +116,11 @@ print(f"  ✓ Gold complete ({(datetime.now()-stage_start).seconds}s)")
 stage_start = datetime.now()
 print("\n[STAGE 4] Exporting to CSV...")
 
+# COMMAND ----------
+
 # MAGIC %run ./04_export
+
+# COMMAND ----------
 
 print(f"  ✓ Export complete ({(datetime.now()-stage_start).seconds}s)")
 

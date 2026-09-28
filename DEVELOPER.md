@@ -21,6 +21,7 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 9 — Deduplication on `primaryid` Was a No-Op](#issue-9--deduplication-on-primaryid-was-a-no-op)
    - [Issue 10 — New `sync.paths` Entries Didn't Populate Until the Remote Folder Existed](#issue-10--new-syncpaths-entries-didnt-populate-until-the-remote-folder-existed)
    - [Issue 11 — Case-Insensitive Column Name Collision Silently Corrupted PRR/ROR](#issue-11--case-insensitive-column-name-collision-silently-corrupted-prrror)
+   - [Issue 12 — `%run` Mixed With Other Statements in a Cell Silently Falls Back to IPython `%run`](#issue-12--run-mixed-with-other-statements-in-a-cell-silently-falls-back-to-ipython-run)
 
 ---
 
@@ -616,6 +617,50 @@ Renamed every intermediate column in `compute_signals()` to be mutually distinct
 #### Rule to Remember
 
 Never name two columns in the same DataFrame such that they differ only by case (e.g. `"A"` and `"a"`) — Spark's default case-insensitive analyzer makes this genuinely ambiguous, and depending on the execution engine (this project saw it specifically under Spark Connect / Databricks Serverless) a `col()` reference to one of them can silently resolve to the wrong one instead of raising an error. This is worse than a crash: the pipeline keeps running and produces plausible-looking wrong numbers. Catch it with unit tests against hand-computed values, not by trusting that Spark will complain.
+
+---
+
+### Issue 12 — `%run` Mixed With Other Statements in a Cell Silently Falls Back to IPython `%run`
+
+**Status:** Resolved
+**Date encountered:** September 2026
+**Affected files:** `notebooks/99_run_pipeline.py`
+
+#### Symptom
+
+Running `99_run_pipeline.py` ("Run All") completed with no errors and printed `✓ Silver complete`, `✓ Gold complete`, etc. for every stage. But Stage 2's output showed nothing from `02_silver_clean.py` itself — none of its `[SILVER_CASES]`/`[DEDUP]`/row-count output — only this warning immediately before the hollow "✓ Silver complete" line:
+
+```
+Warning you are using the ipython `%run` line magic. To use the databricks
+`%run` cell magic make sure that the magic is at the very start of the cell.
+```
+
+The pipeline reported success at every stage while (almost certainly) not actually running Bronze, Silver, Gold, or Export.
+
+#### Root Cause
+
+Commit 1b (fixing Issue 3 — the missing `# MAGIC` prefix) added the prefix to each `%run` line, but each one was still sitting in the *middle* of a cell alongside other Python statements (`stage_start = datetime.now()`, `print(...)`), e.g.:
+
+```python
+stage_start = datetime.now()
+print("\n[STAGE 2] Silver cleansing and integration...")
+
+# MAGIC %run ./02_silver_clean
+
+print(f"  ✓ Silver complete ({(datetime.now()-stage_start).seconds}s)")
+```
+
+Databricks requires `%run` to be the **only** content of its cell. When it isn't, Databricks doesn't error — it silently falls back to IPython's own `%run` line magic, which is a different, unsupported mechanism for this project (it doesn't chain Databricks notebook state the way the native `%run` cell magic does). The fallback produced the warning, did not reliably execute the target notebook's logic, and the unconditional `print(f"  ✓ ... complete")` line after it ran regardless — so every stage reported success whether or not it actually ran.
+
+This is a second, more subtle bug than Issue 3: Issue 3 was about the `# MAGIC` prefix being entirely missing; this one is about `%run`'s cell-isolation requirement, which the prefix fix alone doesn't satisfy.
+
+#### Resolution
+
+Restructured every stage in `99_run_pipeline.py` so `# MAGIC %run ./0N_...` is alone in its own `# COMMAND ----------` cell, with the `stage_start`/print statements split into separate cells before and after it.
+
+#### Rule to Remember
+
+`%run` (as `# MAGIC %run`) must be the **only** statement in its cell — not just correctly prefixed with `# MAGIC`. Putting any other Python code (even a comment-adjacent `print()`) in the same cell causes a silent fallback to IPython's `%run` line magic instead of a hard error, which is easy to miss because the surrounding code still runs and prints success. When orchestrating multiple notebooks with `%run`, always give each one its own dedicated cell, and don't trust a "✓ complete" print that sits in the same cell as (or right after, but not gated on) the `%run` call — check for the target notebook's own output, not just the orchestrator's banner.
 
 ---
 
