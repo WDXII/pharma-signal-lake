@@ -1,0 +1,14 @@
+# Local editor support only (e.g. VS Code Pylance import resolution for
+# src/signal_math.py and tests/). Unit tests are NOT run locally with this —
+# they run inside Databricks via tests/run_unit_tests.py, against the
+# cluster's already-running Spark session (see tests/conftest.py).
+#
+# Installing pyspark locally on this project's Python (3.13) may fail: it
+# pins numpy<2, which has no prebuilt wheel for Python 3.13 and needs a C
+# compiler to build from source. See DEVELOPER.md Issue 2. If `pip install
+# -r requirements-dev.txt` fails on numpy, either install Python 3.12 in a
+# separate venv, or skip this file entirely — it is not required to develop
+# or run this project.
+
+pytest
+pyspark==15.4.*

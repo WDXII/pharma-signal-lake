@@ -20,17 +20,26 @@
 # COMMAND ----------
 # MAGIC %md
 # MAGIC ## Imports
+# MAGIC
+# MAGIC `dedup_cases()` lives in `src/signal_math.py`, not in this notebook, so it
+# MAGIC can be unit tested with plain pytest (`tests/test_signals.py`) without
+# MAGIC needing `spark`/`dbutils` or this notebook's `%run ./00_config` globals.
 
 # COMMAND ----------
+
+import os
+import sys
+
+# databricks.yml syncs src/ as a sibling of notebooks/ (both under .../files/).
+sys.path.append(os.path.join(os.getcwd(), "..", "src"))
 
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import (
     col, upper, trim, max as spark_max, when, coalesce,
-    current_timestamp, lit, to_date, datediff,
-    row_number, cast, expr
+    current_timestamp, lit, to_date, datediff
 )
-from pyspark.sql.window import Window
 from pyspark.sql.types import DoubleType
+from signal_math import dedup_cases
 
 # COMMAND ----------
 # MAGIC %md
@@ -91,23 +100,13 @@ def write_silver(df: DataFrame, table_key: str) -> int:
 def dedup_demo() -> DataFrame:
     """
     Deduplicate DEMO to one row per caseid, keeping the highest caseversion.
-    caseversion is parsed with try_cast so a malformed value returns NULL
-    (sorted last) under ANSI mode instead of raising.
+    Delegates the actual dedup logic to dedup_cases() (src/signal_math.py),
+    which is unit tested directly in tests/test_signals.py.
     """
     demo_raw  = read_bronze("demo")
     raw_count = demo_raw.count()
 
-    caseversion_int = expr("try_cast(caseversion AS INT)")
-    window_latest = Window.partitionBy("caseid").orderBy(
-        caseversion_int.desc_nulls_last()
-    )
-
-    demo_dedup = (
-        demo_raw
-        .withColumn("rn", row_number().over(window_latest))
-        .filter(col("rn") == 1)
-        .drop("rn")
-    )
+    demo_dedup  = dedup_cases(demo_raw)
     dedup_count = demo_dedup.count()
 
     print(

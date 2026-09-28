@@ -21,19 +21,30 @@
 # MAGIC
 # MAGIC ANSI mode is left ON (Databricks Serverless/Photon default). Division safety
 # MAGIC comes from the Haldane correction guaranteeing every PRR/ROR denominator is
-# MAGIC > 0 (see `compute_signals` below) — not from disabling ANSI. If a
-# MAGIC DIVIDE_BY_ZERO error appears here, it means a guard is wrong; fix the guard,
-# MAGIC do not re-disable ANSI (see DEVELOPER.md Issue 7).
+# MAGIC > 0 (see `compute_signals` in `src/signal_math.py`) — not from disabling
+# MAGIC ANSI. If a DIVIDE_BY_ZERO error appears here, it means a guard is wrong;
+# MAGIC fix the guard, do not re-disable ANSI (see DEVELOPER.md Issue 7).
+# MAGIC
+# MAGIC `compute_signals` itself lives in `src/signal_math.py`, not in this
+# MAGIC notebook, so it can be unit tested with plain pytest
+# MAGIC (`tests/test_signals.py`) without needing `spark`/`dbutils` or this
+# MAGIC notebook's `%run ./00_config` globals in scope.
 
 # COMMAND ----------
+
+import os
+import sys
+
+# databricks.yml syncs src/ as a sibling of notebooks/ (both under .../files/).
+sys.path.append(os.path.join(os.getcwd(), "..", "src"))
 
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import (
     col, count, countDistinct, when, lit,
     current_timestamp, round as spark_round,
-    sum as spark_sum, abs as spark_abs
+    sum as spark_sum
 )
-from pyspark.sql.types import DoubleType
+from signal_math import compute_signals
 
 # COMMAND ----------
 # MAGIC %md
@@ -107,162 +118,18 @@ def write_gold(df: DataFrame, table_key: str) -> int:
 # MAGIC `case_count >= EVANS_MIN_CASES AND prr >= EVANS_MIN_PRR AND chi_sq >= EVANS_MIN_CHI2`,
 # MAGIC else `NO_SIGNAL`. `case_count` is always the raw `a` (= A), never the
 # MAGIC Haldane-adjusted value.
+# MAGIC
+# MAGIC The math itself is in `compute_signals()` in `src/signal_math.py` (imported
+# MAGIC above) — a pure function with no table I/O, unit tested in
+# MAGIC `tests/test_signals.py`. This notebook only supplies the thresholds from
+# MAGIC `00_config.py`.
 
 # COMMAND ----------
-
-def compute_signals(dr: DataFrame, n_total: int) -> DataFrame:
-    """
-    Pure function: compute PRR, ROR, Yates chi_sq and signal_flag for every
-    (drugname, pt) pair in `dr`. Reads and writes no tables — takes the
-    drug-reaction DataFrame and the total case count N as plain arguments so
-    it can be unit tested with synthetic data (tests/test_signals.py).
-
-    Cells: a = A, b = B - A, c = C - A, d = N - B - C + A.
-    Haldane-Anscombe correction (+0.5 to all four cells) is applied to
-    a/b/c/d for PRR/ROR only, whenever any cell is 0 — this guarantees every
-    PRR/ROR denominator is > 0, so no when() guard is needed for them under
-    ANSI mode (D5). chi_sq always uses the RAW, uncorrected cells and is
-    null when any of its four marginals is 0.
-    """
-
-    N = float(n_total)
-
-    # ── Step 1: Compute A — cases per (drug, reaction) pair ───────────────────
-    pair_counts = (
-        dr
-        .select("primaryid", "drugname", "pt")
-        .distinct()                             # one row per case-drug-reaction
-        .groupBy("drugname", "pt")
-        .agg(countDistinct("primaryid").alias("A"))
-    )
-
-    # ── Step 2: Compute B — total cases per drug (across all reactions) ────────
-    drug_totals = (
-        dr
-        .select("primaryid", "drugname")
-        .distinct()
-        .groupBy("drugname")
-        .agg(countDistinct("primaryid").alias("B"))
-    )
-
-    # ── Step 3: Compute C — total cases per reaction (across all drugs) ────────
-    reaction_totals = (
-        dr
-        .select("primaryid", "pt")
-        .distinct()
-        .groupBy("pt")
-        .agg(countDistinct("primaryid").alias("C"))
-    )
-
-    # ── Step 4: Assemble the 2x2 cells ──────────────────────────────────────────
-    contingency = (
-        pair_counts
-        .join(drug_totals,     on="drugname", how="left")
-        .join(reaction_totals, on="pt",       how="left")
-        .withColumn("A", col("A").cast(DoubleType()))
-        .withColumn("B", col("B").cast(DoubleType()))
-        .withColumn("C", col("C").cast(DoubleType()))
-        .withColumn("N", lit(N))
-        .withColumn("a", col("A"))
-        .withColumn("b", col("B") - col("A"))
-        .withColumn("c", col("C") - col("A"))
-        .withColumn("d", col("N") - col("B") - col("C") + col("A"))
-    )
-
-    # ── Step 5: Haldane-Anscombe correction, PRR/ROR cells only ────────────────
-    contingency = contingency.withColumn(
-        "haldane_applied",
-        (col("a") == 0) | (col("b") == 0) | (col("c") == 0) | (col("d") == 0)
-    )
-
-    contingency = (
-        contingency
-        .withColumn("a_h", when(col("haldane_applied"), col("a") + 0.5).otherwise(col("a")))
-        .withColumn("b_h", when(col("haldane_applied"), col("b") + 0.5).otherwise(col("b")))
-        .withColumn("c_h", when(col("haldane_applied"), col("c") + 0.5).otherwise(col("c")))
-        .withColumn("d_h", when(col("haldane_applied"), col("d") + 0.5).otherwise(col("d")))
-    )
-
-    # ── Step 6: PRR and ROR on Haldane-adjusted cells ──────────────────────────
-    # Haldane guarantees a_h, b_h, c_h, d_h are all > 0, so (a_h+b_h) > 0,
-    # (c_h+d_h) > 0, and (b_h*c_h) > 0 always — no null guard needed.
-    contingency = (
-        contingency
-        .withColumn(
-            "prr",
-            spark_round(
-                (col("a_h") / (col("a_h") + col("b_h"))) /
-                (col("c_h") / (col("c_h") + col("d_h"))),
-                4
-            )
-        )
-        .withColumn(
-            "ror",
-            spark_round(
-                (col("a_h") * col("d_h")) / (col("b_h") * col("c_h")),
-                4
-            )
-        )
-    )
-
-    # ── Step 7: chi_sq (Yates), on RAW cells, null if any marginal is 0 ───────
-    marginal_ab = col("a") + col("b")   # = B
-    marginal_cd = col("c") + col("d")   # = N - B
-    marginal_ac = col("a") + col("c")   # = C
-    marginal_bd = col("b") + col("d")   # = N - C
-
-    contingency = contingency.withColumn(
-        "chi_sq",
-        when(
-            (marginal_ab > 0) & (marginal_cd > 0) & (marginal_ac > 0) & (marginal_bd > 0),
-            spark_round(
-                (col("N") *
-                    (spark_abs(col("a") * col("d") - col("b") * col("c")) - col("N") / 2.0) ** 2
-                ) / (marginal_ab * marginal_cd * marginal_ac * marginal_bd),
-                4
-            )
-        ).otherwise(None)
-    )
-
-    # ── Step 8: Classify signals using full Evans Criteria (D3) ───────────────
-    # SIGNAL    : case_count (raw a) >= EVANS_MIN_CASES AND prr >= EVANS_MIN_PRR
-    #             AND chi_sq >= EVANS_MIN_CHI2
-    # NO_SIGNAL : everything else (including chi_sq is null)
-
-    signals = (
-        contingency
-        .withColumn(
-            "signal_flag",
-            when(
-                (col("a") >= EVANS_MIN_CASES) &
-                (col("prr") >= EVANS_MIN_PRR) &
-                (col("chi_sq") >= EVANS_MIN_CHI2),
-                "SIGNAL"
-            )
-            .otherwise("NO_SIGNAL")
-        )
-        .select(
-            "drugname",
-            "pt",
-            col("a").cast("int").alias("case_count"),
-            col("B").cast("int").alias("drug_total"),
-            col("C").cast("int").alias("event_total"),
-            col("N").cast("int").alias("total_reports"),
-            "prr",
-            "ror",
-            "chi_sq",
-            "haldane_applied",
-            "signal_flag",
-        )
-    )
-
-    return signals
-
 
 def build_gold_signals() -> DataFrame:
     """
     Read silver_drug_reactions, compute N, and delegate all PRR/ROR/chi_sq/
-    signal_flag math to the pure compute_signals() function.
+    signal_flag math to the pure compute_signals() function (src/signal_math.py).
     """
 
     dr = read_silver("drug_reactions")
@@ -273,7 +140,7 @@ def build_gold_signals() -> DataFrame:
     print(f"  Total unique cases (N): {N:,}")
 
     gold_signals = (
-        compute_signals(dr, N)
+        compute_signals(dr, N, EVANS_MIN_CASES, EVANS_MIN_PRR, EVANS_MIN_CHI2)
         .withColumn("gold_load_timestamp", current_timestamp())
         .withColumn("source_quarter", lit(QUARTER))
         .select(
