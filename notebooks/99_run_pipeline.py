@@ -55,7 +55,7 @@ print(f"  ✓ Configuration loaded ({(datetime.now()-stage_start).seconds}s)")
 stage_start = datetime.now()
 print("\n[STAGE 1] Bronze ingestion...")
 
-# %run ./01_bronze_ingest
+# MAGIC %run ./01_bronze_ingest
 
 print(f"  ✓ Bronze complete ({(datetime.now()-stage_start).seconds}s)")
 
@@ -68,7 +68,7 @@ print(f"  ✓ Bronze complete ({(datetime.now()-stage_start).seconds}s)")
 stage_start = datetime.now()
 print("\n[STAGE 2] Silver cleansing and integration...")
 
-# %run ./02_silver_clean
+# MAGIC %run ./02_silver_clean
 
 print(f"  ✓ Silver complete ({(datetime.now()-stage_start).seconds}s)")
 
@@ -81,7 +81,7 @@ print(f"  ✓ Silver complete ({(datetime.now()-stage_start).seconds}s)")
 stage_start = datetime.now()
 print("\n[STAGE 3] Gold signal detection...")
 
-# %run ./03_gold_signals
+# MAGIC %run ./03_gold_signals
 
 print(f"  ✓ Gold complete ({(datetime.now()-stage_start).seconds}s)")
 
@@ -94,7 +94,7 @@ print(f"  ✓ Gold complete ({(datetime.now()-stage_start).seconds}s)")
 stage_start = datetime.now()
 print("\n[STAGE 4] Exporting to CSV...")
 
-# %run ./04_export
+# MAGIC %run ./04_export
 
 print(f"  ✓ Export complete ({(datetime.now()-stage_start).seconds}s)")
 

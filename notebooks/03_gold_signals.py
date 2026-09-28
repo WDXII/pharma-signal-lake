@@ -16,15 +16,14 @@
 # MAGIC %run ./00_config
 
 # COMMAND ----------
-
-# Photon enforces ANSI SQL mode and throws on divide-by-zero even inside when()
-# guards. Our PRR/ROR when() conditions are logically correct — this setting makes
-# Spark return NULL instead of raising, which is the intended behavior.
-spark.conf.set("spark.sql.ansi.enabled", "false")
-
-# COMMAND ----------
 # MAGIC %md
 # MAGIC ## Imports
+# MAGIC
+# MAGIC ANSI mode is left ON (Databricks Serverless/Photon default). Division safety
+# MAGIC comes from the Haldane correction guaranteeing every PRR/ROR denominator is
+# MAGIC > 0 (see `compute_signals` below) — not from disabling ANSI. If a
+# MAGIC DIVIDE_BY_ZERO error appears here, it means a guard is wrong; fix the guard,
+# MAGIC do not re-disable ANSI (see DEVELOPER.md Issue 7).
 
 # COMMAND ----------
 
@@ -32,7 +31,7 @@ from pyspark.sql import DataFrame
 from pyspark.sql.functions import (
     col, count, countDistinct, when, lit,
     current_timestamp, round as spark_round,
-    sum as spark_sum
+    sum as spark_sum, abs as spark_abs
 )
 from pyspark.sql.types import DoubleType
 
@@ -82,13 +81,13 @@ def write_gold(df: DataFrame, table_key: str) -> int:
 # COMMAND ----------
 # MAGIC %md
 # MAGIC ## Gold Table 1 — gold_signals
-# MAGIC ### PRR and ROR Disproportionality Signal Detection
+# MAGIC ### PRR, ROR, and Yates-Corrected Chi-Squared Disproportionality
 # MAGIC
-# MAGIC **Contingency table notation:**
+# MAGIC **2x2 contingency table notation:**
 # MAGIC ```
 # MAGIC                     Reaction R    All other reactions
-# MAGIC   Drug D            A             B - A
-# MAGIC   All other drugs   C - A         N - B - C + A
+# MAGIC   Drug D            a = A         b = B - A
+# MAGIC   All other drugs   c = C - A     d = N - B - C + A
 # MAGIC
 # MAGIC   A = cases with drug D AND reaction R
 # MAGIC   B = total cases with drug D (any reaction)
@@ -96,31 +95,39 @@ def write_gold(df: DataFrame, table_key: str) -> int:
 # MAGIC   N = total cases in dataset
 # MAGIC ```
 # MAGIC
-# MAGIC **PRR** = (A/B) / ((C-A)/(N-B))
-# MAGIC **ROR** = (A/(B-A)) / ((C-A)/(N-B-C+A))
+# MAGIC **Haldane-Anscombe correction (D2):** if any of a/b/c/d is 0, add 0.5 to
+# MAGIC all four cells before computing PRR/ROR. `haldane_applied` records whether
+# MAGIC this happened. `chi_sq` is always computed on the RAW, uncorrected cells.
+# MAGIC
+# MAGIC **PRR** = (a/(a+b)) / (c/(c+d)) — Haldane-adjusted cells
+# MAGIC **ROR** = (a·d) / (b·c) — Haldane-adjusted cells
+# MAGIC **chi_sq (Yates)** = N·(\|ad − bc\| − N/2)² / ((a+b)(c+d)(a+c)(b+d)) — raw cells; null if any marginal is 0
+# MAGIC
+# MAGIC **signal_flag (full Evans Criteria, D3):** `SIGNAL` iff
+# MAGIC `case_count >= EVANS_MIN_CASES AND prr >= EVANS_MIN_PRR AND chi_sq >= EVANS_MIN_CHI2`,
+# MAGIC else `NO_SIGNAL`. `case_count` is always the raw `a` (= A), never the
+# MAGIC Haldane-adjusted value.
 
 # COMMAND ----------
 
-def build_gold_signals() -> DataFrame:
+def compute_signals(dr: DataFrame, n_total: int) -> DataFrame:
     """
-    Compute PRR and ROR for all drug-reaction pairs and classify signals
-    using Evans Criteria.
+    Pure function: compute PRR, ROR, Yates chi_sq and signal_flag for every
+    (drugname, pt) pair in `dr`. Reads and writes no tables — takes the
+    drug-reaction DataFrame and the total case count N as plain arguments so
+    it can be unit tested with synthetic data (tests/test_signals.py).
 
-    PRR signal threshold  : cases >= EVANS_MIN_CASES AND prr >= EVANS_MIN_PRR
-    Weak signal threshold : cases >= EVANS_MIN_CASES AND prr >= WEAK_SIGNAL_PRR
+    Cells: a = A, b = B - A, c = C - A, d = N - B - C + A.
+    Haldane-Anscombe correction (+0.5 to all four cells) is applied to
+    a/b/c/d for PRR/ROR only, whenever any cell is 0 — this guarantees every
+    PRR/ROR denominator is > 0, so no when() guard is needed for them under
+    ANSI mode (D5). chi_sq always uses the RAW, uncorrected cells and is
+    null when any of its four marginals is 0.
     """
 
-    dr = read_silver("drug_reactions")
+    N = float(n_total)
 
-    # ── Step 1: Compute N — total unique cases in the dataset ─────────────────
-    # N is a scalar value we'll join back in as a literal column.
-    # We count distinct primaryid to avoid inflating N when a case has
-    # multiple PS drugs.
-
-    N = dr.select("primaryid").distinct().count()
-    print(f"  Total unique cases (N): {N:,}")
-
-    # ── Step 2: Compute A — cases per (drug, reaction) pair ───────────────────
+    # ── Step 1: Compute A — cases per (drug, reaction) pair ───────────────────
     pair_counts = (
         dr
         .select("primaryid", "drugname", "pt")
@@ -129,7 +136,7 @@ def build_gold_signals() -> DataFrame:
         .agg(countDistinct("primaryid").alias("A"))
     )
 
-    # ── Step 3: Compute B — total cases per drug (across all reactions) ────────
+    # ── Step 2: Compute B — total cases per drug (across all reactions) ────────
     drug_totals = (
         dr
         .select("primaryid", "drugname")
@@ -138,7 +145,7 @@ def build_gold_signals() -> DataFrame:
         .agg(countDistinct("primaryid").alias("B"))
     )
 
-    # ── Step 4: Compute C — total cases per reaction (across all drugs) ────────
+    # ── Step 3: Compute C — total cases per reaction (across all drugs) ────────
     reaction_totals = (
         dr
         .select("primaryid", "pt")
@@ -147,80 +154,139 @@ def build_gold_signals() -> DataFrame:
         .agg(countDistinct("primaryid").alias("C"))
     )
 
-    # ── Step 5: Assemble the contingency table ─────────────────────────────────
+    # ── Step 4: Assemble the 2x2 cells ──────────────────────────────────────────
     contingency = (
         pair_counts
         .join(drug_totals,     on="drugname", how="left")
         .join(reaction_totals, on="pt",       how="left")
-        .withColumn("N", lit(N).cast(DoubleType()))
         .withColumn("A", col("A").cast(DoubleType()))
         .withColumn("B", col("B").cast(DoubleType()))
         .withColumn("C", col("C").cast(DoubleType()))
+        .withColumn("N", lit(N))
+        .withColumn("a", col("A"))
+        .withColumn("b", col("B") - col("A"))
+        .withColumn("c", col("C") - col("A"))
+        .withColumn("d", col("N") - col("B") - col("C") + col("A"))
     )
 
-    # ── Step 6: Compute PRR ────────────────────────────────────────────────────
-    # PRR = (A / B) / ((C - A) / (N - B))
-    # Guard against division by zero: if denominator == 0, return null
+    # ── Step 5: Haldane-Anscombe correction, PRR/ROR cells only ────────────────
+    contingency = contingency.withColumn(
+        "haldane_applied",
+        (col("a") == 0) | (col("b") == 0) | (col("c") == 0) | (col("d") == 0)
+    )
+
+    contingency = (
+        contingency
+        .withColumn("a_h", when(col("haldane_applied"), col("a") + 0.5).otherwise(col("a")))
+        .withColumn("b_h", when(col("haldane_applied"), col("b") + 0.5).otherwise(col("b")))
+        .withColumn("c_h", when(col("haldane_applied"), col("c") + 0.5).otherwise(col("c")))
+        .withColumn("d_h", when(col("haldane_applied"), col("d") + 0.5).otherwise(col("d")))
+    )
+
+    # ── Step 6: PRR and ROR on Haldane-adjusted cells ──────────────────────────
+    # Haldane guarantees a_h, b_h, c_h, d_h are all > 0, so (a_h+b_h) > 0,
+    # (c_h+d_h) > 0, and (b_h*c_h) > 0 always — no null guard needed.
+    contingency = (
+        contingency
+        .withColumn(
+            "prr",
+            spark_round(
+                (col("a_h") / (col("a_h") + col("b_h"))) /
+                (col("c_h") / (col("c_h") + col("d_h"))),
+                4
+            )
+        )
+        .withColumn(
+            "ror",
+            spark_round(
+                (col("a_h") * col("d_h")) / (col("b_h") * col("c_h")),
+                4
+            )
+        )
+    )
+
+    # ── Step 7: chi_sq (Yates), on RAW cells, null if any marginal is 0 ───────
+    marginal_ab = col("a") + col("b")   # = B
+    marginal_cd = col("c") + col("d")   # = N - B
+    marginal_ac = col("a") + col("c")   # = C
+    marginal_bd = col("b") + col("d")   # = N - C
 
     contingency = contingency.withColumn(
-        "prr",
+        "chi_sq",
         when(
-            (col("B") > 0) & ((col("N") - col("B")) > 0) & ((col("C") - col("A")) > 0),
+            (marginal_ab > 0) & (marginal_cd > 0) & (marginal_ac > 0) & (marginal_bd > 0),
             spark_round(
-                (col("A") / col("B")) / ((col("C") - col("A")) / (col("N") - col("B"))),
+                (col("N") *
+                    (spark_abs(col("a") * col("d") - col("b") * col("c")) - col("N") / 2.0) ** 2
+                ) / (marginal_ab * marginal_cd * marginal_ac * marginal_bd),
                 4
             )
         ).otherwise(None)
     )
 
-    # ── Step 7: Compute ROR ────────────────────────────────────────────────────
-    # ROR = (A / (B - A)) / ((C - A) / (N - B - C + A))
-    # Guard: B > A (drug has other reactions), denominator != 0
+    # ── Step 8: Classify signals using full Evans Criteria (D3) ───────────────
+    # SIGNAL    : case_count (raw a) >= EVANS_MIN_CASES AND prr >= EVANS_MIN_PRR
+    #             AND chi_sq >= EVANS_MIN_CHI2
+    # NO_SIGNAL : everything else (including chi_sq is null)
 
-    contingency = contingency.withColumn(
-        "ror",
-        when(
-            (col("B") - col("A") > 0) &
-            (col("N") - col("B") - col("C") + col("A") > 0) &
-            (col("C") - col("A") >= 0),
-            spark_round(
-                (col("A") / (col("B") - col("A"))) /
-                ((col("C") - col("A")) / (col("N") - col("B") - col("C") + col("A"))),
-                4
-            )
-        ).otherwise(None)
-    )
-
-    # ── Step 8: Classify signals using Evans Criteria ─────────────────────────
-    # SIGNAL      : cases >= EVANS_MIN_CASES AND prr >= EVANS_MIN_PRR
-    # WEAK_SIGNAL : cases >= EVANS_MIN_CASES AND prr >= WEAK_SIGNAL_PRR
-    # NO_SIGNAL   : everything else
-
-    gold_signals = (
+    signals = (
         contingency
         .withColumn(
             "signal_flag",
             when(
-                (col("A") >= EVANS_MIN_CASES) & (col("prr") >= EVANS_MIN_PRR),
+                (col("a") >= EVANS_MIN_CASES) &
+                (col("prr") >= EVANS_MIN_PRR) &
+                (col("chi_sq") >= EVANS_MIN_CHI2),
                 "SIGNAL"
-            )
-            .when(
-                (col("A") >= EVANS_MIN_CASES) & (col("prr") >= WEAK_SIGNAL_PRR),
-                "WEAK_SIGNAL"
             )
             .otherwise("NO_SIGNAL")
         )
-        .withColumn("gold_load_timestamp", current_timestamp())
-        .withColumn("source_quarter", lit(QUARTER))
         .select(
             "drugname",
             "pt",
-            col("A").cast("int").alias("case_count"),
+            col("a").cast("int").alias("case_count"),
             col("B").cast("int").alias("drug_total"),
             col("C").cast("int").alias("event_total"),
             col("N").cast("int").alias("total_reports"),
             "prr",
             "ror",
+            "chi_sq",
+            "haldane_applied",
+            "signal_flag",
+        )
+    )
+
+    return signals
+
+
+def build_gold_signals() -> DataFrame:
+    """
+    Read silver_drug_reactions, compute N, and delegate all PRR/ROR/chi_sq/
+    signal_flag math to the pure compute_signals() function.
+    """
+
+    dr = read_silver("drug_reactions")
+
+    # N = total unique cases in the dataset. Counted distinct primaryid to
+    # avoid inflating N when a case has multiple PS drugs.
+    N = dr.select("primaryid").distinct().count()
+    print(f"  Total unique cases (N): {N:,}")
+
+    gold_signals = (
+        compute_signals(dr, N)
+        .withColumn("gold_load_timestamp", current_timestamp())
+        .withColumn("source_quarter", lit(QUARTER))
+        .select(
+            "drugname",
+            "pt",
+            "case_count",
+            "drug_total",
+            "event_total",
+            "total_reports",
+            "prr",
+            "ror",
+            "chi_sq",
+            "haldane_applied",
             "signal_flag",
             "source_quarter",
             "gold_load_timestamp",
@@ -484,12 +550,14 @@ for row in signal_counts:
     pairs = row["pair_count"]
     print(f"  {flag:<20} : {pairs:>8,} drug-reaction pairs")
 
-total_pairs = signals_df.count()
-signals_only = signals_df.filter(col("signal_flag") == "SIGNAL").count()
+total_pairs      = signals_df.count()
+signals_only     = signals_df.filter(col("signal_flag") == "SIGNAL").count()
+haldane_applied  = signals_df.filter(col("haldane_applied")).count()
 
 print(f"\n  Total pairs evaluated : {total_pairs:,}")
 print(f"  Signals detected      : {signals_only:,}")
 print(f"  Signal rate           : {signals_only/total_pairs*100:.2f}%")
+print(f"  Haldane correction applied : {haldane_applied:,} pairs ({haldane_applied/total_pairs*100:.2f}%)")
 print("=" * 60)
 
 print("\n  ✓ Gold layer complete. Ready to export for Power BI.")
