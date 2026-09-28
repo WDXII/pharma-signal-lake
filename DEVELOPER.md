@@ -19,6 +19,7 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 7 — Photon ANSI Mode Throws DIVIDE_BY_ZERO Inside `when()` Guards](#issue-7--photon-ansi-mode-throws-divide_by_zero-inside-when-guards)
    - [Issue 8 — Notebook-Level `count` Assignment Shadows PySpark `count` Function](#issue-8--notebook-level-count-assignment-shadows-pyspark-count-function)
    - [Issue 9 — Deduplication on `primaryid` Was a No-Op](#issue-9--deduplication-on-primaryid-was-a-no-op)
+   - [Issue 10 — New `sync.paths` Entries Didn't Populate Until the Remote Folder Existed](#issue-10--new-syncpaths-entries-didnt-populate-until-the-remote-folder-existed)
 
 ---
 
@@ -563,6 +564,30 @@ A second, related gap: child tables (`DRUG`, `REAC`, `OUTC`, `RPSR`, `THER`) wer
 #### Rule to Remember
 
 Deduplicate on the actual entity key, not on a column that already encodes uniqueness by construction. If a composite key (like `primaryid = caseid + caseversion`) is used as the dedup partition column, the window will always be a no-op — check whether the column you're partitioning by could already be unique per row before trusting a `row_number() == 1` filter to remove anything. When a dedup fix has zero numeric impact on a sample dataset, that means the sample didn't happen to exercise the bug — it does not mean the bug wasn't real.
+
+---
+
+### Issue 10 — New `sync.paths` Entries Didn't Populate Until the Remote Folder Existed
+
+**Status:** Resolved (workaround)
+**Date encountered:** September 2026
+**Affected files:** `databricks.yml`
+
+#### Symptom
+
+`src/` and `tests/` were added to `sync.paths` in `databricks.yml` (alongside the existing `notebooks`) while `Sync State: WATCHING_FOR_CHANGES` was already active. The two new folders did not appear under `/Workspace/Users/.../PharmaSignalLake/files/` on their own — only `notebooks/` was present, even though `src/` and `tests/` already existed locally with files in them.
+
+#### Resolution
+
+Manually created empty `src` and `tests` folders in the Databricks Workspace UI. Once they existed remotely, the already-running sync picked them up and populated them with the local files on the next sync cycle.
+
+#### Root Cause
+
+Not fully confirmed — the DAB/VS Code extension sync process for Workspace Files appears not to auto-create a *new* top-level `sync.paths` folder remotely while a sync session is already running; it will populate an existing remote folder, but won't necessarily create one from scratch mid-session purely from an edited `databricks.yml`. Stopping and restarting sync, or running `databricks bundle sync` from a terminal, might also have resolved this without the manual folder creation — not tested, since the manual creation was tried first and worked.
+
+#### Rule to Remember
+
+When adding a brand-new folder to `sync.paths` in `databricks.yml` while sync is already active, don't assume it will appear remotely on its own. If it doesn't show up under the Workspace file browser after saving `databricks.yml`, try restarting sync (stop/start in the Databricks panel) or `databricks bundle sync` first; manually creating the empty folder in the Workspace UI is a working fallback if those don't do it.
 
 ---
 
