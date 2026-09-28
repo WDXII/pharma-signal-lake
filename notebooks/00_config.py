@@ -104,6 +104,19 @@ EXPORTS = {
 
 # COMMAND ----------
 # MAGIC %md
+# MAGIC ## Validation Table Paths
+# MAGIC Written only by `05_profile` and `06_validate_fix` (read-only tooling, not part of `99_run_pipeline`).
+# MAGIC The `_` prefix marks them as non-pipeline tables.
+
+# COMMAND ----------
+
+VALIDATION = {
+    "profile_results"       : f"{BASE_GOLD}/_profile_results",
+    "gold_signals_baseline" : f"{BASE_GOLD}/_gold_signals_baseline",
+}
+
+# COMMAND ----------
+# MAGIC %md
 # MAGIC ## Pipeline Constants
 
 # COMMAND ----------
