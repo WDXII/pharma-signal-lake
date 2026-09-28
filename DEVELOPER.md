@@ -11,6 +11,14 @@ This file is a living log — add new entries as issues are found and resolved.
 2. [VS Code + Databricks Sync Setup](#2-vs-code--databricks-sync-setup)
 3. [Known Issues and Resolutions](#3-known-issues-and-resolutions)
    - [Issue 1 — DBFS Root Disabled on Free Edition (Unity Catalog)](#issue-1--dbfs-root-disabled-on-free-edition-unity-catalog)
+   - [Issue 2 — databricks-connect Is Not Required for This Workflow](#issue-2--databricks-connect-is-not-required-for-this-workflow)
+   - [Issue 3 — `%run` Magic Commands Must Use `# MAGIC` Prefix](#issue-3--run-magic-commands-must-use--magic-prefix)
+   - [Issue 4 — FAERS Filenames Use 2-Digit Years; Config Was Generating 4-Digit](#issue-4--faers-filenames-use-2-digit-years-config-was-generating-4-digit)
+   - [Issue 5 — `source_quarter` Dropped in `silver_drug_reactions` Intermediate Select](#issue-5--source_quarter-dropped-in-silver_drug_reactions-intermediate-select)
+   - [Issue 6 — `Column.desc().nulls_last()` Is Not Valid PySpark Syntax](#issue-6--columndescnulls_last-is-not-valid-pyspark-syntax)
+   - [Issue 7 — Photon ANSI Mode Throws DIVIDE_BY_ZERO Inside `when()` Guards](#issue-7--photon-ansi-mode-throws-divide_by_zero-inside-when-guards)
+   - [Issue 8 — Notebook-Level `count` Assignment Shadows PySpark `count` Function](#issue-8--notebook-level-count-assignment-shadows-pyspark-count-function)
+   - [Issue 9 — Deduplication on `primaryid` Was a No-Op](#issue-9--deduplication-on-primaryid-was-a-no-op)
 
 ---
 
@@ -521,6 +529,40 @@ Renamed the local variable from `count` to `n_rows` in all three execution block
 #### Rule to Remember
 
 In Databricks notebooks, all cell code runs in a shared global namespace. Assigning a variable at notebook level (outside a function) will shadow any imported name with the same identifier for all subsequent cells. Never use the same name as an imported function for a local result variable at notebook scope. Common collisions: `count`, `sum`, `max`, `min`, `round`, `filter`, `map`.
+
+---
+
+### Issue 9 — Deduplication on `primaryid` Was a No-Op
+
+**Status:** Resolved
+**Date encountered:** September 2026
+**Affected files:** `notebooks/02_silver_clean.py`
+
+#### Symptom
+
+No runtime error. `silver_cases` always produced exactly one row per `primaryid` even though the code's intent — and its own docstring — was to deduplicate cases, keeping only the latest version. The bug was invisible in the 2026Q1 baseline because every `caseid` that quarter happened to have exactly one `caseversion` (confirmed via `05_profile.py`: distinct `primaryid` == distinct `caseid` == 397,224, 0 superseded). It would silently let stale, superseded case versions flow into Silver and Gold for any quarter where a reporter actually submitted a case update.
+
+#### Root Cause
+
+`primaryid = caseid + caseversion`, so every `primaryid` in Bronze is already unique — there can never be two rows sharing the same `primaryid`. The dedup window was:
+
+```python
+Window.partitionBy("primaryid").orderBy(col("caseversion").cast(IntegerType()).desc())
+```
+
+Partitioning by a column that is already unique per row means every partition has exactly one row, so `row_number() == 1` for every row — the filter `filter(col("rn") == 1)` never removes anything. The entity that actually needs deduplicating is the **case** (`caseid`), not the **case version record** (`primaryid`).
+
+A second, related gap: child tables (`DRUG`, `REAC`, `OUTC`, `RPSR`, `THER`) were built independently from Bronze with no reference to which `primaryid`s belonged to a surviving case version, so even a correct DEMO dedup would not have prevented superseded-version rows from reaching `silver_drug_reactions` and `silver_therapy`.
+
+#### Resolution
+
+- Repartitioned the dedup window by `caseid`, ordering by `caseversion` (parsed via `try_cast(caseversion AS INT)` for ANSI safety) descending with nulls last, keeping one row per `caseid`.
+- Added an explicit `left_semi` join of every child table (`DRUG`, `REAC`, `OUTC`, `RPSR`, `THER`) against the surviving `primaryid`s before any further processing. (`INDI` is not read anywhere in this notebook, so it needed no change.)
+- Added before/after row-count prints for DEMO and every child table so a future run makes the effect of the fix visible.
+
+#### Rule to Remember
+
+Deduplicate on the actual entity key, not on a column that already encodes uniqueness by construction. If a composite key (like `primaryid = caseid + caseversion`) is used as the dedup partition column, the window will always be a no-op — check whether the column you're partitioning by could already be unique per row before trusting a `row_number() == 1` filter to remove anything. When a dedup fix has zero numeric impact on a sample dataset, that means the sample didn't happen to exercise the bug — it does not mean the bug wasn't real.
 
 ---
 
