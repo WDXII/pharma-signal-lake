@@ -20,6 +20,7 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 8 — Notebook-Level `count` Assignment Shadows PySpark `count` Function](#issue-8--notebook-level-count-assignment-shadows-pyspark-count-function)
    - [Issue 9 — Deduplication on `primaryid` Was a No-Op](#issue-9--deduplication-on-primaryid-was-a-no-op)
    - [Issue 10 — New `sync.paths` Entries Didn't Populate Until the Remote Folder Existed](#issue-10--new-syncpaths-entries-didnt-populate-until-the-remote-folder-existed)
+   - [Issue 11 — Case-Insensitive Column Name Collision Silently Corrupted PRR/ROR](#issue-11--case-insensitive-column-name-collision-silently-corrupted-prrror)
 
 ---
 
@@ -588,6 +589,33 @@ Not fully confirmed — the DAB/VS Code extension sync process for Workspace Fil
 #### Rule to Remember
 
 When adding a brand-new folder to `sync.paths` in `databricks.yml` while sync is already active, don't assume it will appear remotely on its own. If it doesn't show up under the Workspace file browser after saving `databricks.yml`, try restarting sync (stop/start in the Databricks panel) or `databricks bundle sync` first; manually creating the empty folder in the Workspace UI is a working fallback if those don't do it.
+
+---
+
+### Issue 11 — Case-Insensitive Column Name Collision Silently Corrupted PRR/ROR
+
+**Status:** Resolved
+**Date encountered:** September 2026
+**Affected files:** `src/signal_math.py`
+
+#### Symptom
+
+`tests/test_signals.py` (run via `tests/run_unit_tests.py`) failed two of five tests, both with plain `AssertionError` and no exception from Spark:
+
+- `test_hand_computed_2x2_table`: `row["drug_total"] == 8` failed (expected value from 8 real synthetic cases).
+- `test_c_equals_a_triggers_haldane`: `row["prr"] == pytest.approx(3.5714, ...)` failed, even though the preceding `row["haldane_applied"] is True` and `row["prr"] is not None` assertions both passed — so PRR was a real, non-null number, just the wrong one.
+
+#### Root Cause
+
+`compute_signals()` built its contingency table by casting the raw aggregation columns (`"A"`, `"B"`, `"C"`) to `DoubleType` and *keeping those names*, then separately computing the 2x2 cells into new columns named `"a"`, `"b"`, `"c"`, `"d"` — differing from `"A"`/`"B"`/`"C"` only by case. Spark's default `spark.sql.caseSensitive = false` treats case-only-differing column names as ambiguous. Classic Spark usually raises `AnalysisException: Reference '...' is ambiguous` for this. Under Spark Connect — which is what Databricks Serverless compute uses (confirmed by the fixture's `spark = <pyspark.sql.connect.session.SparkSession ...>` in the test failure output) — `col("b")` and `col("B")` were instead silently resolved to whichever column the analyzer picked, without raising, producing a real but wrong number instead of an error.
+
+#### Resolution
+
+Renamed every intermediate column in `compute_signals()` to be mutually distinct even under case-insensitive comparison: the raw aggregation counts are now `pair_n`, `drug_n`, `reaction_n`, `total_n` (previously `A`/`B`/`C`/`N`), and the 2x2 cells are `cell_a`, `cell_b`, `cell_c`, `cell_d` (previously `a`/`b`/`c`/`d`), with Haldane-adjusted versions `cell_a_h`.. `cell_d_h`. No two columns in the DataFrame now share a name under case-insensitive comparison.
+
+#### Rule to Remember
+
+Never name two columns in the same DataFrame such that they differ only by case (e.g. `"A"` and `"a"`) — Spark's default case-insensitive analyzer makes this genuinely ambiguous, and depending on the execution engine (this project saw it specifically under Spark Connect / Databricks Serverless) a `col()` reference to one of them can silently resolve to the wrong one instead of raising an error. This is worse than a crash: the pipeline keeps running and produces plausible-looking wrong numbers. Catch it with unit tests against hand-computed values, not by trusting that Spark will complain.
 
 ---
 

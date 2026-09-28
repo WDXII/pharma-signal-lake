@@ -64,7 +64,8 @@ def compute_signals(
     derived from `dr`, since the caller may filter/dedupe cases differently
     than this function would.
 
-    2x2 contingency cells (Evans/FAERS notation):
+    2x2 contingency cells (Evans/FAERS math notation a/b/c/d; internal
+    columns are named cell_a/cell_b/cell_c/cell_d — see the note below):
         a = A = cases with drug D AND reaction R
         b = B - A = cases with drug D, any other reaction
         c = C - A = cases with reaction R, any other drug
@@ -80,101 +81,116 @@ def compute_signals(
     case_count >= evans_min_cases AND prr >= evans_min_prr
     AND chi_sq >= evans_min_chi2; otherwise "NO_SIGNAL". case_count is
     always the raw `a` (= A), never the Haldane-adjusted value.
+
+    NOTE: internal DataFrame columns are never named with only a case
+    difference from one another (e.g. never both "A" and "a"). Spark's
+    default spark.sql.caseSensitive=false makes such names ambiguous, and
+    Spark Connect (Databricks Serverless) was observed to silently resolve
+    col() to the wrong one instead of raising an error — see DEVELOPER.md
+    Issue 11.
     """
 
     N = float(n_total)
 
-    # ── Step 1: Compute A — cases per (drug, reaction) pair ───────────────────
+    # ── Step 1: Compute pair_n — cases per (drug, reaction) pair (A) ──────────
     pair_counts = (
         dr
         .select("primaryid", "drugname", "pt")
         .distinct()                             # one row per case-drug-reaction
         .groupBy("drugname", "pt")
-        .agg(countDistinct("primaryid").alias("A"))
+        .agg(countDistinct("primaryid").alias("pair_n"))
     )
 
-    # ── Step 2: Compute B — total cases per drug (across all reactions) ────────
+    # ── Step 2: Compute drug_n — total cases per drug (across reactions, B) ───
     drug_totals = (
         dr
         .select("primaryid", "drugname")
         .distinct()
         .groupBy("drugname")
-        .agg(countDistinct("primaryid").alias("B"))
+        .agg(countDistinct("primaryid").alias("drug_n"))
     )
 
-    # ── Step 3: Compute C — total cases per reaction (across all drugs) ────────
+    # ── Step 3: Compute reaction_n — total cases per reaction (across drugs, C)
     reaction_totals = (
         dr
         .select("primaryid", "pt")
         .distinct()
         .groupBy("pt")
-        .agg(countDistinct("primaryid").alias("C"))
+        .agg(countDistinct("primaryid").alias("reaction_n"))
     )
 
     # ── Step 4: Assemble the 2x2 cells ──────────────────────────────────────────
+    # NOTE: column names below are deliberately all-lowercase and mutually
+    # distinct (never differing only by case, e.g. never both "A" and "a").
+    # Spark's default spark.sql.caseSensitive=false makes case-only-distinct
+    # column names ambiguous, and Spark Connect (Databricks Serverless)
+    # silently resolves col() to the wrong one instead of raising — see
+    # DEVELOPER.md Issue 11.
     contingency = (
         pair_counts
         .join(drug_totals,     on="drugname", how="left")
         .join(reaction_totals, on="pt",       how="left")
-        .withColumn("A", col("A").cast(DoubleType()))
-        .withColumn("B", col("B").cast(DoubleType()))
-        .withColumn("C", col("C").cast(DoubleType()))
-        .withColumn("N", lit(N))
-        .withColumn("a", col("A"))
-        .withColumn("b", col("B") - col("A"))
-        .withColumn("c", col("C") - col("A"))
-        .withColumn("d", col("N") - col("B") - col("C") + col("A"))
+        .withColumn("pair_n",     col("pair_n").cast(DoubleType()))
+        .withColumn("drug_n",     col("drug_n").cast(DoubleType()))
+        .withColumn("reaction_n", col("reaction_n").cast(DoubleType()))
+        .withColumn("total_n",    lit(N))
+        .withColumn("cell_a", col("pair_n"))
+        .withColumn("cell_b", col("drug_n") - col("pair_n"))
+        .withColumn("cell_c", col("reaction_n") - col("pair_n"))
+        .withColumn("cell_d", col("total_n") - col("drug_n") - col("reaction_n") + col("pair_n"))
     )
 
     # ── Step 5: Haldane-Anscombe correction, PRR/ROR cells only ────────────────
     contingency = contingency.withColumn(
         "haldane_applied",
-        (col("a") == 0) | (col("b") == 0) | (col("c") == 0) | (col("d") == 0)
+        (col("cell_a") == 0) | (col("cell_b") == 0) | (col("cell_c") == 0) | (col("cell_d") == 0)
     )
 
     contingency = (
         contingency
-        .withColumn("a_h", when(col("haldane_applied"), col("a") + 0.5).otherwise(col("a")))
-        .withColumn("b_h", when(col("haldane_applied"), col("b") + 0.5).otherwise(col("b")))
-        .withColumn("c_h", when(col("haldane_applied"), col("c") + 0.5).otherwise(col("c")))
-        .withColumn("d_h", when(col("haldane_applied"), col("d") + 0.5).otherwise(col("d")))
+        .withColumn("cell_a_h", when(col("haldane_applied"), col("cell_a") + 0.5).otherwise(col("cell_a")))
+        .withColumn("cell_b_h", when(col("haldane_applied"), col("cell_b") + 0.5).otherwise(col("cell_b")))
+        .withColumn("cell_c_h", when(col("haldane_applied"), col("cell_c") + 0.5).otherwise(col("cell_c")))
+        .withColumn("cell_d_h", when(col("haldane_applied"), col("cell_d") + 0.5).otherwise(col("cell_d")))
     )
 
     # ── Step 6: PRR and ROR on Haldane-adjusted cells ──────────────────────────
-    # Haldane guarantees a_h, b_h, c_h, d_h are all > 0, so (a_h+b_h) > 0,
-    # (c_h+d_h) > 0, and (b_h*c_h) > 0 always — no null guard needed.
+    # Haldane guarantees cell_a_h, cell_b_h, cell_c_h, cell_d_h are all > 0, so
+    # (cell_a_h+cell_b_h) > 0, (cell_c_h+cell_d_h) > 0, and (cell_b_h*cell_c_h)
+    # > 0 always — no null guard needed.
     contingency = (
         contingency
         .withColumn(
             "prr",
             spark_round(
-                (col("a_h") / (col("a_h") + col("b_h"))) /
-                (col("c_h") / (col("c_h") + col("d_h"))),
+                (col("cell_a_h") / (col("cell_a_h") + col("cell_b_h"))) /
+                (col("cell_c_h") / (col("cell_c_h") + col("cell_d_h"))),
                 4
             )
         )
         .withColumn(
             "ror",
             spark_round(
-                (col("a_h") * col("d_h")) / (col("b_h") * col("c_h")),
+                (col("cell_a_h") * col("cell_d_h")) / (col("cell_b_h") * col("cell_c_h")),
                 4
             )
         )
     )
 
     # ── Step 7: chi_sq (Yates), on RAW cells, null if any marginal is 0 ───────
-    marginal_ab = col("a") + col("b")   # = B
-    marginal_cd = col("c") + col("d")   # = N - B
-    marginal_ac = col("a") + col("c")   # = C
-    marginal_bd = col("b") + col("d")   # = N - C
+    marginal_ab = col("cell_a") + col("cell_b")   # = drug_n
+    marginal_cd = col("cell_c") + col("cell_d")   # = total_n - drug_n
+    marginal_ac = col("cell_a") + col("cell_c")   # = reaction_n
+    marginal_bd = col("cell_b") + col("cell_d")   # = total_n - reaction_n
 
     contingency = contingency.withColumn(
         "chi_sq",
         when(
             (marginal_ab > 0) & (marginal_cd > 0) & (marginal_ac > 0) & (marginal_bd > 0),
             spark_round(
-                (col("N") *
-                    (spark_abs(col("a") * col("d") - col("b") * col("c")) - col("N") / 2.0) ** 2
+                (col("total_n") *
+                    (spark_abs(col("cell_a") * col("cell_d") - col("cell_b") * col("cell_c"))
+                        - col("total_n") / 2.0) ** 2
                 ) / (marginal_ab * marginal_cd * marginal_ac * marginal_bd),
                 4
             )
@@ -187,7 +203,7 @@ def compute_signals(
         .withColumn(
             "signal_flag",
             when(
-                (col("a") >= evans_min_cases) &
+                (col("cell_a") >= evans_min_cases) &
                 (col("prr") >= evans_min_prr) &
                 (col("chi_sq") >= evans_min_chi2),
                 "SIGNAL"
@@ -197,10 +213,10 @@ def compute_signals(
         .select(
             "drugname",
             "pt",
-            col("a").cast("int").alias("case_count"),
-            col("B").cast("int").alias("drug_total"),
-            col("C").cast("int").alias("event_total"),
-            col("N").cast("int").alias("total_reports"),
+            col("cell_a").cast("int").alias("case_count"),
+            col("drug_n").cast("int").alias("drug_total"),
+            col("reaction_n").cast("int").alias("event_total"),
+            col("total_n").cast("int").alias("total_reports"),
             "prr",
             "ror",
             "chi_sq",
