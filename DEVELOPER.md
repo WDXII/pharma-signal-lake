@@ -25,6 +25,7 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 13 — BRD.md Still Documented the Pre-Fix Behavior as the Requirement](#issue-13--brdmd-still-documented-the-pre-fix-behavior-as-the-requirement)
    - [Issue 14 — silver_cases Fanned Out on OUTC/RPSR Despite a Comment Claiming Otherwise](#issue-14--silver_cases-fanned-out-on-outcrpsr-despite-a-comment-claiming-otherwise)
    - [Issue 15 — Notebook Attached to a SQL Warehouse Instead of Interactive/Serverless Compute](#issue-15--notebook-attached-to-a-sql-warehouse-instead-of-interactiveserverless-compute)
+   - [Issue 16 — Validation Query 2.1 Checked `primaryid` Uniqueness and Could Never Fail](#issue-16--validation-query-21-checked-primaryid-uniqueness-and-could-never-fail)
 
 ---
 
@@ -749,6 +750,33 @@ In the notebook's compute selector (top of the notebook), switch from the SQL Wa
 #### Rule to Remember
 
 Before running any PySpark notebook in this project, check what it's attached to — a SQL Warehouse and an interactive/serverless cluster are different compute types in Databricks, and attaching to the wrong one produces this specific banner rather than a Python error. If a session has recently used the SQL Editor (e.g. for `sql/verify_signal_fix.sql`, D6), check the compute selector on the next PySpark notebook opened afterward before assuming a run failure is a code bug.
+
+---
+
+### Issue 16 — Validation Query 2.1 Checked `primaryid` Uniqueness and Could Never Fail
+
+**Status:** Resolved
+**Date encountered:** September 2026
+**Affected files:** `notebooks/validation_queries.sql` (Section 0 and Query 2.1)
+
+#### Symptom
+
+`validation_queries.sql` Query 2.1 ("no duplicate primaryid in silver_cases") returned `duplicate_rows = 0` on every run, including runs where `silver_cases` still held multiple versions of the same case (Issue 9) and, later, multiple rows per case from the OUTC/RPSR fan-out (Issue 14). The check that was supposed to guard deduplication reported healthy while the data was wrong. Separately, Section 0's `CREATE OR REPLACE TEMP VIEW` statements still pointed at `/FileStore/pharma_signal_lake/...` DBFS paths, which are disabled on Free Edition (Issue 1), so the file's own setup block could not run as written.
+
+#### Root Cause
+
+`primaryid` = `caseid` + `caseversion`, so it is unique per row by construction. Counting `COUNT(*) - COUNT(DISTINCT primaryid)` on any table with one row per DEMO record is always 0 — the query tested a property that cannot be violated, so it could not detect the actual defect (several `primaryid`s per `caseid`). It was written against the same wrong mental model as the pipeline bug in Issue 9. The stale DBFS paths were never updated when `00_config.py` moved to Unity Catalog Volumes.
+
+#### Resolution
+
+- Query 2.1 now compares `COUNT(*)` with `COUNT(DISTINCT caseid)`, and its comment states what would make it fail (a surviving superseded version, or a join fan-out).
+- Section 0 paths now match `00_config.py`: `/Volumes/workspace/default/pharma_raw/{bronze,silver,gold}/...`.
+- Queries 3.3 and 3.4 filtered with `signal_flag != 'NO_SIGNAL'`, a leftover from the three-tier flag; they now use `signal_flag = 'SIGNAL'` (D1).
+- Added a header pointer: signal-fix verification lives in `sql/verify_signal_fix.sql` (Will-owned, read-only for the agent, D6). No signal-fix checks were added to this file.
+
+#### Rule to Remember
+
+For every check, name the broken output that would make it fail. If you cannot describe a concrete bad dataset the check would flag, the check is decoration. Check uniqueness on the entity key (`caseid`), not on a key that already encodes the version.
 
 ---
 
