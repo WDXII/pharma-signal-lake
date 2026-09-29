@@ -24,6 +24,7 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 12 — `%run` Mixed With Other Statements in a Cell Silently Falls Back to IPython `%run`](#issue-12--run-mixed-with-other-statements-in-a-cell-silently-falls-back-to-ipython-run)
    - [Issue 13 — BRD.md Still Documented the Pre-Fix Behavior as the Requirement](#issue-13--brdmd-still-documented-the-pre-fix-behavior-as-the-requirement)
    - [Issue 14 — silver_cases Fanned Out on OUTC/RPSR Despite a Comment Claiming Otherwise](#issue-14--silver_cases-fanned-out-on-outcrpsr-despite-a-comment-claiming-otherwise)
+   - [Issue 15 — Notebook Attached to a SQL Warehouse Instead of Interactive/Serverless Compute](#issue-15--notebook-attached-to-a-sql-warehouse-instead-of-interactiveserverless-compute)
 
 ---
 
@@ -714,6 +715,40 @@ When a `DECISIONS.md` entry changes behavior that a formal requirements document
 #### Rule to Remember
 
 A comment describing what the code does is a claim, not a guarantee — when a table's row count doesn't match its expected grain, check whether the surrounding comment already promised the fix that's missing, before assuming the mismatch is an accepted design tradeoff. Also: when an earlier decision is reversed, don't just fix the code — record the reversal itself (which decision, why it no longer holds) so the decisions log stays a true history instead of silently going stale the way the original BRD did (Issue 13).
+
+---
+
+### Issue 15 — Notebook Attached to a SQL Warehouse Instead of Interactive/Serverless Compute
+
+**Status:** Resolved (environment/workflow, not code)
+**Date encountered:** September 2026
+**Affected files:** None — this is a per-notebook compute attachment setting in the Databricks UI, not a file in the repo
+
+#### Symptom
+
+Opening `02_silver_clean.py` in Databricks showed a banner instead of running:
+
+```
+Non-SQL cells will fail during execution
+This notebook is attached to a SQL warehouse, which only supports executing SQL
+cells and rendering Markdown cells. Cells using other languages will fail during
+execution. If you would like to execute all cells, please attach to an
+interactive cluster.
+```
+
+Every `%run`, `import`, and PySpark cell in the notebook would fail if run in this state.
+
+#### Root Cause
+
+The notebook's attached compute was a **SQL Warehouse** rather than an interactive/serverless cluster. SQL Warehouses only execute SQL and Markdown cells — they exist for the SQL Editor / DBSQL dashboards / ad hoc SQL (e.g. running `sql/verify_signal_fix.sql`), not for PySpark notebooks. Databricks appears to default a newly opened notebook to whatever compute was last used in the workspace, so switching between the SQL Editor and a notebook can leave the notebook pointed at the wrong compute type without an explicit choice being made.
+
+#### Resolution
+
+In the notebook's compute selector (top of the notebook), switch from the SQL Warehouse to the Serverless compute (or an interactive cluster, if available), then re-run from the top.
+
+#### Rule to Remember
+
+Before running any PySpark notebook in this project, check what it's attached to — a SQL Warehouse and an interactive/serverless cluster are different compute types in Databricks, and attaching to the wrong one produces this specific banner rather than a Python error. If a session has recently used the SQL Editor (e.g. for `sql/verify_signal_fix.sql`, D6), check the compute selector on the next PySpark notebook opened afterward before assuming a run failure is a code bug.
 
 ---
 
