@@ -86,10 +86,12 @@ ROR = (A / (B - A)) / ((C - A) / (N - B - C + A))
 
 ### Evans Criteria (Signal Classification)
 
+If any contingency-table cell is zero, PRR/ROR get a Haldane-Anscombe correction (+0.5
+to all four cells) before this division, so they're never null.
+
 | Classification | Rule |
 |---|---|
-| `SIGNAL` | case_count ≥ 3 **AND** PRR ≥ 2.0 |
-| `WEAK_SIGNAL` | case_count ≥ 3 **AND** PRR ≥ 1.5 |
+| `SIGNAL` | case_count ≥ 3 **AND** PRR ≥ 2.0 **AND** chi-squared (Yates-corrected) ≥ 4.0 |
 | `NO_SIGNAL` | All other pairs |
 
 ---
@@ -144,6 +146,10 @@ pharma-signal-lake/
 ├── BRD.md                     ← Business Requirements Document
 ├── ARCHITECTURE.md            ← Technical architecture and design decisions
 ├── SETUP.md                   ← Step-by-step environment setup guide
+├── DEVELOPER.md               ← Dev environment notes and known issues/resolutions
+├── DECISIONS.md               ← Architecture and correctness decisions, as made
+├── databricks.yml             ← Databricks Asset Bundle config (notebook/src/test sync)
+├── requirements-dev.txt       ← Local editor support only (no local PySpark required)
 ├── .gitignore
 │
 ├── notebooks/
@@ -152,8 +158,21 @@ pharma-signal-lake/
 │   ├── 02_silver_clean.py     ← Cleansing and integration → Silver Delta tables
 │   ├── 03_gold_signals.py     ← PRR/ROR signal detection → Gold Delta tables
 │   ├── 04_export.py           ← Export Gold → CSV for Power BI
+│   ├── 05_profile.py          ← Read-only: before/after row-count and quality metrics
+│   ├── 06_validate_fix.py     ← Read-only: independent signal-correctness validation
 │   ├── 99_run_pipeline.py     ← Run full pipeline end-to-end
 │   └── validation_queries.sql ← Spark SQL for data quality checks
+│
+├── src/
+│   └── signal_math.py         ← Pure PRR/ROR/chi_sq/dedup functions, unit-testable
+│
+├── tests/
+│   ├── conftest.py            ← Spark fixture (attaches to Databricks' running session)
+│   ├── test_signals.py        ← pytest unit tests for src/signal_math.py
+│   └── run_unit_tests.py      ← Notebook runner (installs pytest, runs the suite)
+│
+├── docs/
+│   └── data_dictionary.md     ← Column-level schema for Bronze/Silver/Gold tables
 │
 ├── data/
 │   ├── .gitignore             ← Prevents raw FAERS files from being committed
@@ -242,7 +261,8 @@ The dashboard has three pages, each reading from a Gold export CSV:
 | `primaryid` as join key | `caseid` is not unique — a case can have multiple versions. `primaryid` includes the version number. |
 | PS filter in Silver | Signal detection only uses Primary Suspect drugs. Including concomitant drugs would dilute PRR/ROR. |
 | Uppercase + trim for drug names | FAERS has no drug name vocabulary control. Normalization prevents fragmentation (e.g., `"ASPIRIN"` vs `"Aspirin "`). |
-| Evans Criteria ≥ 3 cases | A PRR of 10 on 1 case is statistically meaningless. The case threshold prevents false positives. |
+| Full Evans Criteria (cases, PRR, chi-squared) | A PRR of 10 on 1 case is statistically meaningless. Requiring chi-squared (Yates) ≥ 4 in addition to the case-count and PRR thresholds screens out low-confidence pairs that PRR alone would flag. |
+| Haldane-Anscombe correction on zero cells | Without it, any pair with an empty contingency-table cell gets a null PRR/ROR and silently drops out of signal detection — including some of the most exclusive, clinically interesting drug-event pairs. |
 | Power BI via CSV export | No Databricks connector license required. Works entirely within the Free Edition and Power BI Desktop constraints. |
 
 ---
@@ -254,7 +274,7 @@ This is a portfolio project. The following simplifications are documented and in
 - **Drug name normalization is basic** (uppercase + trim only). A production system would use a MedDRA or WHO drug dictionary for entity resolution.
 - **No automated scheduling** — Databricks Free Edition does not support job scheduling. The pipeline runs manually.
 - **Single data source** — only FDA FAERS. A production pharmacovigilance system would also ingest EudraVigilance (EU) and WHO VigiAccess for global coverage.
-- **No confidence intervals** — PRR and ROR are computed as point estimates. Production implementations typically include 95% CI and chi-square significance testing.
+- **No confidence intervals** — PRR and ROR are computed as point estimates (chi-square significance testing via Evans Criteria is implemented; 95% CI is not).
 
 ---
 
@@ -265,6 +285,9 @@ This is a portfolio project. The following simplifications are documented and in
 | [BRD.md](BRD.md) | Business requirements — problem statement, functional requirements, stakeholders, risks |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Technical design — data flow, Medallion layers, signal math, design decisions |
 | [SETUP.md](SETUP.md) | Environment setup — Databricks account, Unity Catalog Volume upload, GitHub, Power BI |
+| [DECISIONS.md](DECISIONS.md) | Architecture and correctness decisions, recorded as they were made, with confirmation evidence |
+| [DEVELOPER.md](DEVELOPER.md) | Dev environment notes and known issues/resolutions, numbered as encountered |
+| [docs/data_dictionary.md](docs/data_dictionary.md) | Column-level schema reference for every Bronze, Silver, and Gold table |
 
 ---
 

@@ -1,9 +1,13 @@
 # SETUP.md
 
 **Project:** PharmaSignalLake  
-**Version:** 1.0  
-**Date:** May 2026  
+**Version:** 1.1  
+**Date:** May 2026 (Revised 2026-09-29)  
 **Purpose:** Environment setup guide — from zero to a running pipeline
+
+> **Revision 1.1** — Updated Step 6's notebook list and sync instructions to include
+> `05_profile.py`, `06_validate_fix.py`, and the `src/`/`tests/` sync paths added since
+> the original setup (see `DEVELOPER.md` Issue 10).
 
 ---
 
@@ -202,7 +206,13 @@ Notebooks are maintained locally and synced to Databricks using the VS Code Data
 | `02_silver_clean.py` | Clean and integrate → write Silver Delta tables |
 | `03_gold_signals.py` | Compute PRR/ROR → write Gold Delta tables |
 | `04_export.py` | Export Gold tables to CSV for Power BI |
-| `99_run_pipeline.py` | Run all notebooks in order via `%run` |
+| `05_profile.py` | Read-only: before/after row-count and data-quality profiling. Not run by `99_run_pipeline.py` |
+| `06_validate_fix.py` | Read-only: independent validation of signal-detection correctness. Not run by `99_run_pipeline.py` |
+| `99_run_pipeline.py` | Run notebooks 01-04 in order via `%run` |
+
+`src/signal_math.py` holds the pure PRR/ROR/chi_sq/dedup functions that `02_silver_clean.py`
+and `03_gold_signals.py` import, and `tests/` holds their pytest unit tests (run inside
+Databricks via `tests/run_unit_tests.py` — see Section 11, no local Python/Spark needed).
 
 ### How to Sync
 
@@ -210,12 +220,14 @@ Notebooks are maintained locally and synced to Databricks using the VS Code Data
 2. Install the **Databricks** VS Code extension (see DEVELOPER.md Step 2)
 3. Connect the extension to your workspace using a PAT (see DEVELOPER.md Steps 1 and 3)
 4. In the Databricks panel, click **Sync State: STOPPED** to start continuous sync
-5. Notebooks are automatically pushed to Databricks on every save
+5. `notebooks/`, `src/`, and `tests/` (per `databricks.yml`'s `sync.paths`) are automatically pushed to Databricks on every save
 
 Notebooks land at:
 ```
 /Workspace/Users/<your-email>/PharmaSignalLake/files/notebooks/
 ```
+`src/` and `tests/` land as sibling folders under `.../files/`. If a newly added top-level
+sync folder doesn't appear remotely on its own, see DEVELOPER.md Issue 10 for the workaround.
 
 > **No Python environment required.** The sync uses the Databricks API directly — no local PySpark or `databricks-connect` installation is needed. See DEVELOPER.md Issue 2 for details.
 
@@ -372,4 +384,4 @@ Expected output: `Delta write successful`
 
 ---
 
-*End of SETUP.md — Version 1.0 — PharmaSignalLake*
+*End of SETUP.md — Version 1.1 — PharmaSignalLake*
