@@ -3,9 +3,13 @@
 **Project:** PharmaSignalLake  
 **Full Title:** PharmaSignalLake: A Pharmacovigilance Signal Detection Lakehouse  
 **Author:** [Your Name]  
-**Version:** 2.0  
-**Date:** May 2026  
+**Version:** 2.1  
+**Date:** May 2026 (Revised 2026-09-29)  
 **Status:** Draft
+
+> **Revision 2.1** — Updated FR-06, FR-14, FR-15, FR-16, Section 5 Scope, and the Evans Criteria
+> glossary entry to reflect the signal-correctness fix on `fix/signal-correctness`
+> (see `DECISIONS.md` D1-D4 for full rationale and 2026Q1 confirmation evidence).
 
 ---
 
@@ -84,7 +88,7 @@ This project addresses all three problems with a structured, reproducible, scala
 - Processing of one quarter minimum (2026Q1); pipeline extensible to any number of quarters
 - Deduplication strategy based on `primaryid` as the unique case-version identifier
 - PRR and ROR computation for all drug-event pairs meeting the Evans minimum threshold (≥ 3 cases)
-- Signal classification: signal, weak signal, or no signal
+- Signal classification: signal or no signal (binary), per full Evans Criteria (case count, PRR, and chi-squared)
 - Power BI dashboard with three report pages
 - Full documentation suite
 
@@ -143,7 +147,7 @@ This project addresses all three problems with a structured, reproducible, scala
 
 | ID | Requirement |
 |----|-------------|
-| FR-06 | DEMO shall be deduplicated on `primaryid`, retaining the record with the highest `caseversion` |
+| FR-06 | DEMO shall be deduplicated on `caseid` (the case entity key — `primaryid` already includes `caseversion` and is unique per row), retaining the record with the highest `caseversion`. All downstream child tables (DRUG, REAC, OUTC, RPSR, THER) shall be filtered to only the surviving `primaryid`s |
 | FR-07 | DRUG `drugname` and `prod_ai` fields shall be standardized to uppercase with leading/trailing whitespace removed |
 | FR-08 | REAC `pt` (Preferred Term) field shall be standardized to uppercase |
 | FR-09 | Invalid or null `age` values shall be flagged with a data quality indicator column rather than dropped |
@@ -156,9 +160,9 @@ This project addresses all three problems with a structured, reproducible, scala
 | ID | Requirement |
 |----|-------------|
 | FR-13 | The system shall compute, for each drug-event pair: case count (A), drug total (B), event total (C), and total reports (N) |
-| FR-14 | PRR shall be computed as: `(A / B) / ((C - A) / (N - B))` |
-| FR-15 | ROR shall be computed as: `(A / (B - A)) / ((C - A) / (N - B - C + A))` |
-| FR-16 | Signal classification shall apply Evans Criteria: cases ≥ 3 AND PRR ≥ 2 |
+| FR-14 | PRR shall be computed as: `(A / B) / ((C - A) / (N - B))`. If any of the four contingency-table cells (A, B-A, C-A, N-B-C+A) is zero, the Haldane-Anscombe correction (+0.5 to all four cells) shall be applied before this division, and recorded in a `haldane_applied` flag |
+| FR-15 | ROR shall be computed as: `(A / (B - A)) / ((C - A) / (N - B - C + A))`, with the same Haldane-Anscombe correction as FR-14 applied when any cell is zero |
+| FR-16 | Signal classification shall apply full Evans Criteria: cases ≥ 3 AND PRR ≥ 2 AND chi-squared (Yates-corrected) ≥ 4. Chi-squared shall be computed on the raw, uncorrected cells, not the Haldane-adjusted ones |
 | FR-17 | Classified signals shall be written to a Gold Delta table: `gold_signals` |
 | FR-18 | The Gold layer shall also contain an aggregated demographics summary table and an outcome distribution table |
 
@@ -246,7 +250,8 @@ This project addresses all three problems with a structured, reproducible, scala
 | **PRR** | Proportional Reporting Ratio — measures how often a drug-event pair is reported relative to all events for that drug, compared to the same ratio across all other drugs |
 | **ROR** | Reporting Odds Ratio — an odds-ratio-based signal metric; more statistically stable than PRR at low case counts |
 | **Signal** | A statistical pattern suggesting a potential causal relationship between a drug and an adverse event, requiring further clinical review |
-| **Evans Criteria** | Minimum threshold for signal validity: ≥ 3 cases AND PRR ≥ 2 |
+| **Evans Criteria** | Minimum threshold for signal validity: ≥ 3 cases AND PRR ≥ 2 AND chi-squared (Yates-corrected) ≥ 4 |
+| **Haldane-Anscombe Correction** | A statistical correction (+0.5 added to all four contingency-table cells) applied when any cell is zero, so PRR and ROR remain computable instead of undefined |
 | **Medallion Architecture** | A three-layer data design pattern: Bronze (raw), Silver (cleansed), Gold (aggregated/curated) |
 | **Delta Lake** | An open-source storage layer that adds ACID transactions, versioning, and schema enforcement to Parquet files |
 | **primaryid** | The unique identifier for a specific version of a case report in FAERS. Always use this for joins, not `caseid` |
