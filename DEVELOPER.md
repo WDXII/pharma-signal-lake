@@ -826,7 +826,7 @@ The baseline was never copied out before re-running the pipeline (PROJECT-LOG T3
 
 #### Resolution
 
-Temporarily raised `delta.deletedFileRetentionDuration` and `delta.logRetentionDuration` to 180 days, restored v1 to `_baseline` paths, then UNSET both properties. The property changes added versions 4–5 with data identical to v3. The ad hoc SQL is in `docs/validation-results.md` Appendix A. Raising retention only worked because the files had not yet been physically removed, which was not guaranteed.
+Temporarily raised `delta.deletedFileRetentionDuration` and `delta.logRetentionDuration` to 180 days, restored v1 to `_baseline` paths, then UNSET both properties. The widen (2026-09-29 08:20 UTC, v4) and reset (09:35 UTC, v5, after all verification queries) added versions with data identical to v3. The ad hoc cells are in `docs/validation-results.md` Appendix A. Raising retention only worked because the files had not yet been physically removed, which was not guaranteed.
 
 #### Rule to Remember
 

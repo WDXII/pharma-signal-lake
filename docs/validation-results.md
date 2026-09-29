@@ -31,9 +31,9 @@ Found during validation: `silver_cases` fanned out on OUTC/RPSR despite a commen
 | Metric | Value |
 |--------|-------|
 | Superseded DEMO versions removed (D4) | 0 (latent bug fix — see §5.1) |
-| Child rows removed (superseded versions) | [NUMBER?] |
+| Child rows removed (superseded versions) | 0 |
 | `silver_cases` fan-out rows removed (D7) | 73,667 (15.6% of 470,891) |
-| SIGNAL before (v1) | 56,491 (plus 5,562 `WEAK_SIGNAL`, tier removed by D1) |
+| SIGNAL before (v1) | 56,491 (plus 5,562 `WEAK_SIGNAL`, tier removed by D1; 62,053 combined) |
 | SIGNAL after (v3, binary) | 49,984 |
 | SIGNAL net change | −6,507 (−11.5%) |
 | Pairs rescued NO_SIGNAL → SIGNAL (D2 Haldane) | 106 |
@@ -50,48 +50,60 @@ Found during validation: `silver_cases` fanned out on OUTC/RPSR despite a commen
 | After-fix run date | 2026-09-29 (`gold_signals` v3 / `silver_cases` v3) |
 | Quarter | 2026Q1 (`QUARTER` in `00_config.py`) |
 | `gold_signals` Delta version — before fix | 1 |
-| `gold_signals` Delta version — after fix | 3 |
-| Baseline recovery | Delta time travel, not captured beforehand (Issue 18). `delta.deletedFileRetentionDuration` and `delta.logRetentionDuration` were temporarily raised to 180 days, v1 was restored to `_baseline` paths, and both properties were UNSET afterward. This added versions 4–5, with data identical to v3 (Appendix A.4) |
+| `gold_signals` Delta version — after fix | 3 (final table version 5; data identical to v3) |
+| Baseline recovery | Delta time travel, not captured beforehand (Issue 18). `delta.deletedFileRetentionDuration` and `delta.logRetentionDuration` were temporarily raised to 180 days on `gold_signals` and `silver_cases`, v1 was restored to `_gold_signals_baseline` / `_silver_cases_baseline`, and both properties were UNSET afterward (Appendix A.3–A.5) |
+| Retention widened | 2026-09-29 08:20 UTC (v4), on both `gold_signals` and `silver_cases` |
+| Retention reset (UNSET) | 2026-09-29 09:35 UTC (v5), on both tables. Ran after all verification queries, not right after H2. Data in v4–v5 is identical to v3 |
+| `05_profile.py` (after) run | 2026-09-29 09:37 UTC |
 | Verifier | `sql/verify_signal_fix.sql`, blob `9ce44bb`, commit `d0f5097`, unmodified |
-| Compute | [NUMBER?] |
+| Compute | Serverless |
 | Pipeline code commit validated | [NUMBER?] |
 
 ---
 
 ## 3. Baseline vs After — Profile Metrics
 
-Baseline = v1 (2026-06-13); After = v3 (2026-09-29). Values come from `sql/verify_signal_fix.sql` and `06_validate_fix.py` output. The `05_profile.py` `_profile_results` metrics that were not recorded from the run are left as `[NUMBER?]`. A dash in the Delta column means no delta was recorded.
+From the `[PROFILE METRIC DELTAS] baseline -> after` output of `06_validate_fix.py` (source: `_profile_results`, written by `05_profile.py`). Baseline = v1 (2026-06-13); After = v3 data, profiled 2026-09-29 09:37 UTC when the table was at v5.
+
+> The baseline profile was **not** run before the re-run (Issue 18). The baseline values below were profiled after the fact against the baseline recovered from Delta time travel, and are recorded as `gold_signals_delta_version` = 1 in `_profile_results`.
 
 | Layer | Metric | Baseline | After | Delta |
 |-------|--------|----------|-------|-------|
 | bronze | `bronze_demo_rows` | 397,224 | 397,224 | 0 |
 | bronze | `bronze_demo_distinct_primaryid` | 397,224 | 397,224 | 0 |
 | bronze | `bronze_demo_distinct_caseid` | 397,224 | 397,224 | 0 |
-| bronze | `bronze_demo_caseids_multi_version` | [NUMBER?] | [NUMBER?] | — |
+| bronze | `bronze_demo_caseids_multi_version` | 0 | 0 | 0 |
 | bronze | `bronze_demo_superseded_rows` | 0 | 0 | 0 |
-| bronze | `bronze_{drug,reac,indi,outc,rpsr,ther}_rows_on_superseded_versions` | [NUMBER?] | [NUMBER?] | — |
+| bronze | `bronze_drug_rows_on_superseded_versions` | 0 | 0 | 0 |
+| bronze | `bronze_reac_rows_on_superseded_versions` | 0 | 0 | 0 |
+| bronze | `bronze_indi_rows_on_superseded_versions` | 0 | 0 | 0 |
+| bronze | `bronze_outc_rows_on_superseded_versions` | 0 | 0 | 0 |
+| bronze | `bronze_rpsr_rows_on_superseded_versions` | 0 | 0 | 0 |
+| bronze | `bronze_ther_rows_on_superseded_versions` | 0 | 0 | 0 |
 | silver | `silver_cases_rows` | 470,891 | 397,224 | −73,667 |
 | silver | `silver_cases_distinct_primaryid` | 397,224 | 397,224 | 0 |
 | silver | `silver_cases_distinct_caseid` | 397,224 | 397,224 | 0 |
-| silver | `silver_drug_reactions_rows` | [NUMBER?] | [NUMBER?] | — |
-| silver | `silver_drug_reactions_orphan_primaryid` | [NUMBER?] | 0 | — |
-| silver | `silver_therapy_rows` | [NUMBER?] | [NUMBER?] | — |
-| silver | `silver_therapy_orphan_primaryid` | [NUMBER?] | [NUMBER?] | — |
-| gold | `gold_signals_pairs` | [NUMBER?] | 373,012 | — |
+| silver | `silver_drug_reactions_rows` | 1,956,087 | 1,956,087 | 0 |
+| silver | `silver_drug_reactions_orphan_primaryid` | 0 | 0 | 0 |
+| silver | `silver_therapy_rows` | 404,946 | 404,946 | 0 |
+| silver | `silver_therapy_orphan_primaryid` | 0 | 0 | 0 |
+| gold | `gold_signals_pairs` | 373,012 | 373,012 | 0 |
 | gold | `gold_signal_flag_SIGNAL` | 56,491 | 49,984 | −6,507 |
 | gold | `gold_signal_flag_WEAK_SIGNAL` | 5,562 | absent (D1) | — |
-| gold | `gold_signal_flag_NO_SIGNAL` | 310,959 | 323,028 | — |
-| gold | `gold_null_prr` | 2,978 | 0 | — |
-| gold | `gold_null_ror` | [NUMBER?] | [NUMBER?] | — |
-| gold | `gold_null_prr_case_count_ge_min` | [NUMBER?] | 0 | — |
+| gold | `gold_signal_flag_NO_SIGNAL` | 310,959 | 323,028 | +12,069 |
+| gold | `gold_null_prr` | 2,978 | 0 | −2,978 |
+| gold | `gold_null_ror` | 7,197 | 0 | −7,197 |
+| gold | `gold_null_prr_case_count_ge_min` | 106 | 0 | −106 |
 | gold | `gold_exclusive_pairs_case_count_ge_min` | 106 | 106 | 0 |
-| gold | `gold_exclusive_pairs_case_count_lt_min` | [NUMBER?] | [NUMBER?] | — |
-| gold | `gold_pairs_with_zero_cell` | [NUMBER?] | [NUMBER?] | — |
+| gold | `gold_exclusive_pairs_case_count_lt_min` | 2,872 | 2,872 | 0 |
+| gold | `gold_pairs_with_zero_cell` | 7,197 | 7,197 | 0 |
+| meta | `gold_signals_delta_version` | 1 | 5 | +4 |
 
 Notes:
 - "Exclusive pairs, case_count ≥ 3" is query E's population (`case_count ≥ 3 AND case_count = event_total`): 106 pairs before, all with null PRR and `NO_SIGNAL`; 106 pairs after, all `SIGNAL` with null PRR 0.
+- `gold_pairs_with_zero_cell` (7,197) equals the baseline null-ROR count; `haldane_applied = true` for 7,197 pairs after the fix.
 - Min PRR among SIGNAL rows: 2 before, 2.0001 after. Min `case_count` among SIGNAL rows: 3 in both.
-- Extra rows not recorded: pairs with `haldane_applied = true` [NUMBER?]; signal rate (SIGNAL ÷ pairs) [NUMBER?].
+- Signal rate after (SIGNAL ÷ pairs): 13.4% (49,984 / 373,012).
 
 ---
 
@@ -99,20 +111,22 @@ Notes:
 
 ### 4.1 `06_validate_fix.py` (V1–V10)
 
-Result: **10/10 PASS**. Observed values other than V1 and V9 were not recorded from the run.
+Result: **10/10 PASS** (`VALIDATION SUMMARY: 10/10 passed`).
 
 | Check | What it proves | Observed | Result |
 |-------|----------------|----------|--------|
 | V1 | `silver_cases`: rows == distinct `caseid` == distinct `primaryid` | 397,224 / 397,224 / 397,224 | PASS |
-| V2 | No orphan `primaryid` in `silver_drug_reactions` / `silver_therapy` | [NUMBER?] | PASS |
-| V3 | `signal_flag` ∈ {SIGNAL, NO_SIGNAL}, no nulls | [NUMBER?] | PASS |
-| V4 | Every SIGNAL meets all three Evans criteria | [NUMBER?] violations | PASS |
-| V5 | No NO_SIGNAL row meets all three criteria | [NUMBER?] violations | PASS |
-| V6 | No null PRR where `case_count ≥ 3` | [NUMBER?] | PASS |
-| V7 | `haldane_applied` true exactly when a raw cell is 0 | [NUMBER?] mismatches | PASS |
-| V8 | `total_reports` == distinct `primaryid` in `silver_drug_reactions` | [NUMBER?] vs [NUMBER?] | PASS |
-| V9 | Independent plain-SQL recompute matches (rel. tol. 0.001) | 373,012 / 373,012 | PASS |
-| V10 | No `case_count` > `drug_total` or `event_total` | [NUMBER?] | PASS |
+| V2 | No orphan `primaryid` in `silver_drug_reactions` / `silver_therapy` | orphan_drug_reactions 0 · orphan_therapy 0 | PASS |
+| V3 | `signal_flag` ∈ {SIGNAL, NO_SIGNAL}, no nulls | 0 violating rows | PASS |
+| V4 | Every SIGNAL meets all three Evans criteria | 0 violations | PASS |
+| V5 | No NO_SIGNAL row meets all three criteria | 0 violations | PASS |
+| V6 | No null PRR where `case_count ≥ 3` | 0 violating rows | PASS |
+| V7 | `haldane_applied` true exactly when a raw cell is 0 | 0 mismatched rows | PASS |
+| V8 | `total_reports` == distinct `primaryid` in `silver_drug_reactions` | 397,209 vs 397,209 | PASS |
+| V9 | Independent plain-SQL recompute matches (rel. tol. 0.001) | gold 373,012 · recomputed 373,012 · joined 373,012 · 0 mismatched | PASS |
+| V10 | No `case_count` > `drug_total` or `event_total` | 0 violating rows | PASS |
+
+397,224 cases in `silver_cases`; 397,209 contribute to signal denominators (N). The 15 excluded cases have drug and reaction rows but no primary-suspect (PS) drug, so they cannot form a drug-event pair under FR-11. Verified by ad hoc query (Appendix A.6).
 
 ### 4.2 `sql/verify_signal_fix.sql` (written by Will, read-only for the agent — D6)
 
@@ -261,34 +275,63 @@ GROUP BY 1;
 
 ### A.3 Retention widen (to recover the v1 baseline via time travel)
 
-Run because time travel to v1 failed with `DELTA_UNSUPPORTED_TIME_TRAVEL_BEYOND_DELETED_FILE_RETENTION_DURATION` (Issue 18). Applied to both `gold_signals` and `silver_cases`.
+Run because time travel to v1 failed with `DELTA_UNSUPPORTED_TIME_TRAVEL_BEYOND_DELETED_FILE_RETENTION_DURATION` (Issue 18). Python cell, run 2026-09-29 08:20 UTC (v4), on both tables.
 
-```sql
-ALTER TABLE delta.`/Volumes/workspace/default/pharma_raw/gold/gold_signals`
-SET TBLPROPERTIES (
-  'delta.deletedFileRetentionDuration' = 'interval 180 days',
-  'delta.logRetentionDuration'         = 'interval 180 days');
-
-ALTER TABLE delta.`/Volumes/workspace/default/pharma_raw/silver/silver_cases`
-SET TBLPROPERTIES (
-  'delta.deletedFileRetentionDuration' = 'interval 180 days',
-  'delta.logRetentionDuration'         = 'interval 180 days');
+```python
+base = "/Volumes/workspace/default/pharma_raw/"
+for t in ["gold/gold_signals", "silver/silver_cases"]:
+    spark.sql(f"""ALTER TABLE delta.`{base}{t}` SET TBLPROPERTIES (
+      'delta.deletedFileRetentionDuration' = 'interval 180 days',
+      'delta.logRetentionDuration'         = 'interval 180 days')""")
 ```
 
-### A.4 Retention reset
+### A.4 Restore v1 to the baseline tables
 
-Both properties were UNSET after the v1 data was restored to the `_baseline` paths. Each `ALTER` added a table version, giving versions 4–5 with data identical to v3.
+Output: `gold/_gold_signals_baseline` 373,012 rows; `silver/_silver_cases_baseline` 470,891 rows.
 
-```sql
-ALTER TABLE delta.`/Volumes/workspace/default/pharma_raw/gold/gold_signals`
-UNSET TBLPROPERTIES (
-  'delta.deletedFileRetentionDuration',
-  'delta.logRetentionDuration');
-
-ALTER TABLE delta.`/Volumes/workspace/default/pharma_raw/silver/silver_cases`
-UNSET TBLPROPERTIES (
-  'delta.deletedFileRetentionDuration',
-  'delta.logRetentionDuration');
+```python
+for src, dst, v in [
+    ("gold/gold_signals",   "gold/_gold_signals_baseline",   1),
+    ("silver/silver_cases", "silver/_silver_cases_baseline", 1),
+]:
+    df = spark.read.format("delta").option("versionAsOf", v).load(base + src)
+    df.write.format("delta").mode("overwrite").save(base + dst)
+    print(f"{dst}: {spark.read.format('delta').load(base + dst).count():,} rows (from {src} v{v})")
 ```
 
-> A.3 and A.4 are reconstructed from the run description (property names, 180 days, UNSET), not pasted from the notebook cell. Confirm against the notebook before publishing.
+### A.5 Retention reset
+
+Same loop with `UNSET`. Run 2026-09-29 09:35 UTC (v5), after all verification queries. Final table version is v5, with data identical to v3.
+
+```python
+base = "/Volumes/workspace/default/pharma_raw/"
+for t in ["gold/gold_signals", "silver/silver_cases"]:
+    spark.sql(f"""ALTER TABLE delta.`{base}{t}` UNSET TBLPROPERTIES (
+      'delta.deletedFileRetentionDuration', 'delta.logRetentionDuration')""")
+```
+
+### A.6 V8 gap: why 15 cases have no drug-reaction row
+
+Run outside the verifier. Result: `no_drug_rows` 0 · `no_ps_drug` 15 · `no_reac_rows` 0 · `cases` 15.
+
+```sql
+-- V8 gap: why 15 cases have no drug-reaction row
+SELECT
+  SUM(CASE WHEN d.primaryid IS NULL THEN 1 ELSE 0 END)                    AS no_drug_rows,
+  SUM(CASE WHEN d.primaryid IS NOT NULL AND d.has_ps = 0 THEN 1 ELSE 0 END) AS no_ps_drug,
+  SUM(CASE WHEN r.primaryid IS NULL THEN 1 ELSE 0 END)                    AS no_reac_rows,
+  COUNT(*)                                                                AS cases
+FROM (
+  SELECT c.primaryid
+  FROM delta.`/Volumes/workspace/default/pharma_raw/silver/silver_cases` c
+  LEFT ANTI JOIN delta.`/Volumes/workspace/default/pharma_raw/silver/silver_drug_reactions` dr
+    ON c.primaryid = dr.primaryid
+) x
+LEFT JOIN (
+  SELECT primaryid, MAX(CASE WHEN role_cod = 'PS' THEN 1 ELSE 0 END) AS has_ps
+  FROM delta.`/Volumes/workspace/default/pharma_raw/bronze/bronze_drug` GROUP BY primaryid
+) d ON x.primaryid = d.primaryid
+LEFT JOIN (
+  SELECT DISTINCT primaryid FROM delta.`/Volumes/workspace/default/pharma_raw/bronze/bronze_reac`
+) r ON x.primaryid = r.primaryid;
+```
