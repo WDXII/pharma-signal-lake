@@ -22,6 +22,7 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 10 — New `sync.paths` Entries Didn't Populate Until the Remote Folder Existed](#issue-10--new-syncpaths-entries-didnt-populate-until-the-remote-folder-existed)
    - [Issue 11 — Case-Insensitive Column Name Collision Silently Corrupted PRR/ROR](#issue-11--case-insensitive-column-name-collision-silently-corrupted-prrror)
    - [Issue 12 — `%run` Mixed With Other Statements in a Cell Silently Falls Back to IPython `%run`](#issue-12--run-mixed-with-other-statements-in-a-cell-silently-falls-back-to-ipython-run)
+   - [Issue 13 — BRD.md Still Documented the Pre-Fix Behavior as the Requirement](#issue-13--brdmd-still-documented-the-pre-fix-behavior-as-the-requirement)
 
 ---
 
@@ -661,6 +662,30 @@ Restructured every stage in `99_run_pipeline.py` so `# MAGIC %run ./0N_...` is a
 #### Rule to Remember
 
 `%run` (as `# MAGIC %run`) must be the **only** statement in its cell — not just correctly prefixed with `# MAGIC`. Putting any other Python code (even a comment-adjacent `print()`) in the same cell causes a silent fallback to IPython's `%run` line magic instead of a hard error, which is easy to miss because the surrounding code still runs and prints success. When orchestrating multiple notebooks with `%run`, always give each one its own dedicated cell, and don't trust a "✓ complete" print that sits in the same cell as (or right after, but not gated on) the `%run` call — check for the target notebook's own output, not just the orchestrator's banner.
+
+---
+
+### Issue 13 — BRD.md Still Documented the Pre-Fix Behavior as the Requirement
+
+**Status:** Resolved
+**Date encountered:** September 2026
+**Affected files:** `BRD.md`
+
+#### Symptom
+
+No runtime error — a documentation drift, surfaced only by asking "does this branch's work align with the BRD?" `BRD.md` v2.0 still specified: DEMO deduplication on `primaryid` (FR-06); Evans Criteria as `case_count >= 3 AND PRR >= 2` with no chi-squared term (FR-16, Section 5 Scope, Glossary); and three-tier signal classification — signal, weak signal, or no signal (Section 5 Scope). Every one of these is the exact pre-fix behavior that D4, D3, and D1 respectively identified as wrong and corrected. FR-14/FR-15 (the PRR/ROR formulas) were also silently incomplete — they never mentioned the Haldane-Anscombe correction (D2), even though it changes both formulas whenever a contingency-table cell is zero.
+
+#### Root Cause
+
+`DECISIONS.md` was updated as each correctness decision was made (D1-D4), but `BRD.md` — the project's canonical requirements document — was never revisited to match. The two documents drifted apart: `DECISIONS.md` correctly recorded the old design as rejected, while `BRD.md` kept describing that same rejected design as the formal requirement. Nothing in the working process forced a cross-check between "a decision changed behavior" and "the requirements doc that specified the old behavior."
+
+#### Resolution
+
+Updated `BRD.md` to v2.1: FR-06 now specifies dedup on `caseid` with child tables filtered to the surviving `primaryid`s (D4); FR-14/FR-15 now document the Haldane-Anscombe correction (D2); FR-16 now requires chi-squared (Yates) ≥ 4 in addition to case count and PRR (D3); Section 5 Scope and the Evans Criteria glossary entry now describe binary `SIGNAL`/`NO_SIGNAL` classification (D1); added a Haldane-Anscombe Correction glossary entry. Cross-referenced from `DECISIONS.md` D1-D4.
+
+#### Rule to Remember
+
+When a `DECISIONS.md` entry changes behavior that a formal requirements document already specifies, update that requirements document in the same pass — don't treat the decisions log alone as sufficient. A requirements doc that silently disagrees with the decisions log is worse than having no requirements doc at all, because it still looks authoritative. Periodically ask "does this match the BRD?" as its own explicit check, not just "does this match the decisions log?" — the two can drift apart from each other even when each is internally consistent.
 
 ---
 

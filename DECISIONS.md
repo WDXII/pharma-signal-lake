@@ -36,6 +36,11 @@ over-signaling from an arbitrary threshold.
 shows only `gold_signal_flag_NO_SIGNAL` (323,028) and
 `gold_signal_flag_SIGNAL` (49,984) — no `WEAK_SIGNAL` key at all.
 
+**BRD sync (2026-09-29):** `BRD.md` v2.1 updated — Section 5 Scope and the
+Evans Criteria glossary entry now describe binary `SIGNAL`/`NO_SIGNAL`
+classification, replacing the stale "signal, weak signal, or no signal"
+wording. See `DEVELOPER.md` Issue 13.
+
 ---
 
 ## D2 — Haldane Correction for Zero Cells
@@ -76,6 +81,11 @@ before the fix, now 0) — these are pairs that were previously structurally
 incapable of ever being flagged `SIGNAL`, since a null PRR always fails a
 `>=` comparison, and can now be evaluated properly.
 
+**BRD sync (2026-09-29):** `BRD.md` v2.1 FR-14/FR-15 updated to document
+this correction — they previously omitted it entirely even though it
+changes both the PRR and ROR formulas whenever a cell is zero. See
+`DEVELOPER.md` Issue 13.
+
 ---
 
 ## D3 — Full Evans Criteria (n ≥ 3 AND PRR ≥ 2 AND χ² (Yates) ≥ 4)
@@ -107,6 +117,11 @@ fix, down from the old combined `SIGNAL` (56,491) + `WEAK_SIGNAL` (5,562) =
 62,053 — even after also rescuing the 106 previously-null-PRR exclusive
 pairs (D2). Net effect: the added `chi_sq >= 4.0` gate removes more
 low-confidence pairs than the Haldane correction adds back.
+
+**BRD sync (2026-09-29):** `BRD.md` v2.1 FR-16 and the Evans Criteria
+glossary entry updated to require chi-squared (Yates) ≥ 4 in addition to
+case count and PRR, replacing the stale PRR-only wording. See
+`DEVELOPER.md` Issue 13.
 
 ---
 
@@ -140,6 +155,10 @@ not an intentional tradeoff between options.
 397,224 → 397,224, 0 superseded, identical to baseline. Zero numeric impact
 this quarter as predicted; the fix is validated structurally (Issue 9,
 Issue 12) but not yet exercised by a quarter with an actual case update.
+
+**BRD sync (2026-09-29):** `BRD.md` v2.1 FR-06 updated to specify dedup on
+`caseid` with child-table `primaryid` filtering, replacing the stale
+`primaryid`-based wording. See `DEVELOPER.md` Issue 13.
 
 ---
 
