@@ -29,6 +29,7 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 17 — Zero-Cell Nulls Hid Exclusive Signals (C = A → Null PRR → NO_SIGNAL)](#issue-17--zero-cell-nulls-hid-exclusive-signals-c--a--null-prr--no_signal)
    - [Issue 18 — Baseline Not Snapshotted Before the Re-Run; Time Travel Blocked by Retention](#issue-18--baseline-not-snapshotted-before-the-re-run-time-travel-blocked-by-retention)
    - [Issue 19 — `sql/` Not Syncing to Databricks Because `sync.paths` Omitted It](#issue-19--sql-not-syncing-to-databricks-because-syncpaths-omitted-it)
+   - [Issue 20 — Unit-Test Runner Failed on Workspace Files: `__pycache__` / `.pytest_cache` Writes Not Supported](#issue-20--unit-test-runner-failed-on-workspace-files-__pycache__--pytest_cache-writes-not-supported)
 4. [Running Unit Tests](#4-running-unit-tests)
 
 ---
@@ -855,6 +856,43 @@ Added `sql` to `sync.paths`. Per Issue 10, a brand-new top-level folder may not 
 #### Rule to Remember
 
 When a new top-level folder is added to the repo, add it to `sync.paths` in the same commit. Then confirm it appears in the Workspace file browser (see Issue 10 for the manual folder fallback).
+
+---
+
+### Issue 20 — Unit-Test Runner Failed on Workspace Files: `__pycache__` / `.pytest_cache` Writes Not Supported
+
+**Status:** Resolved (`tests/run_unit_tests.py` change)
+**Date encountered:** 2026-09-29
+**Affected files:** `tests/run_unit_tests.py`
+
+#### Symptom
+
+Running `tests/run_unit_tests.py` on Serverless compute (synced to `/Workspace/Users/.../PharmaSignalLake/files/tests/`) failed before any test ran:
+
+```
+ImportError while loading conftest '.../tests/conftest.py'.
+OSError: [Errno 95] Operation not supported: '.../tests/__pycache__'
+RuntimeError: Unit tests failed (pytest exit code 4)
+```
+
+#### Root Cause
+
+Workspace files do not allow Python bytecode (`__pycache__`) or pytest cache (`.pytest_cache`) writes. Importing `conftest.py` tried to write bytecode into `tests/__pycache__`, the write failed with `OSError`, and pytest aborted during collection setup.
+
+#### Resolution
+
+Immediately before `pytest.main(...)` in `tests/run_unit_tests.py`:
+
+```python
+sys.dont_write_bytecode = True
+exit_code = pytest.main(["-v", "-p", "no:cacheprovider", TESTS_DIR])
+```
+
+`sys.dont_write_bytecode = True` stops `__pycache__` writes; `-p no:cacheprovider` stops `.pytest_cache` writes.
+
+#### Rule to Remember
+
+Pytest exit code 4 means the tests never ran. It is a setup error, not a test failure. Never report a test count without seeing the "N passed" line in the output.
 
 ---
 

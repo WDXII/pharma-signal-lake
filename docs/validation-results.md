@@ -57,7 +57,9 @@ Found during validation: `silver_cases` fanned out on OUTC/RPSR despite a commen
 | `05_profile.py` (after) run | 2026-09-29 09:37 UTC |
 | Verifier | `sql/verify_signal_fix.sql`, blob `9ce44bb`, commit `d0f5097`, unmodified |
 | Compute | Serverless |
-| Pipeline code commit validated | [NUMBER?] |
+| Pipeline code commit validated | `7f552ea` (fix(silver): D7 fan-out, 2026-09-29 12:14 +0800). The v3 run wrote at 12:22–12:24 +0800. |
+
+Only later commit touching notebooks/src before this doc: 55a640f (validation_queries.sql + DEVELOPER.md only; not pipeline code).
 
 ---
 

@@ -26,6 +26,7 @@ dbutils.library.restartPython()
 # COMMAND ----------
 
 import os
+import sys
 
 import pytest
 
@@ -38,7 +39,8 @@ print("=" * 60)
 print("  PharmaSignalLake — Unit Tests (src/signal_math.py)")
 print("=" * 60)
 
-exit_code = pytest.main(["-v", TESTS_DIR])
+sys.dont_write_bytecode = True          # Workspace files don't allow __pycache__ writes
+exit_code = pytest.main(["-v", "-p", "no:cacheprovider", TESTS_DIR])   # no .pytest_cache either
 
 print("=" * 60)
 
