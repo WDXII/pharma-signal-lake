@@ -272,13 +272,22 @@ def recompute_signals_plain_sql(dr: DataFrame, n_total: int) -> DataFrame:
             GROUP BY pt
         ),
         cells AS (
+            -- Cast every raw cell to DOUBLE here, before any arithmetic on them.
+            -- chi_sq's denominator multiplies four marginals together
+            -- ((a+b)*(c+d)*(a+c)*(b+d)), which overflows BIGINT for an N this
+            -- large (~4x10^5^4 far exceeds BIGINT's ~9.2x10^18 max) and trips
+            -- ANSI's ARITHMETIC_OVERFLOW. DOUBLE arithmetic doesn't hit ANSI's
+            -- overflow check (it saturates to Infinity instead of raising),
+            -- which is exactly why compute_signals() (src/signal_math.py)
+            -- casts pair_n/drug_n/reaction_n to DoubleType() before this same
+            -- computation — this recompute now mirrors that (D5).
             SELECT
                 p.drugname AS drugname,
                 p.pt       AS pt,
-                p.pair_n   AS raw_a,
-                dt.drug_n - p.pair_n     AS raw_b,
-                rt.reaction_n - p.pair_n AS raw_c,
-                {n_total} - dt.drug_n - rt.reaction_n + p.pair_n AS raw_d
+                CAST(p.pair_n AS DOUBLE) AS raw_a,
+                CAST(dt.drug_n - p.pair_n AS DOUBLE)     AS raw_b,
+                CAST(rt.reaction_n - p.pair_n AS DOUBLE) AS raw_c,
+                CAST({n_total} - dt.drug_n - rt.reaction_n + p.pair_n AS DOUBLE) AS raw_d
             FROM pair_counts p
             JOIN drug_totals dt     ON p.drugname = dt.drugname
             JOIN reaction_totals rt ON p.pt = rt.pt
@@ -291,10 +300,10 @@ def recompute_signals_plain_sql(dr: DataFrame, n_total: int) -> DataFrame:
         adjusted AS (
             SELECT
                 drugname, pt, raw_a, raw_b, raw_c, raw_d, recomputed_haldane_applied,
-                CASE WHEN recomputed_haldane_applied THEN raw_a + 0.5 ELSE CAST(raw_a AS DOUBLE) END AS adj_a,
-                CASE WHEN recomputed_haldane_applied THEN raw_b + 0.5 ELSE CAST(raw_b AS DOUBLE) END AS adj_b,
-                CASE WHEN recomputed_haldane_applied THEN raw_c + 0.5 ELSE CAST(raw_c AS DOUBLE) END AS adj_c,
-                CASE WHEN recomputed_haldane_applied THEN raw_d + 0.5 ELSE CAST(raw_d AS DOUBLE) END AS adj_d
+                CASE WHEN recomputed_haldane_applied THEN raw_a + 0.5 ELSE raw_a END AS adj_a,
+                CASE WHEN recomputed_haldane_applied THEN raw_b + 0.5 ELSE raw_b END AS adj_b,
+                CASE WHEN recomputed_haldane_applied THEN raw_c + 0.5 ELSE raw_c END AS adj_c,
+                CASE WHEN recomputed_haldane_applied THEN raw_d + 0.5 ELSE raw_d END AS adj_d
             FROM haldane
         )
         SELECT
