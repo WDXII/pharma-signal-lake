@@ -86,6 +86,8 @@ this correction — they previously omitted it entirely even though it
 changes both the PRR and ROR formulas whenever a cell is zero. See
 `DEVELOPER.md` Issue 13.
 
+**Verified 2026-09-29:** 106 exclusive pairs rescued (NO_SIGNAL → SIGNAL); null PRR 2,978 → 0 (`verify_signal_fix.sql` D/E, v1 vs v3; see `docs/validation-results.md`).
+
 ---
 
 ## D3 — Full Evans Criteria (n ≥ 3 AND PRR ≥ 2 AND χ² (Yates) ≥ 4)
@@ -123,6 +125,8 @@ glossary entry updated to require chi-squared (Yates) ≥ 4 in addition to
 case count and PRR, replacing the stale PRR-only wording. See
 `DEVELOPER.md` Issue 13.
 
+**Verified 2026-09-29:** 6,613 SIGNAL → NO_SIGNAL, all "failed χ² only" with 0 Haldane-affected (H/H2; see `docs/validation-results.md`).
+
 ---
 
 ## D4 — Deduplicate on `caseid`, Not `primaryid`
@@ -159,6 +163,8 @@ Issue 12) but not yet exercised by a quarter with an actual case update.
 **BRD sync (2026-09-29):** `BRD.md` v2.1 FR-06 updated to specify dedup on
 `caseid` with child-table `primaryid` filtering, replacing the stale
 `primaryid`-based wording. See `DEVELOPER.md` Issue 13.
+
+**Verified 2026-09-29:** 0 superseded DEMO versions in 2026Q1 (query A: 397,224 rows = 397,224 `primaryid` = 397,224 `caseid`); latent fix, no numeric impact this quarter.
 
 ---
 
@@ -271,3 +277,20 @@ distinct_caseid=397,224 distinct_primaryid=397,224`) unmodified from its
 original specification, and `V9`'s independent recompute (373,012/373,012
 pairs, 0 mismatches) confirming the signal math itself is untouched by this
 change.
+
+**Verified 2026-09-29:** 73,667 fan-out rows removed (`silver_cases` 470,891 → 397,224, 15.6%); query B after: 397,224 = 397,224 = 397,224.
+
+---
+
+## D8 — Dashboard Ranking: Exclusive Pairs in a Separate Panel
+
+**Date:** 2026-09-29
+**Status:** Accepted
+
+**Context:** After D2 every pair has a finite PRR, but exclusive pairs (`haldane_applied = true`, where every report of the event involves the drug) carry Haldane-corrected PRRs that are not interpretable magnitudes (for example 210,279). Ranked on the same axis as ordinary pairs they would fill every top slot of the Signal Leaderboard (FR-21).
+
+**Decision:** Exclusive pairs (`haldane_applied = true`) appear in a separate "Exclusive reports" panel and never in the main leaderboard. The main leaderboard ranks non-exclusive `SIGNAL` rows. PRR is not shown for exclusive pairs.
+
+**Consequences:** The leaderboard stays interpretable, and exclusive pairs remain visible in their own panel. The Power BI Signal Leaderboard page needs two visuals with a `haldane_applied` filter on each. `BRD.md` FR-21 is updated to match (v2.2).
+
+**Alternatives rejected:** One leaderboard sorted by PRR or by χ² — rejected because Haldane-corrected magnitudes are not comparable with ordinary PRRs and exclusive pairs would dominate the top of the list.

@@ -3,10 +3,13 @@
 **Project:** PharmaSignalLake  
 **Full Title:** PharmaSignalLake: A Pharmacovigilance Signal Detection Lakehouse  
 **Author:** Will  
-**Version:** 2.1  
+**Version:** 2.2  
 **Date:** May 2026 (Revised 2026-09-29)  
 **Status:** Draft
 
+> **Revision 2.2** — FR-21 implements D8 (main leaderboard = non-exclusive `SIGNAL` rows; separate
+> "Exclusive reports" panel) and the row-retention success metric is reworded (see Change Log).
+>
 > **Revision 2.1** — Updated FR-06, FR-14, FR-15, FR-16, Section 5 Scope, and the Evans Criteria
 > glossary entry to reflect the signal-correctness fix on `fix/signal-correctness`
 > (see `DECISIONS.md` D1-D4 for full rationale and 2026Q1 confirmation evidence).
@@ -174,7 +177,7 @@ This project addresses all three problems with a structured, reproducible, scala
 |----|-------------|
 | FR-19 | Gold layer data shall be exported to CSV or Parquet for Power BI Desktop consumption |
 | FR-20 | The Power BI report shall contain three pages: Signal Leaderboard, Patient Demographics, and Case Outcomes |
-| FR-21 | Signal Leaderboard shall display top drug-event pairs ranked by PRR, with ROR and case count as secondary columns |
+| FR-21 | Signal Leaderboard shall display the top non-exclusive `SIGNAL` drug-event pairs (`haldane_applied = false`) ranked by PRR, with ROR and case count as secondary columns. Exclusive pairs (`haldane_applied = true`) shall appear in a separate "Exclusive reports" panel, not in the main leaderboard, and PRR shall not be shown for them (D8) |
 
 ---
 
@@ -197,7 +200,7 @@ This project addresses all three problems with a structured, reproducible, scala
 | Metric | Target |
 |--------|--------|
 | All seven FAERS source files ingested successfully | 7 of 7 |
-| Row retention: Bronze raw vs. Silver after deduplication | ≥ 95% |
+| `silver_cases` contains exactly one row per distinct `caseid` | Rows = distinct `caseid` (verified: 397,224 = 397,224) |
 | Drug-event pairs with computed PRR and ROR | All pairs with ≥ 3 cases |
 | Signal classification coverage | 100% of qualifying pairs classified |
 | Signal-fix verification | All V1–V10 checks in `06_validate_fix.py` and all `sql/verify_signal_fix.sql` checks pass |
@@ -274,3 +277,4 @@ This project addresses all three problems with a structured, reproducible, scala
 |---------|------|---------|-----|
 | 2.0 | May 2026 | Initial requirements | — |
 | 2.1 | 2026-09-29 | Scope and glossary: removed "weak signal"; classification is `SIGNAL` / `NO_SIGNAL` (D1). FR-06: dedup on `caseid`, keep max `caseversion`, child tables filtered to surviving `primaryid`s (D4); Scope bullet updated to match. FR-10: OUTC/RPSR aggregated per `primaryid` (D7). FR-14/FR-15: Haldane-Anscombe correction for zero cells (D2). FR-16: full Evans with chi-squared (D3); added FR-16a (`chi_sq` column). FR-17: `chi_sq` and `haldane_applied` columns, binary flag. Success Metrics: added V1–V10 and `verify_signal_fix.sql` pass criterion. Risks: signal-math mitigation now implemented (unit tests + independent SQL recompute). Glossary: updated Evans, added Chi-squared. Author set to Will | v2.0 deduplicated on `primaryid` (a no-op), left zero-cell pairs with null PRR (labelled NO_SIGNAL), and classified on PRR alone with an unsupported weak tier. See DECISIONS.md D1–D7 and DEVELOPER.md Issues 9, 13, 14 |
+| 2.2 | 2026-09-29 | FR-21: main leaderboard = non-exclusive `SIGNAL` rows; separate "Exclusive reports" panel for `haldane_applied = true` pairs (D8). Success Metrics: "Row retention ≥ 95%" replaced by "`silver_cases` contains exactly one row per distinct `caseid` (verified: 397,224 = 397,224)" | Haldane-corrected PRRs for exclusive pairs are not interpretable magnitudes and would fill every top slot. The old retention metric penalized correct dedup and fan-out removal. See DECISIONS.md D8 |

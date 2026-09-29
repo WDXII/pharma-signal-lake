@@ -250,7 +250,7 @@ The dashboard has three pages, each reading from a Gold export CSV:
 
 | Page | Source Table | Key Visuals |
 |------|-------------|-------------|
-| **Signal Leaderboard** | `gold_signals.csv` | Top drug-reaction pairs ranked by PRR; case count, ROR columns; signal flag filter |
+| **Signal Leaderboard** | `gold_signals.csv` | Top non-exclusive `SIGNAL` pairs ranked by PRR; case count, ROR columns; separate "Exclusive reports" panel for pairs with `haldane_applied = true` (D8) |
 | **Patient Demographics** | `gold_demographics.csv` | Age group bar chart; sex donut chart; top 15 reporter countries bar chart |
 | **Case Outcomes** | `gold_outcomes.csv` | Outcome distribution (death, hospitalization, etc.); reporter type distribution |
 
@@ -292,6 +292,14 @@ This is a portfolio project. The following simplifications are documented and in
 ---
 
 ## Results & Validation
+
+Verified on 2026Q1 against the pre-fix baseline (Delta time travel, `gold_signals` v1 → v3):
+
+- **Independent verification passes:** `06_validate_fix.py` V1–V10 10/10 PASS, and the independent SQL recompute matched all 373,012 pairs (PRR, ROR, χ² and Haldane mismatches all 0).
+- **One row per case in Silver:** `silver_cases` fell from 470,891 to 397,224 rows (73,667 fan-out rows removed, 15.6%), equal to the 397,224 distinct cases.
+- **Exclusive pairs no longer hidden:** null PRR went from 2,978 pairs to 0, and 106 exclusive pairs moved from `NO_SIGNAL` to `SIGNAL`. They are shown in a separate "Exclusive reports" panel, not the main leaderboard.
+- **Stricter classification:** `SIGNAL` went from 56,491 to 49,984 (−6,507, −11.5%). 6,613 pairs (11.7% of 56,491) were lost, all because they failed the χ² ≥ 4 criterion.
+- **Dedup was a latent bug:** it removed 0 rows in 2026Q1 (0 superseded case versions), but prevents double-counting when quarters are added.
 
 Baseline-vs-after metrics, check results (V1–V10 and `sql/verify_signal_fix.sql`), the signal transition matrix, and limitations are recorded in **[docs/validation-results.md](docs/validation-results.md)**.
 

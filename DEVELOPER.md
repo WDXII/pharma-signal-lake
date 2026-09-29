@@ -26,6 +26,9 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 14 — silver_cases Fanned Out on OUTC/RPSR Despite a Comment Claiming Otherwise](#issue-14--silver_cases-fanned-out-on-outcrpsr-despite-a-comment-claiming-otherwise)
    - [Issue 15 — Notebook Attached to a SQL Warehouse Instead of Interactive/Serverless Compute](#issue-15--notebook-attached-to-a-sql-warehouse-instead-of-interactiveserverless-compute)
    - [Issue 16 — Validation Query 2.1 Checked `primaryid` Uniqueness and Could Never Fail](#issue-16--validation-query-21-checked-primaryid-uniqueness-and-could-never-fail)
+   - [Issue 17 — Zero-Cell Nulls Hid Exclusive Signals (C = A → Null PRR → NO_SIGNAL)](#issue-17--zero-cell-nulls-hid-exclusive-signals-c--a--null-prr--no_signal)
+   - [Issue 18 — Baseline Not Snapshotted Before the Re-Run; Time Travel Blocked by Retention](#issue-18--baseline-not-snapshotted-before-the-re-run-time-travel-blocked-by-retention)
+   - [Issue 19 — `sql/` Not Syncing to Databricks Because `sync.paths` Omitted It](#issue-19--sql-not-syncing-to-databricks-because-syncpaths-omitted-it)
 4. [Running Unit Tests](#4-running-unit-tests)
 
 ---
@@ -780,6 +783,78 @@ Before running any PySpark notebook in this project, check what it's attached to
 #### Rule to Remember
 
 For every check, name the broken output that would make it fail. If you cannot describe a concrete bad dataset the check would flag, the check is decoration. Check uniqueness on the entity key (`caseid`), not on a key that already encodes the version.
+
+---
+
+### Issue 17 — Zero-Cell Nulls Hid Exclusive Signals (C = A → Null PRR → NO_SIGNAL)
+
+**Status:** Resolved (D2)
+**Date encountered:** September 2026 (found in the 2026-09-25 audit; verified 2026-09-29)
+**Affected files:** `notebooks/03_gold_signals.py`, `src/signal_math.py`
+
+#### Symptom
+
+Pairs where the drug was the only reporter of the event (`case_count = event_total`, so the 2×2 cell `C − A = 0`) had a null PRR and were classified `NO_SIGNAL`. In the 2026Q1 baseline (`gold_signals` v1), 2,978 pairs had a null PRR, and query E of `sql/verify_signal_fix.sql` showed 106 pairs with `case_count ≥ 3` in that state: NO_SIGNAL 106, null PRR 106.
+
+#### Root Cause
+
+With a zero cell the PRR/ROR denominators are zero, and the guards returned null. A null fails every `>=` comparison, so the classification fell through to the default `NO_SIGNAL`. The most exclusive drug–event pairs were the ones that could never be flagged. Disabling ANSI mode (Issue 7) had hidden the underlying guard bug.
+
+#### Resolution
+
+Haldane-Anscombe correction (+0.5 to all four cells when any is 0) for PRR/ROR only, with a `haldane_applied` column, and ANSI mode left on (D2, D5). Verified 2026-09-29: null PRR 2,978 → 0, and the 106 query-E pairs went from NO_SIGNAL with null PRR to SIGNAL with null PRR 0.
+
+#### Rule to Remember
+
+A null metric must never fall silently into a default class. Every classification branch needs an explicit outcome for null inputs, and a check should count nulls in the metric per class.
+
+---
+
+### Issue 18 — Baseline Not Snapshotted Before the Re-Run; Time Travel Blocked by Retention
+
+**Status:** Resolved (workaround)
+**Date encountered:** 2026-09-29
+**Affected files:** none (Delta table properties on `gold_signals` and `silver_cases`; no repo files)
+
+#### Symptom
+
+Recovering the pre-fix baseline (`gold_signals` v1 / `silver_cases` v1, 2026-06-13) with `VERSION AS OF 1` failed with `DELTA_UNSUPPORTED_TIME_TRAVEL_BEYOND_DELETED_FILE_RETENTION_DURATION`.
+
+#### Root Cause
+
+The baseline was never copied out before re-running the pipeline (PROJECT-LOG T3 was meant to capture it). Delta time travel only reaches versions whose data files are still retained, and `delta.deletedFileRetentionDuration` defaults to 168 hours (7 days). The v1 files were months old.
+
+#### Resolution
+
+Temporarily raised `delta.deletedFileRetentionDuration` and `delta.logRetentionDuration` to 180 days, restored v1 to `_baseline` paths, then UNSET both properties. The property changes added versions 4–5 with data identical to v3. The ad hoc SQL is in `docs/validation-results.md` Appendix A. Raising retention only worked because the files had not yet been physically removed, which was not guaranteed.
+
+#### Rule to Remember
+
+Time travel is not a backup. Before any re-run that will be compared against, snapshot the baseline to its own table or path (for example a `_baseline` copy) and record the Delta version. Do not rely on the default retention window.
+
+---
+
+### Issue 19 — `sql/` Not Syncing to Databricks Because `sync.paths` Omitted It
+
+**Status:** Resolved (`databricks.yml` change); the manual-folder fallback from Issue 10 may still apply
+**Date encountered:** 2026-09-29
+**Affected files:** `databricks.yml`
+
+#### Symptom
+
+`sql/verify_signal_fix.sql` existed locally and in git but did not appear under the workspace `PharmaSignalLake/files/` folder.
+
+#### Root Cause
+
+`databricks.yml` `sync.paths` listed only `notebooks`, `src` and `tests`. Only listed folders are synced, so `sql/` was never uploaded.
+
+#### Resolution
+
+Added `sql` to `sync.paths`. Per Issue 10, a brand-new top-level folder may not appear remotely while a sync session is already running. If `sql/` does not show up after saving `databricks.yml`, restart sync or run `databricks bundle sync`, and as a fallback create an empty `sql` folder in the Workspace UI.
+
+#### Rule to Remember
+
+When a new top-level folder is added to the repo, add it to `sync.paths` in the same commit. Then confirm it appears in the Workspace file browser (see Issue 10 for the manual folder fallback).
 
 ---
 
