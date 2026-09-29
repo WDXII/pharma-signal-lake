@@ -23,6 +23,7 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 11 — Case-Insensitive Column Name Collision Silently Corrupted PRR/ROR](#issue-11--case-insensitive-column-name-collision-silently-corrupted-prrror)
    - [Issue 12 — `%run` Mixed With Other Statements in a Cell Silently Falls Back to IPython `%run`](#issue-12--run-mixed-with-other-statements-in-a-cell-silently-falls-back-to-ipython-run)
    - [Issue 13 — BRD.md Still Documented the Pre-Fix Behavior as the Requirement](#issue-13--brdmd-still-documented-the-pre-fix-behavior-as-the-requirement)
+   - [Issue 14 — silver_cases Fanned Out on OUTC/RPSR Despite a Comment Claiming Otherwise](#issue-14--silver_cases-fanned-out-on-outcrpsr-despite-a-comment-claiming-otherwise)
 
 ---
 
@@ -686,6 +687,33 @@ Updated `BRD.md` to v2.1: FR-06 now specifies dedup on `caseid` with child table
 #### Rule to Remember
 
 When a `DECISIONS.md` entry changes behavior that a formal requirements document already specifies, update that requirements document in the same pass — don't treat the decisions log alone as sufficient. A requirements doc that silently disagrees with the decisions log is worse than having no requirements doc at all, because it still looks authoritative. Periodically ask "does this match the BRD?" as its own explicit check, not just "does this match the decisions log?" — the two can drift apart from each other even when each is internally consistent.
+
+---
+
+### Issue 14 — `silver_cases` Fanned Out on OUTC/RPSR Despite a Comment Claiming Otherwise
+
+**Status:** Resolved
+**Date encountered:** September 2026
+**Affected files:** `notebooks/02_silver_clean.py`, `notebooks/03_gold_signals.py`
+
+#### Symptom
+
+`06_validate_fix.py`'s `V1` check failed: `silver_cases` had 470,891 rows for only 397,224 distinct cases (`rows=470,891 distinct_caseid=397,224 distinct_primaryid=397,224`). This was already a known number from `05_profile.py`'s baseline ("fan-out 73,667 from OUTC x RPSR"), and on 2026-09-28 the team had explicitly decided to accept it rather than fix it, scoping `V1` to check dedup-level uniqueness instead. Re-examining it turned up something that decision hadn't accounted for: `build_silver_cases()`'s own comment already said *"We aggregate to a comma-separated list to avoid fan-out on the join"* — but the code directly below it never did that aggregation.
+
+#### Root Cause
+
+`build_silver_cases()` joined DEMO with OUTC and RPSR after only `dropDuplicates(["primaryid", "outc_cod"])` / `dropDuplicates(["primaryid", "rpsr_cod"])` — which removes exact duplicate rows but does nothing about a case legitimately having multiple *distinct* outcome or report-source codes. A case with 2 outcome codes and 3 report-source codes produced a 2×3=6-row cartesian fan-out from the two plain `left` joins, instead of the single aggregated row the code's own comment described.
+
+#### Resolution
+
+- `02_silver_clean.py`: aggregate `outc_cod` and `rpsr_cod` per `primaryid` into a comma-separated list (`collect_set` + `concat_ws`) before the join, so `silver_cases` is one row per case.
+- `03_gold_signals.py`: `build_gold_outcomes()` now `explode(split(col, ","))`s each list back into one row per (case, code) before its existing per-code `groupBy`/`countDistinct`, so the `gold_outcomes` output — and the Power BI Case Outcomes page — is numerically unchanged.
+- Recorded as `DECISIONS.md` D7, which explicitly supersedes the 2026-09-28 "keep the grain" decision.
+- `docs/data_dictionary.md` updated: `silver_cases`' grain and `outc_cod`/`rpsr_cod` descriptions now reflect one row per case with multi-valued code columns.
+
+#### Rule to Remember
+
+A comment describing what the code does is a claim, not a guarantee — when a table's row count doesn't match its expected grain, check whether the surrounding comment already promised the fix that's missing, before assuming the mismatch is an accepted design tradeoff. Also: when an earlier decision is reversed, don't just fix the code — record the reversal itself (which decision, why it no longer holds) so the decisions log stays a true history instead of silently going stale the way the original BRD did (Issue 13).
 
 ---
 

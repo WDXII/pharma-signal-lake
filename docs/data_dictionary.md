@@ -1,8 +1,13 @@
 # Data Dictionary
 
 **Project:** PharmaSignalLake
-**Version:** 1.0
-**Date:** May 2026
+**Version:** 1.1
+**Date:** May 2026 (Revised 2026-09-29)
+
+> **Revision 1.1** — Updated `gold_signals` (added `chi_sq`/`haldane_applied`, binary
+> `signal_flag`), Section 4.9, and Section 6 to match `DECISIONS.md` D1-D3; updated
+> `silver_cases`' grain and `outc_cod`/`rpsr_cod` columns to match D7 (see `DEVELOPER.md`
+> Issues 13-14).
 
 This document is the authoritative schema reference for every table in the pipeline —
 from raw Bronze source files through Silver integration to Gold analytics outputs.
@@ -220,7 +225,7 @@ Every Silver table includes:
 ### 2.1 silver_cases
 
 **Built from:** DEMO + OUTC + RPSR
-**Grain:** One row per case-outcome-source combination (`primaryid` + `outc_cod` + `rpsr_cod`)
+**Grain:** One row per case (`primaryid`)
 **Purpose:** Unified case-level table for demographic analysis and outcome reporting
 
 | Column | Type | Nullable | Source | Notes |
@@ -241,8 +246,8 @@ Every Silver table includes:
 | `occp_cod` | STRING | Yes | DEMO | Reporter occupation code |
 | `wt` | STRING | Yes | DEMO | Weight — not normalized (too sparse) |
 | `wt_cod` | STRING | Yes | DEMO | Weight unit |
-| `outc_cod` | STRING | Yes | OUTC | Null if no outcome record exists for this case |
-| `rpsr_cod` | STRING | Yes | RPSR | Null if no source record exists for this case |
+| `outc_cod` | STRING | Yes | OUTC | Comma-separated list of outcome codes if the case has more than one (e.g. `DE,HO`); null if no outcome record exists for this case |
+| `rpsr_cod` | STRING | Yes | RPSR | Comma-separated list of report source codes if the case has more than one; null if no source record exists for this case |
 | `source_quarter` | STRING | No | Audit | |
 | `silver_load_timestamp` | TIMESTAMP | No | Audit | |
 
@@ -323,9 +328,11 @@ Every Gold table includes:
 | `drug_total` | INTEGER | No | **B** — total distinct cases reporting this drug (any reaction) |
 | `event_total` | INTEGER | No | **C** — total distinct cases reporting this reaction (any drug) |
 | `total_reports` | INTEGER | No | **N** — total distinct cases in the entire dataset |
-| `prr` | DOUBLE | Yes | Proportional Reporting Ratio. Null if denominator is zero. Rounded to 4 decimal places. |
-| `ror` | DOUBLE | Yes | Reporting Odds Ratio. Null if denominator is zero. Rounded to 4 decimal places. |
-| `signal_flag` | STRING | No | `SIGNAL` / `WEAK_SIGNAL` / `NO_SIGNAL`. See [Section 4.9](#49-signal_flag--signal-classification). |
+| `prr` | DOUBLE | No | Proportional Reporting Ratio. Haldane-Anscombe corrected when any contingency-table cell is zero (see `haldane_applied`) — never null. Rounded to 4 decimal places. |
+| `ror` | DOUBLE | No | Reporting Odds Ratio. Same Haldane-Anscombe correction as `prr` — never null. Rounded to 4 decimal places. |
+| `chi_sq` | DOUBLE | Yes | Yates-corrected chi-squared statistic, computed on the raw (non-Haldane-adjusted) cells. Null if any of its four marginals is zero. Rounded to 4 decimal places. |
+| `haldane_applied` | BOOLEAN | No | `true` if any of the four contingency-table cells (A, B-A, C-A, N-B-C+A) was zero and the Haldane-Anscombe correction (+0.5 to all four cells) was applied before computing `prr`/`ror`. |
+| `signal_flag` | STRING | No | `SIGNAL` / `NO_SIGNAL` (binary). See [Section 4.9](#49-signal_flag--signal-classification). |
 | `source_quarter` | STRING | No | Audit |
 | `gold_load_timestamp` | TIMESTAMP | No | Audit |
 
@@ -335,6 +342,10 @@ Every Gold table includes:
 PRR = (A / B) / ((C - A) / (N - B))
 ROR = (A / (B - A)) / ((C - A) / (N - B - C + A))
 ```
+
+If any of the four contingency-table cells (`A`, `B-A`, `C-A`, `N-B-C+A`) is zero, add
+0.5 to all four cells (Haldane-Anscombe correction) before computing PRR/ROR above —
+`chi_sq` always uses the raw, uncorrected cells.
 
 ---
 
@@ -503,9 +514,8 @@ Source: `gold_signals.signal_flag` (derived)
 
 | Value | Rule | Interpretation |
 |-------|------|----------------|
-| `SIGNAL` | `case_count >= 3` AND `prr >= 2.0` | Meets Evans Criteria. Warrants clinical review. |
-| `WEAK_SIGNAL` | `case_count >= 3` AND `prr >= 1.5` | Below Evans threshold but above background noise. Monitor. |
-| `NO_SIGNAL` | All other pairs | No disproportionate reporting detected. |
+| `SIGNAL` | `case_count >= 3` AND `prr >= 2.0` AND `chi_sq (Yates) >= 4.0` | Meets full Evans Criteria. Warrants clinical review. |
+| `NO_SIGNAL` | All other pairs | No disproportionate reporting detected, or fails the chi-squared significance test. |
 
 ---
 
@@ -540,11 +550,11 @@ These are known characteristics of FAERS data. All are documented in the pipelin
 | **Partial dates** | `DEMO.event_dt`, `THER.start_dt`, `THER.end_dt` | Flagged in `date_quality`; not dropped |
 | **Missing age units** | `DEMO.age_cod` | Flagged as `MISSING_UNIT` in `age_quality`; `age_years` set to null |
 | **Extreme age values** | `DEMO.age` | Flagged as `INVALID_OVER_120` or `INVALID_NEGATIVE`; not dropped |
-| **Multiple outcomes per case** | `OUTC.outc_cod` | Left-joined; one row per case-outcome combination in Silver |
-| **Multiple sources per case** | `RPSR.rpsr_cod` | Left-joined; one row per case-source combination in Silver |
+| **Multiple outcomes per case** | `OUTC.outc_cod` | Aggregated to a comma-separated list per case in Silver (`silver_cases.outc_cod`); exploded back to one row per code in `gold_outcomes` |
+| **Multiple sources per case** | `RPSR.rpsr_cod` | Same handling as outcomes — comma-separated in `silver_cases.rpsr_cod`, exploded in `gold_outcomes` |
 | **No drug vocabulary control** | `DRUG.drugname` | Known limitation. Production systems use WHO drug dictionary. Documented in README. |
-| **PRR/ROR denominator edge cases** | `gold_signals` | Division-by-zero guarded with `when` conditions; result set to null |
+| **PRR/ROR denominator edge cases** | `gold_signals` | Haldane-Anscombe correction (+0.5 to all four contingency-table cells) applied when any cell is zero, before computing PRR/ROR; see `haldane_applied`. No null PRR/ROR values remain. |
 
 ---
 
-*End of Data Dictionary — Version 1.0 — PharmaSignalLake*
+*End of Data Dictionary — Version 1.1 — PharmaSignalLake*

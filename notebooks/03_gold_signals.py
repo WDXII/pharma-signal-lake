@@ -42,7 +42,7 @@ from pyspark.sql import DataFrame
 from pyspark.sql.functions import (
     col, count, countDistinct, when, lit,
     current_timestamp, round as spark_round,
-    sum as spark_sum
+    sum as spark_sum, explode, split
 )
 from signal_math import compute_signals
 
@@ -258,9 +258,14 @@ def build_gold_outcomes() -> DataFrame:
     cases = read_silver("cases")
 
     # Outcome distribution
+    # silver_cases.outc_cod is a comma-separated list of codes (one row per
+    # case — see 02_silver_clean.py's build_silver_cases). Explode it back
+    # into one row per (case, code) before the per-code distribution below,
+    # so case_count is unaffected by that aggregation.
     outc_dist = (
         cases
         .filter(col("outc_cod").isNotNull())
+        .withColumn("outc_cod", explode(split(col("outc_cod"), ",")))
         .withColumn(
             "outc_label",
             when(col("outc_cod") == "DE", "Death")
@@ -278,9 +283,12 @@ def build_gold_outcomes() -> DataFrame:
     )
 
     # Reporter source distribution
+    # Same explode as outc_dist above — rpsr_cod is also a comma-separated
+    # list per case in silver_cases.
     rpsr_dist = (
         cases
         .filter(col("rpsr_cod").isNotNull())
+        .withColumn("rpsr_cod", explode(split(col("rpsr_cod"), ",")))
         .withColumn(
             "rpsr_label",
             when(col("rpsr_cod") == "HP",  "Healthcare Professional")

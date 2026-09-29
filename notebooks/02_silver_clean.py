@@ -36,7 +36,8 @@ sys.path.append(os.path.join(os.getcwd(), "..", "src"))
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import (
     col, upper, trim, max as spark_max, when, coalesce,
-    current_timestamp, lit, to_date, datediff
+    current_timestamp, lit, to_date, datediff,
+    collect_set, concat_ws
 )
 from pyspark.sql.types import DoubleType
 from signal_math import dedup_cases
@@ -125,7 +126,9 @@ def dedup_demo() -> DataFrame:
 # MAGIC **Transformations:**
 # MAGIC 1. Normalize age to years using `age_cod` multiplier
 # MAGIC 2. Flag missing/invalid ages (do NOT drop — preserves case count)
-# MAGIC 3. Left-semi-join OUTC and RPSR to the surviving primaryids, then left join on `primaryid`
+# MAGIC 3. Left-semi-join OUTC and RPSR to the surviving primaryids, aggregate each to a
+# MAGIC    comma-separated list of codes per `primaryid` (one row per case, not one per
+# MAGIC    outcome/source combination), then left join on `primaryid`
 
 # COMMAND ----------
 
@@ -174,8 +177,13 @@ def build_silver_cases(demo_dedup: DataFrame) -> DataFrame:
     )
 
     # ── Step 2: Load OUTC and RPSR, filtered to surviving cases ───────────────
-    # RPSR can have multiple rows per primaryid (multiple report sources).
-    # We aggregate to a comma-separated list to avoid fan-out on the join.
+    # OUTC and RPSR can have multiple rows per primaryid (multiple outcomes,
+    # multiple report sources). Aggregate each to a comma-separated list per
+    # primaryid so the joins below don't fan out silver_cases into one row
+    # per (outcome, source) combination (see DEVELOPER.md Issue 14 — the
+    # previous code didn't aggregate despite this same comment claiming it
+    # did). gold_outcomes explodes the list back out before its per-code
+    # distribution, so its output is unaffected by this change.
 
     outc_raw   = read_bronze("outc")
     outc_count = outc_raw.count()
@@ -184,8 +192,10 @@ def build_silver_cases(demo_dedup: DataFrame) -> DataFrame:
         .join(survivors, on="primaryid", how="left_semi")
         .select("primaryid", "outc_cod")
         .dropDuplicates(["primaryid", "outc_cod"])
+        .groupBy("primaryid")
+        .agg(concat_ws(",", collect_set("outc_cod")).alias("outc_cod"))
     )
-    print(f"  OUTC: {outc_count:,} rows -> {outc.count():,} rows kept for surviving cases")
+    print(f"  OUTC: {outc_count:,} rows -> {outc.count():,} cases with at least one outcome")
 
     rpsr_raw   = read_bronze("rpsr")
     rpsr_count = rpsr_raw.count()
@@ -194,8 +204,10 @@ def build_silver_cases(demo_dedup: DataFrame) -> DataFrame:
         .join(survivors, on="primaryid", how="left_semi")
         .select("primaryid", "rpsr_cod")
         .dropDuplicates(["primaryid", "rpsr_cod"])
+        .groupBy("primaryid")
+        .agg(concat_ws(",", collect_set("rpsr_cod")).alias("rpsr_cod"))
     )
-    print(f"  RPSR: {rpsr_count:,} rows -> {rpsr.count():,} rows kept for surviving cases")
+    print(f"  RPSR: {rpsr_count:,} rows -> {rpsr.count():,} cases with at least one source")
 
     # ── Step 3: Join DEMO + OUTC + RPSR ───────────────────────────────────────
     silver_cases = (

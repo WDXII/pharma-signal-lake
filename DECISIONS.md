@@ -210,3 +210,48 @@ Will, never as a silent edit.
 **Alternatives rejected:** Letting the same session maintain both the
 pipeline and its verifier — rejected because it collapses the independence
 the verification step exists to provide.
+
+---
+
+## D7 — Aggregate OUTC/RPSR Per Case Instead of Keeping the Fan-Out
+
+**Date:** 2026-09-29
+**Status:** Accepted (supersedes the 2026-09-28 "option A: keep the grain" call)
+
+**Context:** `build_silver_cases()` (`02_silver_clean.py`) joins DEMO with OUTC
+and RPSR, both of which can have multiple rows per `primaryid` (multiple
+outcomes, multiple report sources). The join was never aggregated, so a case
+with 2 outcome codes and 3 report-source codes produced 2x2=6 rows instead
+of 1 — `silver_cases` had 470,891 rows for only 397,224 distinct cases on
+2026Q1. On 2026-09-28, this was already known (surfaced via profiling) and
+the team explicitly decided to accept it ("option A: keep the grain") rather
+than fix it, scoping `06_validate_fix.py`'s `V1` check to dedup-level
+uniqueness instead of `silver_cases`' row count. Re-examining it on
+2026-09-29 (triggered by `V1` failing when it was written to check the
+originally-specified "rows == distinct caseid == distinct primaryid") found
+that `build_silver_cases()`'s own comment already claimed *"We aggregate to
+a comma-separated list to avoid fan-out on the join"* — the aggregation
+code just didn't exist. This isn't an accepted design tradeoff; it's the
+implementation not doing what it already claimed to do.
+
+**Decision:** Aggregate `outc_cod` and `rpsr_cod` per `primaryid` into a
+comma-separated list (`collect_set` + `concat_ws`) before joining to DEMO,
+so `silver_cases` becomes one row per case. `build_gold_outcomes()`
+(`03_gold_signals.py`) explodes each list back into one row per (case, code)
+before its existing per-code `groupBy`/`countDistinct`, so its output
+(`gold_outcomes.csv`, and the Power BI Case Outcomes page it feeds) is
+numerically unchanged.
+
+**Consequences:** `silver_cases` now satisfies `rows == distinct caseid ==
+distinct primaryid`, so `06_validate_fix.py`'s `V1` needs no special-casing
+— it passes as originally specified. `silver_cases.outc_cod`/`rpsr_cod` are
+now multi-valued (comma-separated) columns rather than single codes; any
+future direct consumer of `silver_cases` (not routed through
+`gold_outcomes`) must account for this.
+
+**Alternatives rejected:** Keeping the fan-out (the original 2026-09-28
+decision) — reversed because it wasn't actually an intentional tradeoff, it
+was this bug going undiagnosed. Flagging the fan-out with a data-quality
+column instead of fixing it — rejected because the fix is no more complex
+than the flag would have been, and `build_gold_outcomes()` already needed
+to keep working, not just be told about the problem.
