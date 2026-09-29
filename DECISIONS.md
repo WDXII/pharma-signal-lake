@@ -255,3 +255,19 @@ was this bug going undiagnosed. Flagging the fan-out with a data-quality
 column instead of fixing it — rejected because the fix is no more complex
 than the flag would have been, and `build_gold_outcomes()` already needed
 to keep working, not just be told about the problem.
+
+**Confirmed on 2026Q1 (2026-09-29):** Re-ran `02_silver_clean.py` →
+`silver_cases` now 397,224 rows (was 470,891), exactly matching distinct
+`caseid` and distinct `primaryid` — the fan-out is gone. `silver_drug_reactions`
+(1,956,087) and `silver_therapy` (404,946) unchanged, as expected since
+neither reads OUTC/RPSR. Re-ran `03_gold_signals.py` → `gold_signals`
+(373,012 pairs, SIGNAL 49,984 / NO_SIGNAL 323,028, Haldane 7,197 pairs)
+byte-identical to pre-fix, as expected since `gold_signals` never reads
+`silver_cases`; `gold_demographics` (34 rows) and `gold_outcomes` (11 rows)
+match their pre-fix row counts, confirming `build_gold_outcomes()`'s
+explode-back-out reproduces the same category set. Re-ran
+`06_validate_fix.py` → **10/10 checks pass**, including `V1` (`rows=397,224
+distinct_caseid=397,224 distinct_primaryid=397,224`) unmodified from its
+original specification, and `V9`'s independent recompute (373,012/373,012
+pairs, 0 mismatches) confirming the signal math itself is untouched by this
+change.
