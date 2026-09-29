@@ -148,7 +148,7 @@ Queries A–E run BEFORE the fix (v1, via time travel — Appendix A); A–I run
 
 ### 4.3 Unit tests
 
-`tests/run_unit_tests.py` in Databricks: [NUMBER?] passed / [NUMBER?] failed.
+`tests/run_unit_tests.py` in Databricks (Serverless, pytest 8.4.2, Python 3.12.3): 5 passed / 0 failed (`5 passed in 20.90s`).
 
 ---
 
