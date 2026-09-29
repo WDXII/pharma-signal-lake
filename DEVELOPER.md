@@ -26,6 +26,7 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 14 — silver_cases Fanned Out on OUTC/RPSR Despite a Comment Claiming Otherwise](#issue-14--silver_cases-fanned-out-on-outcrpsr-despite-a-comment-claiming-otherwise)
    - [Issue 15 — Notebook Attached to a SQL Warehouse Instead of Interactive/Serverless Compute](#issue-15--notebook-attached-to-a-sql-warehouse-instead-of-interactiveserverless-compute)
    - [Issue 16 — Validation Query 2.1 Checked `primaryid` Uniqueness and Could Never Fail](#issue-16--validation-query-21-checked-primaryid-uniqueness-and-could-never-fail)
+4. [Running Unit Tests](#4-running-unit-tests)
 
 ---
 
@@ -467,9 +468,11 @@ There is no separate `.nulls_first()` or `.nulls_last()` method. Chaining `.desc
 
 ### Issue 7 — Photon ANSI Mode Throws DIVIDE_BY_ZERO Inside `when()` Guards
 
-**Status:** Resolved  
+**Status:** Resolved — **Superseded** (see note)  
 **Date encountered:** June 2026  
 **Affected files:** `notebooks/03_gold_signals.py`
+
+> **Superseded (September 2026):** ANSI mode is re-enabled in `03_gold_signals.py` (DECISIONS.md D5). The zero-denominator cases that triggered the error are now removed by the Haldane correction (D2), which makes every contingency-table cell positive before PRR/ROR are computed. The Resolution below is kept for history only; do not repeat it. The Rule to Remember has been corrected.
 
 #### Symptom
 
@@ -497,7 +500,7 @@ Added `spark.conf.set("spark.sql.ansi.enabled", "false")` at the top of `03_gold
 
 #### Rule to Remember
 
-Databricks Serverless + Photon enforces ANSI SQL mode by default. Any notebook performing division must either use `try_divide`, pre-filter to exclude zero denominators, or disable ANSI mode with `spark.conf.set("spark.sql.ansi.enabled", "false")`. The `when()` guard alone is not sufficient in Photon ANSI mode.
+Databricks Serverless + Photon enforces ANSI SQL mode by default, and `when()` guards alone do not prevent the error. Do **not** disable ANSI mode: that silently turns a real data-shape problem into nulls (here, null PRR for exactly the most exclusive drug–event pairs, which then fell into `NO_SIGNAL`). Remove the zero denominator with the math (Haldane correction) or use `try_divide` and handle the null explicitly. If ANSI throws, find the exact expression and fix it.
 
 ---
 
@@ -781,3 +784,18 @@ For every check, name the broken output that would make it fail. If you cannot d
 ---
 
 *Add new issues below this line using the same format.*
+
+---
+
+## 4. Running Unit Tests
+
+The pure signal-math and dedup functions live in `src/signal_math.py` and are tested by `tests/test_signals.py` (hand-computed 2×2 tables, `C == A`, low case count, low chi-square, and dedup).
+
+**Run them in Databricks, not locally.** This machine has no Java, so a local `SparkSession` cannot start (Issue 2), while Free Edition serverless compute provides Spark.
+
+1. Sync the bundle (`databricks.yml` `sync.paths` includes `notebooks`, `src` and `tests`; if `src`/`tests` do not appear remotely, see Issue 10).
+2. Open `tests/run_unit_tests.py` in Databricks and attach it to Serverless/interactive compute (not a SQL Warehouse — Issue 15).
+3. Run All. It installs pytest with `%pip install pytest`, restarts Python, and calls `pytest.main()`. `tests/conftest.py` attaches to the notebook's own Spark session with `SparkSession.builder.getOrCreate()`.
+4. Expect every test to pass.
+
+Do not add `tests/run_unit_tests.py` to `99_run_pipeline.py`.

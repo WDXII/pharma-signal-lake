@@ -28,6 +28,7 @@
 12. [Notebook Execution Order](#12-notebook-execution-order)
 13. [Data Dictionary](#13-data-dictionary)
 14. [Design Decisions and Why](#14-design-decisions-and-why)
+15. [Validation Layer](#15-validation-layer)
 
 ---
 
@@ -523,9 +524,34 @@ These rationales are worth memorizing — they are real interview questions.
 | **Full Evans Criteria (≥3 cases, PRR ≥2, chi-squared ≥4)** | A PRR of 10 on 1 case is statistically meaningless — one unusual case is not a signal. The case-count and chi-squared thresholds together screen out both rare single-report associations and pairs where PRR alone would overstate confidence. |
 | **Haldane-Anscombe correction on zero cells** | Without it, PRR/ROR are undefined (null) whenever a contingency-table cell is zero — including the most exclusive drug-event pairs, the ones most worth flagging. The correction (+0.5 to all four cells) trades a small amount of precision for making every pair classifiable. |
 | **Aggregate OUTC/RPSR before joining in `silver_cases`** | Both files can have multiple rows per case. Joining without aggregating first fans `silver_cases` out to one row per (case, outcome, source) combination instead of one row per case. `gold_outcomes` explodes the aggregated list back out before its per-code distribution, so its output is unaffected. |
+| **D1 — Binary `signal_flag`** | Evans defines one threshold; the earlier 1.5 "weak" tier had no literature basis and diluted the meaning of a flag. See DECISIONS.md D1. |
+| **D2 — Haldane correction, PRR/ROR only** | Applied only when a cell is 0, and never to `chi_sq`, so the significance test stays on real counts. See DECISIONS.md D2. |
+| **D3 — Full Evans (n ≥ 3 AND PRR ≥ 2 AND χ² ≥ 4)** | See the Evans row above and DECISIONS.md D3. |
+| **D4 — Dedup on `caseid`; child tables semi-joined** | See the deduplication row above and DECISIONS.md D4. |
+| **D5 — ANSI mode stays ON** | Division safety comes from the math (Haldane makes every cell positive), not from disabling engine checks. Disabling ANSI (DEVELOPER.md Issue 7) hid the zero-cell problem instead of fixing it. See DECISIONS.md D5. |
+| **D6 — Verifier is independent** | `sql/verify_signal_fix.sql` is written by a human outside the coding session and is read-only for the assistant; a fix cannot be graded by the code that made it. See DECISIONS.md D6. |
+| **D7 — One row per case in `silver_cases`** | See the OUTC/RPSR aggregation row above and DECISIONS.md D7. |
 | **Power BI over Tableau** | Power BI Desktop is free. Tableau requires a license. For a portfolio project, using a free tool with full functionality is the correct choice. Power BI is also the dominant tool in clinical data organizations. |
 | **Manual notebook execution** | Databricks Free Edition does not support job scheduling. This is a constraint, not a design choice. In a production environment on paid Databricks, notebooks would be wrapped in a Workflow and scheduled. The architecture already supports this — `99_run_pipeline.py` is the scheduling entrypoint. |
 | **One notebook per pipeline stage** | Mirrors professional Databricks project structure. Each notebook is independently testable and debuggable. A single monolithic notebook is harder to maintain and impossible to unit test. |
+
+---
+
+## 15. Validation Layer
+
+The validation layer sits *beside* the Medallion layers. It reads pipeline tables and never
+writes to them; it is **not** part of `99_run_pipeline.py`.
+
+| Component | Role | Writes to |
+|-----------|------|-----------|
+| `notebooks/05_profile.py` | Row-count and data-quality metrics per layer; run once as `baseline` on the unfixed tables, once as `after` | `gold/_profile_results`, `gold/_gold_signals_baseline` (baseline run only) |
+| `notebooks/06_validate_fix.py` | Checks V1–V10 (PASS/FAIL, raises on any FAIL), an independent plain-SQL recompute of every pair (V9), and the before/after report | its own `_`-prefixed tables only |
+| `sql/verify_signal_fix.sql` | Independent SQL verification, written by Will (D6); read-only for the assistant | nothing |
+| `src/signal_math.py` + `tests/` | Pure signal-math and dedup functions and their pytest suite, run in Databricks via `tests/run_unit_tests.py` | nothing |
+| `notebooks/validation_queries.sql` | Ad-hoc exploration and data-quality queries | nothing |
+
+Run order is in [SETUP.md § Verify Your Environment](SETUP.md#10-step-9--verify-your-environment);
+results are recorded in [docs/validation-results.md](docs/validation-results.md).
 
 ---
 

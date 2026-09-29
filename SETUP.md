@@ -40,6 +40,7 @@ Complete all items before starting Step 1.
 | Web browser | Chrome or Edge recommended for Databricks | — |
 | Storage space | ~2 GB free on your local machine | — |
 | Internet connection | Required throughout; FAERS ZIP files are ~300–500 MB | — |
+| Python + pytest (optional) | Not needed to run the pipeline or the unit tests — tests run inside Databricks via `tests/run_unit_tests.py` (no local Java/Spark on most machines; see DEVELOPER.md Issue 2). Local Python only helps editor tooling (`requirements-dev.txt`) | https://www.python.org |
 
 **No paid subscriptions are required.** Databricks Free Edition, GitHub Free, and Power BI Desktop are all zero-cost.
 
@@ -325,6 +326,24 @@ print("Delta write successful")
 ```
 Expected output: `Delta write successful`
 
+### Verify a Signal-Correctness Run (run order)
+
+Run these in order. Steps 1–3 must happen **before** the fixed pipeline is run, because they capture the unfixed state.
+
+| # | Action | Record / screenshot |
+|---|--------|---------------------|
+| 1 | `DESCRIBE HISTORY` on `gold_signals` | The current version number — call it `<V>` (time-travel fallback) |
+| 2 | `sql/verify_signal_fix.sql` queries **A–E** | Save the output as BEFORE |
+| 3 | `05_profile.py` with widget `run_label = baseline` (on the current, unfixed tables; also snapshots `_gold_signals_baseline`) | Printed metrics and the Delta version it reports |
+| 4 | `99_run_pipeline.py` with the fixed code | Row counts per stage; confirm no stage silently skipped |
+| 5 | `05_profile.py` with `run_label = after` | Printed metrics |
+| 6 | `06_validate_fix.py` | The V1–V10 PASS/FAIL table, the transition matrix, and the RESUME NUMBERS block (it raises if any check FAILs) |
+| 7 | `sql/verify_signal_fix.sql` queries **A–I** with `<V>` from step 1 | Save the output as AFTER |
+
+Unit tests (independent of the steps above): run `tests/run_unit_tests.py` in Databricks; expect all tests to pass.
+
+Fill in [docs/validation-results.md](docs/validation-results.md) from these outputs. Notebooks 05 and 06 only read pipeline tables and are not part of `99_run_pipeline.py`. Attach them to Serverless/interactive compute, not a SQL Warehouse.
+
 ### Power BI Verification
 
 1. Open Power BI Desktop
@@ -364,6 +383,15 @@ Expected output: `Delta write successful`
 ### Delta write fails with "path already exists"
 
 - This is expected on a re-run. All tables (Bronze, Silver, and Gold) use `.mode("overwrite")` partitioned by `source_quarter` — re-running for the same quarter is safe and idempotent
+
+### Delta write fails after adding columns
+
+- `gold_signals` gained `chi_sq` and `haldane_applied`. Writing new columns over an existing table fails with a schema-mismatch error unless the write sets `.option("overwriteSchema", "true")`. `03_gold_signals.py` already does; if you write the table from elsewhere, add it
+
+### DIVIDE_BY_ZERO under ANSI mode
+
+- A division guard is wrong. Do **not** disable ANSI mode (`spark.sql.ansi.enabled`) — that only hides the bad denominator (DECISIONS.md D5, DEVELOPER.md Issue 7). Find the expression that divides and fix the math so the denominator cannot be zero (the Haldane correction handles zero contingency-table cells)
+- Similarly, multiplying several BIGINT marginals in raw SQL can raise `ARITHMETIC_OVERFLOW`; cast to DOUBLE first
 
 ### Compute shows "quota exceeded"
 

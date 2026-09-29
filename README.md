@@ -228,6 +228,10 @@ Run in this order. Each notebook depends on the previous layer being complete.
 04_export.py          ← Exports Gold → CSV
 ```
 
+### Option C — Verify a Run
+
+Follow the seven-step run order in **[SETUP.md § Verify Your Environment](SETUP.md#10-step-9--verify-your-environment)**: record the `gold_signals` Delta version, capture the BEFORE baseline, run the pipeline, then run `05_profile.py` (`after`), `06_validate_fix.py` (V1–V10), and `sql/verify_signal_fix.sql`. Notebooks 05 and 06 are read-only and are not part of `99_run_pipeline.py`.
+
 ### Adding a New Quarter
 
 1. Download the new quarter's FAERS files
@@ -263,6 +267,13 @@ The dashboard has three pages, each reading from a Gold export CSV:
 | Uppercase + trim for drug names | FAERS has no drug name vocabulary control. Normalization prevents fragmentation (e.g., `"ASPIRIN"` vs `"Aspirin "`). |
 | Full Evans Criteria (cases, PRR, chi-squared) | A PRR of 10 on 1 case is statistically meaningless. Requiring chi-squared (Yates) ≥ 4 in addition to the case-count and PRR thresholds screens out low-confidence pairs that PRR alone would flag. |
 | Haldane-Anscombe correction on zero cells | Without it, any pair with an empty contingency-table cell gets a null PRR/ROR and silently drops out of signal detection — including some of the most exclusive, clinically interesting drug-event pairs. |
+| D1 — Binary `signal_flag` | `SIGNAL` / `NO_SIGNAL` only; the 1.5 "weak" tier had no literature basis. |
+| D2 — Haldane correction | +0.5 to all four cells when any is 0, for PRR/ROR only, so no pair gets a null PRR. |
+| D3 — Full Evans | `case_count ≥ 3` AND `PRR ≥ 2` AND Yates `chi_sq ≥ 4`. |
+| D4 — Dedup on `caseid` | `primaryid` already includes the version, so deduping on it is a no-op; keep max `caseversion` per `caseid`, semi-join child tables. |
+| D5 — ANSI mode stays on | Division safety comes from the math, not from disabling engine checks. |
+| D6 — Independent verifier | `sql/verify_signal_fix.sql` is written by a human, outside the coding session, and is read-only for the assistant. |
+| D7 — One row per case in Silver | OUTC/RPSR are aggregated per `primaryid` before joining, so `silver_cases` does not fan out. |
 | Power BI via CSV export | No Databricks connector license required. Works entirely within the Free Edition and Power BI Desktop constraints. |
 
 ---
@@ -274,7 +285,15 @@ This is a portfolio project. The following simplifications are documented and in
 - **Drug name normalization is basic** (uppercase + trim only). A production system would use a MedDRA or WHO drug dictionary for entity resolution.
 - **No automated scheduling** — Databricks Free Edition does not support job scheduling. The pipeline runs manually.
 - **Single data source** — only FDA FAERS. A production pharmacovigilance system would also ingest EudraVigilance (EU) and WHO VigiAccess for global coverage.
+- **Haldane is a convention** — +0.5 to each cell is the common continuity correction, not the only defensible one; it affects only sparse pairs and never `chi_sq`.
+- **Single quarter verified** — the signal-fix validation has been run on 2026Q1 only.
 - **No confidence intervals** — PRR and ROR are computed as point estimates (chi-square significance testing via Evans Criteria is implemented; 95% CI is not).
+
+---
+
+## Results & Validation
+
+Baseline-vs-after metrics, check results (V1–V10 and `sql/verify_signal_fix.sql`), the signal transition matrix, and limitations are recorded in **[docs/validation-results.md](docs/validation-results.md)**.
 
 ---
 

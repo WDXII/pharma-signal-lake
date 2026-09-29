@@ -2,7 +2,7 @@
 
 **Project:** PharmaSignalLake  
 **Full Title:** PharmaSignalLake: A Pharmacovigilance Signal Detection Lakehouse  
-**Author:** [Your Name]  
+**Author:** Will  
 **Version:** 2.1  
 **Date:** May 2026 (Revised 2026-09-29)  
 **Status:** Draft
@@ -27,6 +27,7 @@
 10. [Assumptions and Constraints](#10-assumptions-and-constraints)
 11. [Risks](#11-risks)
 12. [Glossary](#12-glossary)
+13. [Change Log](#change-log)
 
 ---
 
@@ -86,7 +87,7 @@ This project addresses all three problems with a structured, reproducible, scala
 
 - Ingestion of all seven FDA FAERS file types: DEMO, DRUG, INDI, OUTC, REAC, RPSR, THER
 - Processing of one quarter minimum (2026Q1); pipeline extensible to any number of quarters
-- Deduplication strategy based on `primaryid` as the unique case-version identifier
+- Deduplication on `caseid` (the case entity key), retaining the highest `caseversion`; `primaryid` is used for joins
 - PRR and ROR computation for all drug-event pairs meeting the Evans minimum threshold (≥ 3 cases)
 - Signal classification: signal or no signal (binary), per full Evans Criteria (case count, PRR, and chi-squared)
 - Power BI dashboard with three report pages
@@ -151,7 +152,7 @@ This project addresses all three problems with a structured, reproducible, scala
 | FR-07 | DRUG `drugname` and `prod_ai` fields shall be standardized to uppercase with leading/trailing whitespace removed |
 | FR-08 | REAC `pt` (Preferred Term) field shall be standardized to uppercase |
 | FR-09 | Invalid or null `age` values shall be flagged with a data quality indicator column rather than dropped |
-| FR-10 | A unified Silver case table shall join DEMO, OUTC, and RPSR on `primaryid` |
+| FR-10 | A unified Silver case table shall join DEMO, OUTC, and RPSR on `primaryid`. OUTC and RPSR shall be aggregated to one row per `primaryid` before joining, so the case table has exactly one row per case |
 | FR-11 | A Silver drug-reaction table shall join DRUG and REAC on `primaryid`, filtered to Primary Suspect drugs (`role_cod = 'PS'`) only |
 | FR-12 | Silver tables shall include `silver_load_timestamp` and `source_quarter` audit columns |
 
@@ -163,7 +164,8 @@ This project addresses all three problems with a structured, reproducible, scala
 | FR-14 | PRR shall be computed as: `(A / B) / ((C - A) / (N - B))`. If any of the four contingency-table cells (A, B-A, C-A, N-B-C+A) is zero, the Haldane-Anscombe correction (+0.5 to all four cells) shall be applied before this division, and recorded in a `haldane_applied` flag |
 | FR-15 | ROR shall be computed as: `(A / (B - A)) / ((C - A) / (N - B - C + A))`, with the same Haldane-Anscombe correction as FR-14 applied when any cell is zero |
 | FR-16 | Signal classification shall apply full Evans Criteria: cases ≥ 3 AND PRR ≥ 2 AND chi-squared (Yates-corrected) ≥ 4. Chi-squared shall be computed on the raw, uncorrected cells, not the Haldane-adjusted ones |
-| FR-17 | Classified signals shall be written to a Gold Delta table: `gold_signals` |
+| FR-16a | The chi-squared statistic (Yates-corrected, computed on raw cells) shall be stored in a `chi_sq` column; it is null when any marginal total is zero |
+| FR-17 | Classified signals shall be written to a Gold Delta table: `gold_signals`, including the `chi_sq` and `haldane_applied` columns. `signal_flag` shall be `SIGNAL` or `NO_SIGNAL` only |
 | FR-18 | The Gold layer shall also contain an aggregated demographics summary table and an outcome distribution table |
 
 ### Reporting Layer — Power BI
@@ -198,6 +200,7 @@ This project addresses all three problems with a structured, reproducible, scala
 | Row retention: Bronze raw vs. Silver after deduplication | ≥ 95% |
 | Drug-event pairs with computed PRR and ROR | All pairs with ≥ 3 cases |
 | Signal classification coverage | 100% of qualifying pairs classified |
+| Signal-fix verification | All V1–V10 checks in `06_validate_fix.py` and all `sql/verify_signal_fix.sql` checks pass |
 | Power BI dashboard load time on Gold data | < 10 seconds |
 | Pipeline extensibility | New quarter processed by config change only — verified with a second quarter |
 | Documentation completeness | BRD, ARCHITECTURE.md, SETUP.md, README all present in GitHub |
@@ -234,7 +237,7 @@ This project addresses all three problems with a structured, reproducible, scala
 | Daily compute quota exceeded | Medium | Medium | Process one quarter per session; checkpoint results to Delta after each layer |
 | Drug name inconsistency reduces signal accuracy | High | Medium | Document limitation clearly in README; apply uppercase + trim as baseline |
 | Free Edition account deactivated due to inactivity | Low | High | Push notebooks to GitHub after every session |
-| Signal math implementation error | Low | High | Unit-test PRR/ROR against known FAERS published benchmarks |
+| Signal math implementation error | Low | High | Unit tests (`tests/test_signals.py`) on hand-computed 2×2 tables, plus an independent plain-SQL recompute of every pair (`06_validate_fix.py` V9) — both implemented |
 
 ---
 
@@ -251,6 +254,7 @@ This project addresses all three problems with a structured, reproducible, scala
 | **ROR** | Reporting Odds Ratio — an odds-ratio-based signal metric; more statistically stable than PRR at low case counts |
 | **Signal** | A statistical pattern suggesting a potential causal relationship between a drug and an adverse event, requiring further clinical review |
 | **Evans Criteria** | Minimum threshold for signal validity: ≥ 3 cases AND PRR ≥ 2 AND chi-squared (Yates-corrected) ≥ 4 |
+| **Chi-squared (Yates)** | Significance test on the 2×2 drug-event table with continuity correction: `N·(abs(ad − bc) − N/2)² / ((a+b)(c+d)(a+c)(b+d))`. Computed on raw cells; ≥ 4 is the Evans threshold (~p < 0.05) |
 | **Haldane-Anscombe Correction** | A statistical correction (+0.5 added to all four contingency-table cells) applied when any cell is zero, so PRR and ROR remain computable instead of undefined |
 | **Medallion Architecture** | A three-layer data design pattern: Bronze (raw), Silver (cleansed), Gold (aggregated/curated) |
 | **Delta Lake** | An open-source storage layer that adds ACID transactions, versioning, and schema enforcement to Parquet files |
@@ -261,3 +265,12 @@ This project addresses all three problems with a structured, reproducible, scala
 ---
 
 *End of BRD — Version 2.0 — PharmaSignalLake*
+
+---
+
+## Change Log
+
+| Version | Date | Changes | Why |
+|---------|------|---------|-----|
+| 2.0 | May 2026 | Initial requirements | — |
+| 2.1 | 2026-09-29 | Scope and glossary: removed "weak signal"; classification is `SIGNAL` / `NO_SIGNAL` (D1). FR-06: dedup on `caseid`, keep max `caseversion`, child tables filtered to surviving `primaryid`s (D4); Scope bullet updated to match. FR-10: OUTC/RPSR aggregated per `primaryid` (D7). FR-14/FR-15: Haldane-Anscombe correction for zero cells (D2). FR-16: full Evans with chi-squared (D3); added FR-16a (`chi_sq` column). FR-17: `chi_sq` and `haldane_applied` columns, binary flag. Success Metrics: added V1–V10 and `verify_signal_fix.sql` pass criterion. Risks: signal-math mitigation now implemented (unit tests + independent SQL recompute). Glossary: updated Evans, added Chi-squared. Author set to Will | v2.0 deduplicated on `primaryid` (a no-op), left zero-cell pairs with null PRR (labelled NO_SIGNAL), and classified on PRR alone with an unsupported weak tier. See DECISIONS.md D1–D7 and DEVELOPER.md Issues 9, 13, 14 |
