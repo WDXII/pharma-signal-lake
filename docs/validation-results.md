@@ -3,7 +3,7 @@
 > Verified on 2026Q1, Databricks run of 2026-09-29. Every number below is copied from the
 > Databricks run output (`sql/verify_signal_fix.sql`, `06_validate_fix.py`, ad hoc queries in
 > Appendix A). Remaining `[NUMBER?]` cells are values that were not recorded from the run.
-> Branch: `fix/signal-correctness` · Decisions: [DECISIONS.md](../DECISIONS.md) D1–D8
+> Branch: `fix/signal-correctness` · Decisions: [DECISIONS.md](../DECISIONS.md) D1–D9
 
 ---
 
@@ -210,7 +210,39 @@ Lost-SIGNAL reasons (H2): failed χ² only 6,613 · PRR fell below 2 (Haldane) 0
 | ZOLGENSMA | RED BLOOD CELL SCHISTOCYTES PRESENT | 5 | 18701.0581 |
 | SIMVASTATIN | GLYCOGEN STORAGE DISEASE TYPE IX | 5 | 15029.7855 |
 
-> **Clinical plausibility — Will's assessment:** [TO BE WRITTEN BY WILL]
+### Case-level review of rescued signals
+
+`case_count` counts reports, not patients, and exclusive pairs fill the top of any PRR or χ² ranking, so the ten pairs above were checked at case level. Queries P1 (duplicate fingerprint), P2 (case listing) and P3 (reporter occupation) in [`sql/case_review_rescued_signals.sql`](../sql/case_review_rescued_signals.sql) were run on 2026-09-29/30. P1's fingerprint (age, age unit, sex, event date, reporter country) is built with `concat_ws`, which skips NULLs, so reports missing those fields collapse into one fingerprint; a low fingerprint count is a prompt for P2-style row review, not proof of duplication.
+
+"Likely patients (inferred)" is inferred from case data and is not a verified patient count. In every row, Reports (n) equals query I's `case_count`.
+
+| Drug | Reaction (PT) | Reports (n) | Fingerprints | Senders | Literature | Likely patients (inferred) | Case-level evidence (data facts only) | Final group (Will) |
+|------|---------------|-------------|--------------|---------|------------|----------------------------|---------------------------------------|--------------------|
+| RHOPHYLAC | RHESUS ANTIBODIES POSITIVE | 4 | 2 | 1 | 0 | duplicates not determinable | CSL BEHRING; all 4 reports `rept_cod` PER, all F, US; 3 of 4 have no age and no `event_dt` | [WILL] |
+| ADSTILADRIN | INSTILLATION SITE DISCHARGE | 10 | 8 | 1 | 0 | not assessed (P2 not run) | P1 only: 1 sender, 0 literature references | [WILL] |
+| MACI | GRAFT DELAMINATION | 3 | 3 | 1 | 0 | not assessed (P2 not run) | P1 only: 1 sender, 0 literature references | [WILL] |
+| CABLIVI | ADAMTS13 ACTIVITY ABNORMAL | 5 | 5 | 1 | 0 | not assessed (P2 not run) | P1 only: 1 sender, 0 literature references | [WILL] |
+| CARIPRAZINE | CONGENITAL EPIBLEPHARON | 3 | 2 | 1 | 0 | 1 (maternal exposure) | `rept_cod` DIR, sender FDA-CTU, `event_dt` 20221229, `fda_dt` 20260210, age 0 YR, sex M/F/F; case IDs 26376050, 26376054, 26376067 | [WILL] |
+| PARAGARD T 380A | FOREIGN BODY IN UROGENITAL TRACT | 277 | 235 | 1 | 0 | not assessed (P2 not run) | P1: 1 sender, 0 literature references. P3: 94.2% consumer or lawyer reporters (table below), consistent with stimulated reporting | [WILL] |
+| PARAGARD T 380A | REPRODUCTIVE COMPLICATION ASSOCIATED WITH DEVICE | 253 | 217 | 1 | 0 | not assessed (P2 not run) | P1: 1 sender, 0 literature references. P3: 98.4% consumer or lawyer reporters (table below), consistent with stimulated reporting | [WILL] |
+| XIAFLEX | FRACTURE OF PENIS | 7 | 6 | 1 | 0 | not assessed (P2 not run) | P1 only: 1 sender, 0 literature references | [WILL] |
+| ZOLGENSMA | RED BLOOD CELL SCHISTOCYTES PRESENT | 5 | 2 | 1 | 0 | ~2 | NOVARTIS, all EXP. US: 2 reports, 6 MON F, `event_dt` 20190923, case IDs 26265712 and 16923856. JP: 3 reports, 1 YR F, `event_dt` 20200710, `fda_dt` 20260313, case IDs 18053158, 19879160, 20941170 | [WILL] |
+| SIMVASTATIN | GLYCOGEN STORAGE DISEASE TYPE IX | 5 | 2 | 5 | 4 | 1 | 5 reports from 5 senders (MICRO LABS LIMITED, ORGANON, CIPLA, AUROBINDO, ACCORD), all EXP, US. 4 cite the same article (Huynh T, Nguyen H, Nguyen M. J Lipid Atheroscler 2026;15(1):183-92); the AUROBINDO report has no `lit_ref` but the same age and sex (46 YR, M) | [WILL] |
+
+**ParaGard reporter mix (P3, reporter occupation `occp_cod`):**
+
+| PT | CN | LW | HP | MD | PH | Total | Consumer + lawyer | Lawyer | Health professional (HP + MD + PH) |
+|----|----|----|----|----|----|-------|-------------------|--------|------------------------------------|
+| FOREIGN BODY IN UROGENITAL TRACT | 219 | 42 | 11 | 4 | 1 | 277 | 94.2% | 15.2% | 5.8% |
+| REPRODUCTIVE COMPLICATION ASSOCIATED WITH DEVICE | 141 | 108 | 2 | 2 | 0 | 253 | 98.4% | 42.7% | 1.6% |
+
+CN consumer · LW lawyer · HP other health professional · MD physician · PH pharmacist. Percentages are derived from the counts.
+
+**Patient-level finding:** 3 of the 10 pairs (Simvastatin, Cariprazine, Zolgensma) rest on fewer than three likely patients. Likely-patient counts exist for only 4 of the 10 pairs (see §7).
+
+**Reconciliation (D8, amended 2026-09-30):** exclusive pairs (`case_count = event_total`) number 2,978, equal to the pre-fix null-PRR count of 2,978. Pairs with `haldane_applied` number 7,197 = 4,166 + 2,872 + 53 + 106. Of the 159 `SIGNAL` pairs with `haldane_applied`, 106 are exclusive; the other 53 stay in the main leaderboard.
+
+> **Clinical plausibility — WILL's assessment:** [TO BE WRITTEN BY WILL]
 
 ---
 
@@ -221,6 +253,8 @@ Lost-SIGNAL reasons (H2): failed χ² only 6,613 · PRR fell below 2 (Haldane) 0
 - **Haldane is a convention, not the only option.** +0.5 to every cell is the common continuity correction, but other approaches (exact methods, Bayesian shrinkage such as EBGM) would give different values for sparse pairs. It is applied to PRR/ROR only; `chi_sq` uses raw cells.
 - **No confidence intervals.** PRR/ROR are point estimates; the χ² gate is the only significance filter.
 - **Disproportionality is not causality.** Signals are hypotheses for clinical review, not confirmed adverse reactions.
+- **`case_count` counts reports, not patients.** The same literature case submitted by several manufacturers, related reports filed together, or follow-ups filed under new case IDs can inflate n. Case-ID deduplication (D4) cannot detect these (D9).
+- **Likely-patient counts cover only 4 of the 10 reviewed pairs.** P2 (case listing) was run for Rhophylac, Cariprazine, Zolgensma and Simvastatin; for Rhophylac the count could not be determined from the missing fields. The other six pairs are "not assessed (P2 not run)". The counts are inferred from case data.
 
 ---
 
@@ -337,3 +371,15 @@ LEFT JOIN (
   SELECT DISTINCT primaryid FROM delta.`/Volumes/workspace/default/pharma_raw/bronze/bronze_reac`
 ) r ON x.primaryid = r.primaryid;
 ```
+
+### A.7 P1 — duplicate fingerprint per rescued pair
+
+SQL: `P1` in [`sql/case_review_rescued_signals.sql`](../sql/case_review_rescued_signals.sql). Result: 10 rows, one per pair; `cases` equals query I's n for every pair; fingerprints, senders and literature counts are in the evidence table in §6.
+
+### A.8 P2 — case listing for low-fingerprint pairs
+
+SQL: `P2` in [`sql/case_review_rescued_signals.sql`](../sql/case_review_rescued_signals.sql). Result: 17 rows (Cariprazine 3, Simvastatin 5, Zolgensma 5, Rhophylac 4); the facts read from them are in the evidence table in §6.
+
+### A.9 P3 — reporter occupation for the ParaGard pairs
+
+SQL: `P3` in [`sql/case_review_rescued_signals.sql`](../sql/case_review_rescued_signals.sql). Result: reporter-occupation counts for both ParaGard pairs (277 and 253 cases), shown in the reporter-mix table in §6.
