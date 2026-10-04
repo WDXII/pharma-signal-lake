@@ -339,6 +339,7 @@ Run these in order. Steps 1–3 must happen **before** the fixed pipeline is run
 | 5 | `05_profile.py` with `run_label = after` | Printed metrics |
 | 6 | `06_validate_fix.py` | The V1–V10 PASS/FAIL table, the transition matrix, and the RESUME NUMBERS block (it raises if any check FAILs) |
 | 7 | `sql/verify_signal_fix.sql` queries **A–I** with `<V>` from step 1 | Save the output as AFTER |
+| 8 (optional) | Case-level review: run P1–P3 from `sql/case_review_rescued_signals.sql` for the top rescued signals | Save the output; record findings in `docs/validation-results.md` |
 
 Unit tests (independent of the steps above): run `tests/run_unit_tests.py` in Databricks; expect all tests to pass.
 

@@ -549,6 +549,7 @@ writes to them; it is **not** part of `99_run_pipeline.py`.
 | `sql/verify_signal_fix.sql` | Independent SQL verification, written by Will (D6); read-only for the assistant | nothing |
 | `src/signal_math.py` + `tests/` | Pure signal-math and dedup functions and their pytest suite, run in Databricks via `tests/run_unit_tests.py` | nothing |
 | `notebooks/validation_queries.sql` | Ad-hoc exploration and data-quality queries | nothing |
+| `sql/case_review_rescued_signals.sql` | Manual case-level review of the top rescued signals (P1 duplicate fingerprint, P2 case listing, P3 reporter occupation). Run after verification, read-only, and not part of `99_run_pipeline.py`. Results go in `docs/validation-results.md` (D9) | nothing |
 
 Run order is in [SETUP.md § Verify Your Environment](SETUP.md#10-step-9--verify-your-environment);
 results are recorded in [docs/validation-results.md](docs/validation-results.md).
