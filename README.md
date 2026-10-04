@@ -166,6 +166,10 @@ pharma-signal-lake/
 ├── src/
 │   └── signal_math.py         ← Pure PRR/ROR/chi_sq/dedup functions, unit-testable
 │
+├── sql/
+│   ├── verify_signal_fix.sql           ← Independent verification queries (read-only for the assistant, D6)
+│   └── case_review_rescued_signals.sql ← Case-level review of the top rescued signals (manual, read-only)
+│
 ├── tests/
 │   ├── conftest.py            ← Spark fixture (attaches to Databricks' running session)
 │   ├── test_signals.py        ← pytest unit tests for src/signal_math.py
@@ -250,7 +254,7 @@ The dashboard has three pages, each reading from a Gold export CSV:
 
 | Page | Source Table | Key Visuals |
 |------|-------------|-------------|
-| **Signal Leaderboard** | `gold_signals.csv` | Top non-exclusive `SIGNAL` pairs ranked by PRR; case count, ROR columns; separate "Exclusive reports" panel for pairs with `haldane_applied = true` (D8) |
+| **Signal Leaderboard** | `gold_signals.csv` | Main leaderboard = non-exclusive `SIGNAL` pairs ranked by PRR, with case count and ROR columns and the Haldane flag in the tooltip; a separate "Exclusive reports" panel shows the 106 pairs where the drug is the only reporter of the event (D8, amended) |
 | **Patient Demographics** | `gold_demographics.csv` | Age group bar chart; sex donut chart; top 15 reporter countries bar chart |
 | **Case Outcomes** | `gold_outcomes.csv` | Outcome distribution (death, hospitalization, etc.); reporter type distribution |
 
@@ -288,6 +292,7 @@ This is a portfolio project. The following simplifications are documented and in
 - **Haldane is a convention** — +0.5 to each cell is the common continuity correction, not the only defensible one; it affects only sparse pairs and never `chi_sq`.
 - **Single quarter verified** — the signal-fix validation has been run on 2026Q1 only.
 - **No confidence intervals** — PRR and ROR are computed as point estimates (chi-square significance testing via Evans Criteria is implemented; 95% CI is not).
+- **`case_count` counts reports, not patients.** The same literature case submitted by several manufacturers, related reports filed together, or follow-ups filed under new case IDs can inflate n. Case-ID deduplication (D4) cannot detect these (D9).
 
 ---
 
@@ -299,6 +304,7 @@ Verified on 2026Q1 against the pre-fix baseline (Delta time travel, `gold_signal
 - **One row per case in Silver:** `silver_cases` fell from 470,891 to 397,224 rows (73,667 fan-out rows removed, 15.6%), equal to the 397,224 distinct cases.
 - **Exclusive pairs no longer hidden:** null PRR went from 2,978 pairs to 0, and 106 exclusive pairs moved from `NO_SIGNAL` to `SIGNAL`. They are shown in a separate "Exclusive reports" panel, not the main leaderboard.
 - **Stricter classification:** `SIGNAL` went from 56,491 to 49,984 (−6,507, −11.5%). 6,613 pairs (11.7% of 56,491) were lost, all because they failed the χ² ≥ 4 criterion.
+- **Case-level review of the top 10 rescued signals:** 3 rest on fewer than three likely patients (report duplication), see [docs/validation-results.md](docs/validation-results.md).
 - **Dedup was a latent bug:** it removed 0 rows in 2026Q1 (0 superseded case versions), but prevents double-counting when quarters are added.
 
 Baseline-vs-after metrics, check results (V1–V10 and `sql/verify_signal_fix.sql`), the signal transition matrix, and limitations are recorded in **[docs/validation-results.md](docs/validation-results.md)**.
@@ -332,3 +338,5 @@ The FAERS data used is public domain, published by the U.S. Food and Drug Admini
 [LinkedIn](https://linkedin.com/in/yourprofile) · [GitHub](https://github.com/yourusername)
 
 *Portfolio project — built to demonstrate Databricks, PySpark, and clinical data engineering skills.*
+
+Built with AI-assisted development (Claude, Claude Code). Design decisions, independent verification, and analysis reviewed and owned by William Daluyen.
