@@ -294,3 +294,43 @@ change.
 **Consequences:** The leaderboard stays interpretable, and exclusive pairs remain visible in their own panel. The Power BI Signal Leaderboard page needs two visuals with a `haldane_applied` filter on each. `BRD.md` FR-21 is updated to match (v2.2).
 
 **Alternatives rejected:** One leaderboard sorted by PRR or by χ² — rejected because Haldane-corrected magnitudes are not comparable with ordinary PRRs and exclusive pairs would dominate the top of the list.
+
+### Amended 2026-09-30
+
+**Status:** Accepted (amends the Decision and Consequences above; the original text is kept for the record)
+
+**Check run on `gold_signals` (2026Q1), grouped by `signal_flag`, `haldane_applied` and `is_exclusive` (`is_exclusive` = `case_count = event_total`):**
+
+| signal_flag | haldane_applied | is_exclusive | pairs |
+|---|---|---|---|
+| NO_SIGNAL | false | false | 315,990 |
+| NO_SIGNAL | true | false | 4,166 |
+| NO_SIGNAL | true | true | 2,872 |
+| SIGNAL | false | false | 49,825 |
+| SIGNAL | true | false | 53 |
+| SIGNAL | true | true | 106 |
+
+Reconciliation: all exclusive pairs (2,872 + 106) = 2,978 = the pre-fix null-PRR count. All `haldane_applied` pairs = 4,166 + 2,872 + 53 + 106 = 7,197.
+
+**Amended decision:**
+- The exclusive panel filter is `is_exclusive` (`case_count = event_total`), **not** `haldane_applied`. The panel shows 106 `SIGNAL` pairs.
+- Reason: the uninterpretable-PRR problem comes from `c = 0` (no other drug reports the event). The 53 `SIGNAL` pairs with `haldane_applied = true` but not exclusive (`b = 0`: every report for the drug has this event) get only a minor correction, so they stay in the main leaderboard, with `haldane_applied` shown as a tooltip flag.
+- Main leaderboard = `SIGNAL` AND NOT `is_exclusive` (49,878 pairs = 49,825 + 53).
+- Power BI derives `is_exclusive` from `case_count` and `event_total`; no pipeline change.
+
+**Alternative rejected:** filtering on `haldane_applied` under the name "Exclusive reports" — it would mislabel 53 pairs that are not exclusive.
+
+---
+
+## D9 — Defer Patient-Level (Report) Deduplication
+
+**Date:** 2026-09-30
+**Status:** Accepted
+
+**Context:** The case-level review of the top 10 rescued signals (`sql/case_review_rescued_signals.sql`, P1/P2; results in `docs/validation-results.md`) showed that `case_count` counts reports, not patients. Reports can duplicate each other through literature cases submitted by several manufacturers, related reports filed together, and follow-ups filed under new case IDs. D4's `caseid` dedup cannot detect these.
+
+**Decision:** Keep case-ID deduplication (D4) and document the limitation. No fingerprint-based (patient-level) deduplication in this release.
+
+**Consequences:** `case_count` may overstate patient counts. The case review is a manual check for top signals, not a pipeline stage.
+
+**Alternatives rejected:** Fingerprint-based deduplication now — rejected for scope, because it needs validation against a gold standard and would block the dashboard.
