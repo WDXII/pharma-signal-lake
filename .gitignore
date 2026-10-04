@@ -110,3 +110,6 @@ config_local.py
 
 # ── Personal working notes (not for the public repo) ────────
 PROJECT-LOG.md
+
+# Local working spreadsheets
+working/
