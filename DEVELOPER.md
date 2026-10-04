@@ -30,6 +30,8 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 18 — Baseline Not Snapshotted Before the Re-Run; Time Travel Blocked by Retention](#issue-18--baseline-not-snapshotted-before-the-re-run-time-travel-blocked-by-retention)
    - [Issue 19 — `sql/` Not Syncing to Databricks Because `sync.paths` Omitted It](#issue-19--sql-not-syncing-to-databricks-because-syncpaths-omitted-it)
    - [Issue 20 — Unit-Test Runner Failed on Workspace Files: `__pycache__` / `.pytest_cache` Writes Not Supported](#issue-20--unit-test-runner-failed-on-workspace-files-__pycache__--pytest_cache-writes-not-supported)
+   - [Issue 21 — `case_count` Counts Reports, Not Patients: Rescued Exclusive Signals Rest on Duplicate Reports](#issue-21--case_count-counts-reports-not-patients-rescued-exclusive-signals-rest-on-duplicate-reports)
+   - [Issue 22 — `haldane_applied` Is Not the Same as "Exclusive": the First D8 Panel Filter Would Mislabel 53 Pairs](#issue-22--haldane_applied-is-not-the-same-as-exclusive-the-first-d8-panel-filter-would-mislabel-53-pairs)
 4. [Running Unit Tests](#4-running-unit-tests)
 
 ---
@@ -893,6 +895,54 @@ exit_code = pytest.main(["-v", "-p", "no:cacheprovider", TESTS_DIR])
 #### Rule to Remember
 
 Pytest exit code 4 means the tests never ran. It is a setup error, not a test failure. Never report a test count without seeing the "N passed" line in the output.
+
+---
+
+### Issue 21 — `case_count` Counts Reports, Not Patients: Rescued Exclusive Signals Rest on Duplicate Reports
+
+**Status:** Documented limitation (D9); no pipeline change
+**Date encountered:** 2026-09-29/30
+**Affected files:** none (analysis in `sql/case_review_rescued_signals.sql`, results in `docs/validation-results.md`)
+
+#### Symptom
+
+The top 10 rescued signals (exclusive pairs moved NO_SIGNAL → SIGNAL by D2) have large `case_count` values, but the case-level review (P1/P2) showed many reports per pair share a fingerprint, a literature reference or a sender. For example, Simvastatin / Glycogen Storage Disease Type IX has 5 reports from 5 senders, 4 citing the same article; Cariprazine has 3 reports with the same event and FDA dates; Zolgensma has 5 reports that read as about 2 patients. 3 of the 10 rest on fewer than three likely patients.
+
+#### Root Cause
+
+`case_count` is `countDistinct(primaryid)`, so it counts reports. D4 deduplicates on `caseid`, which only catches updated versions of one case. It cannot detect the same literature case submitted by several manufacturers, related reports filed together, or follow-ups filed under new case IDs. Exclusive pairs sit at the top of any PRR/χ² ranking, so they are exactly where this inflation shows.
+
+#### Resolution
+
+Not fixed in the pipeline. D9 defers patient-level deduplication; the limitation is documented in README and `docs/validation-results.md` §7, and the P1–P3 case review is the manual check for top signals.
+
+#### Rule to Remember
+
+Never read a report count as a patient count. Before trusting a top-ranked signal, check its fingerprints, senders and literature references. Note that P1's fingerprint uses `concat_ws`, which skips NULLs, so reports with missing fields collapse together; a low fingerprint count needs row review (P2) before calling anything a duplicate.
+
+---
+
+### Issue 22 — `haldane_applied` Is Not the Same as "Exclusive": the First D8 Panel Filter Would Mislabel 53 Pairs
+
+**Status:** Resolved (D8 amended 2026-09-30)
+**Date encountered:** 2026-09-30
+**Affected files:** `DECISIONS.md`, `BRD.md` (FR-21), `README.md`
+
+#### Symptom
+
+D8 as first written filtered the "Exclusive reports" panel on `haldane_applied = true`, which would show 159 `SIGNAL` pairs, not the 106 exclusive ones.
+
+#### Root Cause
+
+`haldane_applied` is true whenever any of the four 2×2 cells is 0, not only `c = 0` (every report of the event involves the drug). A grouping of `gold_signals` (2026Q1) by `signal_flag`, `haldane_applied` and `is_exclusive` (`case_count = event_total`) gave: SIGNAL, `haldane_applied` true, not exclusive = **53 pairs**; SIGNAL, true, exclusive = 106; SIGNAL, false, not exclusive = 49,825 (the full output table is in DECISIONS.md D8, amended). Those 53 pairs have `b = 0` (every report for the drug has this event) and get only a minor correction. The exact SQL text was not saved in the repo; the result table is the evidence.
+
+#### Resolution
+
+The exclusive panel filter is `is_exclusive` (`case_count = event_total`), 106 `SIGNAL` pairs. The main leaderboard is `SIGNAL` AND NOT `is_exclusive` (49,878 = 49,825 + 53), with `haldane_applied` as a tooltip flag. Power BI derives `is_exclusive`; no pipeline change. DECISIONS.md D8, BRD v2.3 FR-21 and README updated.
+
+#### Rule to Remember
+
+Name a filter after the property it actually tests. Before building a visual on a flag, cross-tabulate the flag against the concept it is supposed to represent and check the cell counts.
 
 ---
 
