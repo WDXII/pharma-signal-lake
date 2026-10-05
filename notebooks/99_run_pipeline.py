@@ -54,7 +54,7 @@ print("\n[STAGE 0] Loading configuration...")
 
 # COMMAND ----------
 
-print(f"  ✓ Configuration loaded ({(datetime.now()-stage_start).seconds}s)")
+print(f"  ✓ Configuration loaded ({(datetime.now()-stage_start).total_seconds():.0f}s)")
 
 # COMMAND ----------
 # MAGIC %md
@@ -71,7 +71,7 @@ print("\n[STAGE 1] Bronze ingestion...")
 
 # COMMAND ----------
 
-print(f"  ✓ Bronze complete ({(datetime.now()-stage_start).seconds}s)")
+print(f"  ✓ Bronze complete ({(datetime.now()-stage_start).total_seconds():.0f}s)")
 
 # COMMAND ----------
 # MAGIC %md
@@ -88,7 +88,7 @@ print("\n[STAGE 2] Silver cleansing and integration...")
 
 # COMMAND ----------
 
-print(f"  ✓ Silver complete ({(datetime.now()-stage_start).seconds}s)")
+print(f"  ✓ Silver complete ({(datetime.now()-stage_start).total_seconds():.0f}s)")
 
 # COMMAND ----------
 # MAGIC %md
@@ -105,7 +105,7 @@ print("\n[STAGE 3] Gold signal detection...")
 
 # COMMAND ----------
 
-print(f"  ✓ Gold complete ({(datetime.now()-stage_start).seconds}s)")
+print(f"  ✓ Gold complete ({(datetime.now()-stage_start).total_seconds():.0f}s)")
 
 # COMMAND ----------
 # MAGIC %md
@@ -122,7 +122,7 @@ print("\n[STAGE 4] Exporting to CSV...")
 
 # COMMAND ----------
 
-print(f"  ✓ Export complete ({(datetime.now()-stage_start).seconds}s)")
+print(f"  ✓ Export complete ({(datetime.now()-stage_start).total_seconds():.0f}s)")
 
 # COMMAND ----------
 # MAGIC %md
