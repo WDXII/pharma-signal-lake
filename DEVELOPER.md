@@ -32,6 +32,7 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 20 — Unit-Test Runner Failed on Workspace Files: `__pycache__` / `.pytest_cache` Writes Not Supported](#issue-20--unit-test-runner-failed-on-workspace-files-__pycache__--pytest_cache-writes-not-supported)
    - [Issue 21 — `case_count` Counts Reports, Not Patients: Rescued Exclusive Signals Rest on Duplicate Reports](#issue-21--case_count-counts-reports-not-patients-rescued-exclusive-signals-rest-on-duplicate-reports)
    - [Issue 22 — `haldane_applied` Is Not the Same as "Exclusive": the First D8 Panel Filter Would Mislabel 53 Pairs](#issue-22--haldane_applied-is-not-the-same-as-exclusive-the-first-d8-panel-filter-would-mislabel-53-pairs)
+   - [Issue 23 — Docs Claimed More Than Was Verified: Second Quarter, Append Behavior, Schema Validation](#issue-23--docs-claimed-more-than-was-verified-second-quarter-append-behavior-schema-validation)
 4. [Running Unit Tests](#4-running-unit-tests)
 
 ---
@@ -946,7 +947,31 @@ Name a filter after the property it actually tests. Before building a visual on 
 
 ---
 
-*Add new issues below this line using the same format.*
+### Issue 23 — Docs Claimed More Than Was Verified: Second Quarter, Append Behavior, Schema Validation
+
+**Status:** Docs corrected (BRD v2.4); code behavior for a second quarter untested
+**Date encountered:** 2026-10-05
+**Affected files:** `BRD.md`, `README.md`, `ARCHITECTURE.md`, `SETUP.md`
+
+#### Symptom
+
+Docs described behavior that had not been verified. BRD v2.3 said extensibility was "verified with a second quarter" and that the pipeline would "scale to any number of quarters without code changes". Only 2026Q1 has been run. README and ARCHITECTURE said a new quarter "is appended as a new partition; existing quarters are untouched". The BRD also promised schema validation at Bronze ingestion, which PROJECT-LOG I4 records as not in code.
+
+#### Root Cause
+
+The docs were written as design intent and never re-checked against what was run. `01_bronze_ingest.py`, `02_silver_clean.py` and `03_gold_signals.py` all write with `mode("overwrite")` partitioned by `source_quarter` and no `replaceWhere`, which does not by itself show that existing quarters are preserved. A second quarter has not been run, so neither claim could have been verified.
+
+#### Resolution
+
+Reworded without changing code. BRD v2.4: extensibility is "designed for; verified on 2026Q1 only", schema validation is "planned, not yet implemented (I4)". README, ARCHITECTURE and SETUP: "Verified on 2026Q1 only", append claim removed. The second-quarter run and the write-mode check are deferred until after release (PROJECT-LOG T9).
+
+#### Rule to Remember
+
+A doc may state only what a recorded run showed. Write design intent as "designed to", and name the run that verified it. Check every "no code changes needed" claim against the actual write mode before repeating it.
+
+---
+
+*Add new issues below this line using the same format.
 
 ---
 

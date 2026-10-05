@@ -209,6 +209,8 @@ alone, outside this session. Claude may read it to understand what will be
 verified, but must never edit, move, or rename it. If a check in it appears
 wrong, stop and explain why rather than changing it.
 
+**Verified 2026-09-29:** `sql/verify_signal_fix.sql` was committed as `d0f5097` (blob `9ce44bb`) before the fix was built and was unmodified when the results in `docs/validation-results.md` were recorded.
+
 **Consequences:** Verification results stay independent of the agent under
 test. A suspected problem in the verifier surfaces as a conversation with
 Will, never as a silent edit.
@@ -309,6 +311,8 @@ change.
 | SIGNAL | false | false | 49,825 |
 | SIGNAL | true | false | 53 |
 | SIGNAL | true | true | 106 |
+
+The SQL that produced this table was not saved; only its output is recorded here (DEVELOPER.md Issue 22).
 
 Reconciliation: all exclusive pairs (2,872 + 106) = 2,978 = the pre-fix null-PRR count. All `haldane_applied` pairs = 4,166 + 2,872 + 53 + 106 = 7,197.
 
