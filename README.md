@@ -341,7 +341,7 @@ The FAERS data used is public domain, published by the U.S. Food and Drug Admini
 ## Author
 
 **Will**
-[LinkedIn](https://linkedin.com/in/yourprofile) · [GitHub](https://github.com/yourusername)
+[LinkedIn](https://www.linkedin.com/in/wdaluyen) · [GitHub](https://github.com/WDXII)
 
 *Portfolio project — built to demonstrate Databricks, PySpark, and clinical data engineering skills.*
 
