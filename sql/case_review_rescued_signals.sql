@@ -83,3 +83,20 @@ WHERE dr.drugname = 'PARAGARD T 380A'
   AND dr.pt IN ('FOREIGN BODY IN UROGENITAL TRACT', 'REPRODUCTIVE COMPLICATION ASSOCIATED WITH DEVICE')
 GROUP BY dr.pt, d.occp_cod
 ORDER BY dr.pt, cases DESC;
+
+
+
+-- ------------------------------------------------------------
+-- P4. Haldane vs exclusive split (basis for D8 amendment, 2026-09-30)
+--     is_exclusive = drug is the only reporter of the event (c = 0).
+--     haldane_applied = any 2x2 cell was 0 (includes b = 0 and d = 0 cases).
+--     2026Q1 result: SIGNAL & haldane & exclusive = 106; SIGNAL & haldane & NOT exclusive = 53 (159 total).
+--     Reconciliation: all exclusive = 2,978 (= pre-fix null PRR); all haldane_applied = 7,197.
+-- ------------------------------------------------------------
+SELECT signal_flag,
+       haldane_applied,
+       case_count = event_total AS is_exclusive,
+       COUNT(*) AS pairs
+FROM delta.`/Volumes/workspace/default/pharma_raw/gold/gold_signals`
+GROUP BY 1, 2, 3
+ORDER BY 1, 2, 3;
