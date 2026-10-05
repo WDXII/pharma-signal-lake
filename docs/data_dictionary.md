@@ -1,9 +1,11 @@
 # Data Dictionary
 
 **Project:** PharmaSignalLake
-**Version:** 1.1
-**Date:** May 2026 (Revised 2026-09-29)
+**Version:** 1.2
+**Date:** May 2026 (Revised 2026-10-05)
 
+> **Revision 1.2** — Dedup and join-key wording aligned to D4 (dedup on `caseid`; join on `primaryid`).
+>
 > **Revision 1.1** — Updated `gold_signals` (added `chi_sq`/`haldane_applied`, binary
 > `signal_flag`), Section 4.9, and Section 6 to match `DECISIONS.md` D1-D3; updated
 > `silver_cases`' grain and `outc_cod`/`rpsr_cod` columns to match D7 (see `DEVELOPER.md`
@@ -69,7 +71,7 @@ All source columns land as **STRING** type at Bronze — no casting is applied a
 
 | Column | Type (Bronze) | Nullable | Description |
 |--------|--------------|----------|-------------|
-| `primaryid` | STRING | No | Unique identifier for a case version. Format: `{caseid}{caseversion}`. Always use this for joins — not `caseid`. |
+| `primaryid` | STRING | No | Unique identifier for a case version. Format: `{caseid}{caseversion}`. Use this for joins; `caseid` is the case key used for dedup (D4). |
 | `caseid` | STRING | No | Base case identifier. A case can have multiple versions; `caseid` alone is not unique. |
 | `caseversion` | STRING | No | Version number of this case report. Higher = more recent update. |
 | `i_f_code` | STRING | Yes | Initial (`I`) or Follow-up (`F`) report. See [Section 4.7](#47-i_f_code--initialfollow-up). |
@@ -532,8 +534,8 @@ DRUG (1) ──────────── (1) THER       via primaryid + dru
 DRUG (1) ──────────── (M) INDI       via primaryid + drug_seq = indi_drug_seq
 ```
 
-**Critical rule:** Always join on `primaryid`, never on `caseid` alone.
-`caseid` is a many-to-one relationship with `primaryid` (one case, multiple versions).
+**Critical rule:** Join on `primaryid`. `caseid` is the case key used for dedup (D4).
+`caseid` is a one-to-many relationship with `primaryid` (one case, multiple versions).
 Joining on `caseid` without deduplication produces duplicate rows.
 
 ---
@@ -544,7 +546,7 @@ These are known characteristics of FAERS data. All are documented in the pipelin
 
 | Issue | Affected Fields | Pipeline Handling |
 |-------|----------------|-------------------|
-| **Duplicate case versions** | All files via `primaryid` | Silver deduplication: keep max `caseversion` per `primaryid` |
+| **Duplicate case versions** | All files via `primaryid` | Silver deduplication: keep max `caseversion` per `caseid`; child tables semi-joined to the surviving `primaryid`s (D4) |
 | **Inconsistent drug names** | `DRUG.drugname`, `DRUG.prod_ai` | Silver normalization: UPPER + TRIM |
 | **Inconsistent reaction terms** | `REAC.pt` | Silver normalization: UPPER + TRIM |
 | **Partial dates** | `DEMO.event_dt`, `THER.start_dt`, `THER.end_dt` | Flagged in `date_quality`; not dropped |
@@ -557,4 +559,4 @@ These are known characteristics of FAERS data. All are documented in the pipelin
 
 ---
 
-*End of Data Dictionary — Version 1.1 — PharmaSignalLake*
+*End of Data Dictionary — Version 1.2 — PharmaSignalLake*

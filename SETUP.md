@@ -190,7 +190,7 @@ When you add a second quarter later:
     ...
 ```
 
-No other changes required — `00_config.py` handles the rest.
+No other changes are intended — `00_config.py` handles the rest. This has been verified on 2026Q1 only; a second-quarter run is planned after the initial release.
 
 ---
 
