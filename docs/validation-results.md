@@ -2,7 +2,7 @@
 
 > Verified on 2026Q1, Databricks run of 2026-09-29. Every number below is copied from the
 > Databricks run output (`sql/verify_signal_fix.sql`, `06_validate_fix.py`, ad hoc queries in
-> Appendix A). Remaining `[NUMBER?]` cells are values that were not recorded from the run.
+> Appendix A).
 > Branch: `fix/signal-correctness` · Decisions: [DECISIONS.md](../DECISIONS.md) D1–D9
 
 ---
@@ -218,16 +218,16 @@ Lost-SIGNAL reasons (H2): failed χ² only 6,613 · PRR fell below 2 (Haldane) 0
 
 | Drug | Reaction (PT) | Reports (n) | Fingerprints | Senders | Literature | Likely patients (inferred) | Case-level evidence (data facts only) | Final group (Will) |
 |------|---------------|-------------|--------------|---------|------------|----------------------------|---------------------------------------|--------------------|
-| RHOPHYLAC | RHESUS ANTIBODIES POSITIVE | 4 | 2 | 1 | 0 | duplicates not determinable | CSL BEHRING; all 4 reports `rept_cod` PER, all F, US; 3 of 4 have no age and no `event_dt` | [WILL] |
-| ADSTILADRIN | INSTILLATION SITE DISCHARGE | 10 | 8 | 1 | 0 | not assessed (P2 not run) | P1 only: 1 sender, 0 literature references | [WILL] |
-| MACI | GRAFT DELAMINATION | 3 | 3 | 1 | 0 | not assessed (P2 not run) | P1 only: 1 sender, 0 literature references | [WILL] |
-| CABLIVI | ADAMTS13 ACTIVITY ABNORMAL | 5 | 5 | 1 | 0 | not assessed (P2 not run) | P1 only: 1 sender, 0 literature references | [WILL] |
-| CARIPRAZINE | CONGENITAL EPIBLEPHARON | 3 | 2 | 1 | 0 | 1 (maternal exposure) | `rept_cod` DIR, sender FDA-CTU, `event_dt` 20221229, `fda_dt` 20260210, age 0 YR, sex M/F/F; case IDs 26376050, 26376054, 26376067 | [WILL] |
-| PARAGARD T 380A | FOREIGN BODY IN UROGENITAL TRACT | 277 | 235 | 1 | 0 | not assessed (P2 not run) | P1: 1 sender, 0 literature references. P3: 94.2% consumer or lawyer reporters (table below), consistent with stimulated reporting | [WILL] |
-| PARAGARD T 380A | REPRODUCTIVE COMPLICATION ASSOCIATED WITH DEVICE | 253 | 217 | 1 | 0 | not assessed (P2 not run) | P1: 1 sender, 0 literature references. P3: 98.4% consumer or lawyer reporters (table below), consistent with stimulated reporting | [WILL] |
-| XIAFLEX | FRACTURE OF PENIS | 7 | 6 | 1 | 0 | not assessed (P2 not run) | P1 only: 1 sender, 0 literature references | [WILL] |
-| ZOLGENSMA | RED BLOOD CELL SCHISTOCYTES PRESENT | 5 | 2 | 1 | 0 | ~2 | NOVARTIS, all EXP. US: 2 reports, 6 MON F, `event_dt` 20190923, case IDs 26265712 and 16923856. JP: 3 reports, 1 YR F, `event_dt` 20200710, `fda_dt` 20260313, case IDs 18053158, 19879160, 20941170 | [WILL] |
-| SIMVASTATIN | GLYCOGEN STORAGE DISEASE TYPE IX | 5 | 2 | 5 | 4 | 1 | 5 reports from 5 senders (MICRO LABS LIMITED, ORGANON, CIPLA, AUROBINDO, ACCORD), all EXP, US. 4 cite the same article (Huynh T, Nguyen H, Nguyen M. J Lipid Atheroscler 2026;15(1):183-92); the AUROBINDO report has no `lit_ref` but the same age and sex (46 YR, M) | [WILL] |
+| RHOPHYLAC | RHESUS ANTIBODIES POSITIVE | 4 | 2 | 1 | 0 | duplicates not determinable | CSL BEHRING; all 4 reports `rept_cod` PER, all F, US; 3 of 4 have no age and no `event_dt` | Known/labeled effect |
+| ADSTILADRIN | INSTILLATION SITE DISCHARGE | 10 | 8 | 1 | 0 | not assessed (P2 not run) | P1 only: 1 sender, 0 literature references | Known/labeled effect |
+| MACI | GRAFT DELAMINATION | 3 | 3 | 1 | 0 | not assessed (P2 not run) | P1 only: 1 sender, 0 literature references | Known/labeled effect |
+| CABLIVI | ADAMTS13 ACTIVITY ABNORMAL | 5 | 5 | 1 | 0 | not assessed (P2 not run) | P1 only: 1 sender, 0 literature references | Confounding by indication |
+| CARIPRAZINE | CONGENITAL EPIBLEPHARON | 3 | 2 | 1 | 0 | 1 (maternal exposure) | `rept_cod` DIR, sender FDA-CTU, `event_dt` 20221229, `fda_dt` 20260210, age 0 YR, sex M/F/F; case IDs 26376050, 26376054, 26376067 | Likely artifact |
+| PARAGARD T 380A | FOREIGN BODY IN UROGENITAL TRACT | 277 | 235 | 1 | 0 | not assessed (P2 not run) | P1: 1 sender, 0 literature references. P3: 94.2% consumer or lawyer reporters (table below), consistent with stimulated reporting | Known/labeled effect |
+| PARAGARD T 380A | REPRODUCTIVE COMPLICATION ASSOCIATED WITH DEVICE | 253 | 217 | 1 | 0 | not assessed (P2 not run) | P1: 1 sender, 0 literature references. P3: 98.4% consumer or lawyer reporters (table below), consistent with stimulated reporting | Known/labeled effect |
+| XIAFLEX | FRACTURE OF PENIS | 7 | 6 | 1 | 0 | not assessed (P2 not run) | P1 only: 1 sender, 0 literature references | Known/labeled effect |
+| ZOLGENSMA | RED BLOOD CELL SCHISTOCYTES PRESENT | 5 | 2 | 1 | 0 | ~2 | NOVARTIS, all EXP. US: 2 reports, 6 MON F, `event_dt` 20190923, case IDs 26265712 and 16923856. JP: 3 reports, 1 YR F, `event_dt` 20200710, `fda_dt` 20260313, case IDs 18053158, 19879160, 20941170 | Known/labeled effect |
+| SIMVASTATIN | GLYCOGEN STORAGE DISEASE TYPE IX | 5 | 2 | 5 | 4 | 1 | 5 reports from 5 senders (MICRO LABS LIMITED, ORGANON, CIPLA, AUROBINDO, ACCORD), all EXP, US. 4 cite the same article (Huynh T, Nguyen H, Nguyen M. J Lipid Atheroscler 2026;15(1):183-92); the AUROBINDO report has no `lit_ref` but the same age and sex (46 YR, M) | Likely artifact |
 
 **ParaGard reporter mix (P3, reporter occupation `occp_cod`):**
 
@@ -238,11 +238,26 @@ Lost-SIGNAL reasons (H2): failed χ² only 6,613 · PRR fell below 2 (Haldane) 0
 
 CN consumer · LW lawyer · HP other health professional · MD physician · PH pharmacist. Percentages are derived from the counts.
 
-**Patient-level finding:** 3 of the 10 pairs (Simvastatin, Cariprazine, Zolgensma) rest on fewer than three likely patients. Likely-patient counts exist for only 4 of the 10 pairs (see §7).
+**Patient-level finding:** 3 of the 10 pairs (Simvastatin, Cariprazine, Zolgensma) rest on fewer than three likely patients. Case-level review (P2) covers 4 of the 10 pairs and gives a likely-patient estimate for 3 of them; Rhophylac's count could not be determined, and the other 6 were not assessed (see §7).
 
 **Reconciliation (D8, amended 2026-09-30):** exclusive pairs (`case_count = event_total`) number 2,978, equal to the pre-fix null-PRR count of 2,978. Pairs with `haldane_applied` number 7,197 = 4,166 + 2,872 + 53 + 106. Of the 159 `SIGNAL` pairs with `haldane_applied`, 106 are exclusive; the other 53 stay in the main leaderboard.
 
-> **Clinical plausibility — WILL's assessment:** [TO BE WRITTEN BY WILL]
+### Clinical plausibility — my assessment
+
+*Screening-level review, not a medical or causality assessment*
+
+As of October 4, 2026, I reviewed the current labels for the **top ten of the 106 exclusive pairs from 2026 Q1**, selected by rank, along with case-level data for four pairs and the reporter mix for the two ParaGard pairs. An **exclusive pair** means that every report of that event in this dataset has this drug as its primary suspect. These pairs can rank high even with a small number of reports, so I treated exclusivity as a screening flag, not as evidence of a new safety issue.
+
+I grouped the ten pairs as **7 known/labeled, 1 confounding by indication, and 2 likely artifacts**. Several of the labels were revised after the 2026 Q1 reports, so this reflects what the labels say now. A label match shows that an event is already recognized for the product; **it does not explain why a pair has 5, 10, or 277 reports**. Some of the matches are also weaker than others. Rhophylac's match is laboratory-test interference, Zolgensma's match is through TMA rather than the term itself, the second ParaGard term is only a partial match, and MACI is listed in postmarketing information.
+
+For Cablivi, I treated the ADAMTS13 finding as **confounding by indication** because it is closely related to the underlying disease being treated. The current label uses ADAMTS13 activity as a marker of the underlying aTTP disease, and a keyword search found no listing of it as an adverse reaction. For the two ParaGard pairs, about 94% and 98% of the reports came from consumers or lawyers, which is consistent with possible stimulated reporting.
+
+Simvastatin and Cariprazine look most like artifacts based on the case-level information I reviewed. The five Simvastatin reports appear to trace back to one published case, while the three Cariprazine reports look tied to one maternal exposure. Neither event term was found by keyword search of the current label.
+
+One limitation of my pipeline is that it counts **reports, not unique patients**. Likely-patient estimates exist for three pairs: Simvastatin (1), Cariprazine (1 exposure), and Zolgensma (~2). Rhophylac could not be determined, and the other six pairs were not assessed at the patient level.
+
+For these ten pairs, my overall view is that exclusivity is useful for screening, but it is not proof of a new safety risk.
+
 
 ---
 
@@ -254,7 +269,8 @@ CN consumer · LW lawyer · HP other health professional · MD physician · PH p
 - **No confidence intervals.** PRR/ROR are point estimates; the χ² gate is the only significance filter.
 - **Disproportionality is not causality.** Signals are hypotheses for clinical review, not confirmed adverse reactions.
 - **`case_count` counts reports, not patients.** The same literature case submitted by several manufacturers, related reports filed together, or follow-ups filed under new case IDs can inflate n. Case-ID deduplication (D4) cannot detect these (D9).
-- **Likely-patient counts cover only 4 of the 10 reviewed pairs.** P2 (case listing) was run for Rhophylac, Cariprazine, Zolgensma and Simvastatin; for Rhophylac the count could not be determined from the missing fields. The other six pairs are "not assessed (P2 not run)". The counts are inferred from case data.
+- **Patient-level review is partial.** P2 (case listing) was run for four of the ten pairs and gives a likely-patient estimate for three (Simvastatin, Cariprazine, Zolgensma); for Rhophylac the count could not be determined from missing fields. The other six are 'not assessed (P2 not run)'. Counts are inferred from case data.
+- **Label review is a keyword check against current labels.** Each label was searched by keyword (Ctrl+F) for the event term and related terms, on one label per product. Zolgensma, Cablivi and Xiaflex labels were revised after the 2026Q1 reports, so the review shows what the labels say now, not what they said when the reports arrived.
 
 ---
 
@@ -383,3 +399,19 @@ SQL: `P2` in [`sql/case_review_rescued_signals.sql`](../sql/case_review_rescued_
 ### A.9 P3 — reporter occupation for the ParaGard pairs
 
 SQL: `P3` in [`sql/case_review_rescued_signals.sql`](../sql/case_review_rescued_signals.sql). Result: reporter-occupation counts for both ParaGard pairs (277 and 253 cases), shown in the reporter-mix table in §6.
+
+### A.10 Label review (summary of the tracker)
+
+Labels read on DailyMed on 2026-10-04. Keyword search by Ctrl+F on the full label.
+
+| Drug | Label (DailyMed) | Label updated | Where the term matches | Keyword search |
+|------|------------------|---------------|------------------------|----------------|
+| RHOPHYLAC | CSL Behring | 2025-08-01 | W&P 5.2 Interference with Laboratory Tests (Rh antibodies detectable after administration; matched by meaning) | not run |
+| ADSTILADRIN | per DailyMed | 2026-03-24 | 6.1 Table 1: instillation site discharge 33% Grade 1-2 (CS-003, n=157) | not run |
+| MACI | per DailyMed | 2026-03-09 | 6.2 Postmarketing; 2.3 Postsurgical Rehabilitation | "delaminat": 3 hits (2.3 x1, 6.2 x2), none in 6.1 |
+| CABLIVI | per DailyMed | 2026-04-24 | Section 14 Clinical Studies and 2.1 dosing use ADAMTS13 as a disease-activity marker; not listed as an adverse reaction | "ADAMTS13": 4 hits (2 in Section 14, 2 in dosage text), none in Adverse Reactions |
+| CARIPRAZINE | Vraylar (Allergan) | 2025-12-18 | not found | "epiblepharon": not found; "eyelid": not found |
+| PARAGARD T 380A | CooperSurgical, NDC 59365-5129-1 | 2024-06-09 | W&P 5.5 Embedment, 5.6 Perforation (foreign body); 5.4 PID and Endometritis, 5.6 (reproductive complication, partial match) | not run |
+| XIAFLEX | per DailyMed | 2026-04-22 | Boxed Warning: corporal rupture (penile fracture), 5 of 1044 (0.5%); W&P 5.2. Boxed warning is for Peyronie's disease | not run |
+| ZOLGENSMA | Novartis | 2026-06-16 | W&P 5.4 Thrombotic Microangiopathy (also 5.3); matched by meaning | "schistocyte": not found |
+| SIMVASTATIN | Zocor (Organon) | 2025-03-28 | not found | "glycogen": not found |
