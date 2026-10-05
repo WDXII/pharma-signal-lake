@@ -3,10 +3,15 @@
 **Project:** PharmaSignalLake  
 **Full Title:** PharmaSignalLake: A Pharmacovigilance Signal Detection Lakehouse  
 **Author:** Will  
-**Version:** 2.3  
-**Date:** May 2026 (Revised 2026-09-30)  
+**Version:** 2.4  
+**Date:** May 2026 (Revised 2026-10-05)  
 **Status:** Draft
 
+> **Revision 2.4** — Claims aligned to the verified state of `fix/signal-correctness`: extensibility is a
+> design goal verified on 2026Q1 only (second-quarter run deferred until after release); PRR/ROR are
+> computed for all pairs and the Evans minimum applies to classification; `primaryid`/`caseid` wording
+> corrected; schema validation marked planned, not implemented; reports-not-patients constraint added (D9).
+>
 > **Revision 2.3** — FR-21 implements the amended D8 (exclusive panel filter is `is_exclusive`, not
 > `haldane_applied`); patient-level duplicate detection added to Out of Scope and Future Enhancements (D9).
 >
@@ -43,7 +48,7 @@ Post-market drug safety surveillance is a regulatory obligation for every pharma
 
 **PharmaSignalLake** is a cloud-native data lakehouse pipeline built on Databricks and Apache Spark (PySpark) that ingests raw FDA FAERS quarterly data, cleanses and integrates it across seven source file types, computes industry-standard disproportionality safety signals (PRR and ROR), and surfaces results through a Power BI executive dashboard.
 
-The pipeline is built on the **Medallion Architecture** (Bronze → Silver → Gold) with **Delta Lake** as the storage layer, enabling ACID-compliant, auditable, and incrementally extensible processing. The solution is designed to process a minimum of one quarter and scale to any number of quarters without code changes.
+The pipeline is built on the **Medallion Architecture** (Bronze → Silver → Gold) with **Delta Lake** as the storage layer, enabling ACID-compliant, auditable, and incrementally extensible processing. The solution is designed to process one quarter and extend to additional quarters; verified on 2026Q1.
 
 ---
 
@@ -67,7 +72,7 @@ This project addresses all three problems with a structured, reproducible, scala
 |----|-----------|
 | OBJ-01 | Ingest all seven FAERS quarterly source files into a governed Bronze layer without data loss |
 | OBJ-02 | Cleanse, standardize, deduplicate, and integrate source files into a unified Silver layer |
-| OBJ-03 | Compute PRR and ROR disproportionality metrics for all qualifying drug-event pairs |
+| OBJ-03 | Compute PRR and ROR disproportionality metrics for all drug-event pairs |
 | OBJ-04 | Classify signals using Evans Criteria and surface results in a structured Gold layer |
 | OBJ-05 | Deliver a Power BI dashboard with three report pages: Signal Leaderboard, Demographics, and Case Outcomes |
 | OBJ-06 | Design the pipeline to be quarter-agnostic and extensible to N quarters via configuration only |
@@ -92,9 +97,9 @@ This project addresses all three problems with a structured, reproducible, scala
 ### In Scope
 
 - Ingestion of all seven FDA FAERS file types: DEMO, DRUG, INDI, OUTC, REAC, RPSR, THER
-- Processing of one quarter minimum (2026Q1); pipeline extensible to any number of quarters
+- Processing of one quarter minimum (2026Q1); pipeline extensible to additional quarters (extensibility verified on 2026Q1 only)
 - Deduplication on `caseid` (the case entity key), retaining the highest `caseversion`; `primaryid` is used for joins
-- PRR and ROR computation for all drug-event pairs meeting the Evans minimum threshold (≥ 3 cases)
+- PRR and ROR computation for all drug-event pairs; the Evans minimum (≥ 3 cases) applies to signal classification
 - Signal classification: signal or no signal (binary), per full Evans Criteria (case count, PRR, and chi-squared)
 - Power BI dashboard with three report pages
 - Full documentation suite
@@ -137,7 +142,7 @@ This project addresses all three problems with a structured, reproducible, scala
 ### Key Relationships
 
 - `primaryid` is the master join key across all seven files
-- `caseid` is the case identifier; `primaryid` includes the case version. Always use `primaryid` for joins
+- `caseid` is the case identifier; `primaryid` includes the case version. Use `primaryid` for joins; `caseid` is the case key used for dedup (D4)
 - `drug_seq` / `dsg_drug_seq` / `indi_drug_seq` link drug-level records across DRUG, THER, and INDI
 - `role_cod` in DRUG distinguishes Primary Suspect (`PS`), Secondary Suspect (`SS`), Concomitant (`C`), and Interacting (`I`) drugs
 
@@ -209,11 +214,11 @@ This project addresses all three problems with a structured, reproducible, scala
 |--------|--------|
 | All seven FAERS source files ingested successfully | 7 of 7 |
 | `silver_cases` contains exactly one row per distinct `caseid` | Rows = distinct `caseid` (verified: 397,224 = 397,224) |
-| Drug-event pairs with computed PRR and ROR | All pairs with ≥ 3 cases |
-| Signal classification coverage | 100% of qualifying pairs classified |
+| Drug-event pairs with computed PRR and ROR | All pairs (PRR/ROR computed for every pair; the ≥ 3 case minimum applies to classification) |
+| Signal classification coverage | 100% of pairs classified |
 | Signal-fix verification | All V1–V10 checks in `06_validate_fix.py` and all `sql/verify_signal_fix.sql` checks pass |
 | Power BI dashboard load time on Gold data | < 10 seconds |
-| Pipeline extensibility | New quarter processed by config change only — verified with a second quarter |
+| Pipeline extensibility | Designed so a new quarter is processed by config change; verified on 2026Q1 only. Second-quarter run planned after the initial release |
 | Documentation completeness | BRD, ARCHITECTURE.md, SETUP.md, README all present in GitHub |
 
 ---
@@ -223,7 +228,7 @@ This project addresses all three problems with a structured, reproducible, scala
 ### Assumptions
 
 - FDA FAERS quarterly data continues to be publicly available at the official FDA URL
-- FAERS file schema remains consistent across quarters (schema validation logic will detect changes)
+- FAERS file schema remains consistent across quarters (schema validation is planned, not yet implemented; PROJECT-LOG I4)
 - Basic drug name normalization (uppercase + trim) is sufficient for portfolio-level signal detection without a full MedDRA drug dictionary
 - Databricks Free Edition provides adequate daily compute quota to process one quarter per session
 - Power BI Desktop (free) is the reporting tool
@@ -236,7 +241,8 @@ This project addresses all three problems with a structured, reproducible, scala
 | **Compute** | Serverless compute with daily quota limits |
 | **Budget** | $0 |
 | **Drug normalization** | Text normalization only; no WHO or MedDRA drug dictionary |
-| **Scope** | Minimum one quarter (2026Q1); designed to scale to N quarters |
+| **Scope** | Minimum one quarter (2026Q1); designed to scale to N quarters (extensibility verified on 2026Q1 only) |
+| **Unit of count** | `case_count` counts reports, not patients; patient-level duplicate detection is out of scope (D9) |
 
 ---
 
@@ -244,7 +250,7 @@ This project addresses all three problems with a structured, reproducible, scala
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| FAERS file schema changes between quarters | Medium | High | Schema validation at Bronze ingestion; alert on column count mismatch |
+| FAERS file schema changes between quarters | Medium | High | Schema validation at Bronze ingestion; alert on column count mismatch: planned, not yet implemented (PROJECT-LOG I4) |
 | Daily compute quota exceeded | Medium | Medium | Process one quarter per session; checkpoint results to Delta after each layer |
 | Drug name inconsistency reduces signal accuracy | High | Medium | Document limitation clearly in README; apply uppercase + trim as baseline |
 | Free Edition account deactivated due to inactivity | Low | High | Push notebooks to GitHub after every session |
@@ -269,13 +275,13 @@ This project addresses all three problems with a structured, reproducible, scala
 | **Haldane-Anscombe Correction** | A statistical correction (+0.5 added to all four contingency-table cells) applied when any cell is zero, so PRR and ROR remain computable instead of undefined |
 | **Medallion Architecture** | A three-layer data design pattern: Bronze (raw), Silver (cleansed), Gold (aggregated/curated) |
 | **Delta Lake** | An open-source storage layer that adds ACID transactions, versioning, and schema enforcement to Parquet files |
-| **primaryid** | The unique identifier for a specific version of a case report in FAERS. Always use this for joins, not `caseid` |
+| **primaryid** | The unique identifier for a specific version of a case report in FAERS. Use it for joins; `caseid` is the case key used for dedup (D4) |
 | **role_cod** | Drug role code in FAERS DRUG file: PS = Primary Suspect, SS = Secondary Suspect, C = Concomitant, I = Interacting |
 | **DBU** | Databricks Unit — the billing/quota metric for Databricks compute consumption |
 
 ---
 
-*End of BRD — Version 2.3 — PharmaSignalLake*
+*End of BRD — Version 2.4 — PharmaSignalLake*
 
 ---
 
@@ -286,4 +292,5 @@ This project addresses all three problems with a structured, reproducible, scala
 | 2.0 | May 2026 | Initial requirements | — |
 | 2.1 | 2026-09-29 | Scope and glossary: removed "weak signal"; classification is `SIGNAL` / `NO_SIGNAL` (D1). FR-06: dedup on `caseid`, keep max `caseversion`, child tables filtered to surviving `primaryid`s (D4); Scope bullet updated to match. FR-10: OUTC/RPSR aggregated per `primaryid` (D7). FR-14/FR-15: Haldane-Anscombe correction for zero cells (D2). FR-16: full Evans with chi-squared (D3); added FR-16a (`chi_sq` column). FR-17: `chi_sq` and `haldane_applied` columns, binary flag. Success Metrics: added V1–V10 and `verify_signal_fix.sql` pass criterion. Risks: signal-math mitigation now implemented (unit tests + independent SQL recompute). Glossary: updated Evans, added Chi-squared. Author set to Will | v2.0 deduplicated on `primaryid` (a no-op), left zero-cell pairs with null PRR (labelled NO_SIGNAL), and classified on PRR alone with an unsupported weak tier. See DECISIONS.md D1–D7 and DEVELOPER.md Issues 9, 13, 14 |
 | 2.2 | 2026-09-29 | FR-21: main leaderboard = non-exclusive `SIGNAL` rows; separate "Exclusive reports" panel for `haldane_applied = true` pairs (D8). Success Metrics: "Row retention ≥ 95%" replaced by "`silver_cases` contains exactly one row per distinct `caseid` (verified: 397,224 = 397,224)" | Haldane-corrected PRRs for exclusive pairs are not interpretable magnitudes and would fill every top slot. The old retention metric penalized correct dedup and fan-out removal. See DECISIONS.md D8 |
-| 2.3 | 2026-09-30 | FR-21: implements the amended D8. Power BI derives `is_exclusive` (`case_count = event_total`); exclusive panel = `SIGNAL` AND `is_exclusive` (106); main leaderboard = `SIGNAL` AND NOT `is_exclusive` (49,878), `haldane_applied` as a tooltip flag. Scope: patient-level (cross-report) duplicate detection added to Out of Scope; new Future Enhancements list. Footer version corrected. Success metrics unchanged | Filtering the exclusive panel on `haldane_applied` would have mislabeled 53 `SIGNAL` pairs that are not exclusive (`b = 0`, not `c = 0`). The case-level review showed `case_count` counts reports, not patients (D9). See DECISIONS.md D8 (amended) and D9 |
+| 2.3 | 2026-09-30 | FR-21: implements the amended D8. Power BI derives `is_exclusive` (`case_count = event_total`); exclusive panel = `SIGNAL` AND `is_exclusive` (106); main leaderboard = `SIGNAL` AND NOT `is_exclusive` (49,878), `haldane_applied` as a tooltip flag. Scope: patient-level (cross-report) duplicate detection added to Out of Scope; new Future Enhancements list. Footer version corrected. Success metrics unchanged | Filtering the exclusive panel on `haldane_applied` would have mislabeled 53 `SIGNAL` pairs that are not exclusive (`b = 0`, not `c = 0`; source query not saved, see DEVELOPER Issue 22). The case-level review showed `case_count` counts reports, not patients (D9). See DECISIONS.md D8 (amended) and D9 |
+| 2.4 | 2026-10-05 | Executive Summary and Success Metrics: extensibility reworded to "designed for; verified on 2026Q1 only"; Scope bullet and Constraints "Scope" row note the same. OBJ-03, Scope bullet and Success Metrics: PRR/ROR computed for all pairs, the Evans minimum applies to classification. Key Relationships and glossary: `primaryid` for joins, `caseid` is the dedup key (D4). Assumptions and Risks: schema validation marked planned, not implemented. Constraints: added "Unit of count" row (D9). | Second-quarter verification is deferred until after release, and the BRD must not claim it. Schema validation (I4) is not implemented |
