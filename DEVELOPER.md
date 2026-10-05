@@ -33,6 +33,7 @@ This file is a living log — add new entries as issues are found and resolved.
    - [Issue 21 — `case_count` Counts Reports, Not Patients: Rescued Exclusive Signals Rest on Duplicate Reports](#issue-21--case_count-counts-reports-not-patients-rescued-exclusive-signals-rest-on-duplicate-reports)
    - [Issue 22 — `haldane_applied` Is Not the Same as "Exclusive": the First D8 Panel Filter Would Mislabel 53 Pairs](#issue-22--haldane_applied-is-not-the-same-as-exclusive-the-first-d8-panel-filter-would-mislabel-53-pairs)
    - [Issue 23 — Docs Claimed More Than Was Verified: Second Quarter, Append Behavior, Schema Validation](#issue-23--docs-claimed-more-than-was-verified-second-quarter-append-behavior-schema-validation)
+   - [Issue 24 — Stage Timers Used `timedelta.seconds`, Which Is Not Elapsed Time](#issue-24--stage-timers-used-timedeltaseconds-which-is-not-elapsed-time)
 4. [Running Unit Tests](#4-running-unit-tests)
 
 ---
@@ -968,6 +969,30 @@ Reworded without changing code. BRD v2.4: extensibility is "designed for; verifi
 #### Rule to Remember
 
 A doc may state only what a recorded run showed. Write design intent as "designed to", and name the run that verified it. Check every "no code changes needed" claim against the actual write mode before repeating it.
+
+---
+
+### Issue 24 — Stage Timers Used `timedelta.seconds`, Which Is Not Elapsed Time
+
+**Status:** Stage timers fixed; total-duration line still uses `.seconds` (see Resolution)
+**Date encountered:** 2026-10-05
+**Affected files:** `notebooks/99_run_pipeline.py`
+
+#### Symptom
+
+Per-stage timings in `99_run_pipeline.py` were printed with `(datetime.now()-stage_start).seconds`. Nothing was wrong on the 2026Q1 run (2m 52s total), but the value is only the seconds component of the timedelta.
+
+#### Root Cause
+
+`timedelta.seconds` holds the remainder after whole days are removed and drops fractional seconds. It is not the total elapsed time. A stage that crossed 24 hours would wrap back to a small number, and sub-second stages always print `0s`.
+
+#### Resolution
+
+The five stage timers in `99_run_pipeline.py` now use `.total_seconds():.0f`. The final `total_seconds = (pipeline_end - pipeline_start).seconds` line was left as is (outside the agreed change); it is correct for any run under 24 hours and should get the same fix next time the file is touched. `02_silver_clean.py` has no stage timer.
+
+#### Rule to Remember
+
+For elapsed time use `timedelta.total_seconds()`, never `timedelta.seconds`.
 
 ---
 
