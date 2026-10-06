@@ -457,7 +457,7 @@ Run notebooks in this sequence. Each notebook depends on the previous layer bein
 
 **Stage timing:** `99_run_pipeline.py` keeps an in-memory `stage_log` with one entry per stage (`stage`, `start_utc`, `end_utc`, `duration_s`, `status`). Timestamps are UTC and durations come from `time.perf_counter()`. The log is reset at the start of each run and is not persisted (DECISIONS D10).
 
-At the end of the run the notebook prints a stage / start_utc / end_utc / duration_s / status table and the total, then warns (without failing) if the timestamps or durations are inconsistent. Not yet verified on Databricks.
+At the end of the run the notebook prints a stage / start_utc / end_utc / duration_s / status table and the total, then warns (without failing) if the timestamps or durations are inconsistent. 
 
 **Adding a new quarter:** Update `QUARTER` in `00_config.py` and upload the new files to the Volume. Run notebooks 01 through 04. Verified on 2026Q1 only. The notebooks write with `mode("overwrite")` partitioned by `source_quarter` and no `replaceWhere`, so whether a second quarter appends or replaces existing data has not been tested; a second-quarter run is planned after the initial release.
 
