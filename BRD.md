@@ -3,10 +3,14 @@
 **Project:** PharmaSignalLake  
 **Full Title:** PharmaSignalLake: A Pharmacovigilance Signal Detection Lakehouse  
 **Author:** Will  
-**Version:** 2.4  
-**Date:** May 2026 (Revised 2026-10-05)  
+**Version:** 2.5  
+**Date:** May 2026 (Revised 2026-10-06)  
 **Status:** Draft
 
+> **Revision 2.5** — NFR-01: records that per-stage start, end and duration are written in UTC to the
+> `99_run_pipeline.py` output (in-memory, not persisted); the 60-minute limit is unchanged. Verified in a
+> Databricks run on 2026-10-06 (DEVELOPER Issue 25, DECISIONS D10).
+>
 > **Revision 2.4** — Claims aligned to the verified state of `fix/signal-correctness`: extensibility is a
 > design goal verified on 2026Q1 only (second-quarter run deferred until after release); PRR/ROR are
 > computed for all pairs and the Evans minimum applies to classification; `primaryid`/`caseid` wording
@@ -281,7 +285,7 @@ This project addresses all three problems with a structured, reproducible, scala
 
 ---
 
-*End of BRD — Version 2.4 — PharmaSignalLake*
+*End of BRD — Version 2.5 — PharmaSignalLake*
 
 ---
 
@@ -294,3 +298,4 @@ This project addresses all three problems with a structured, reproducible, scala
 | 2.2 | 2026-09-29 | FR-21: main leaderboard = non-exclusive `SIGNAL` rows; separate "Exclusive reports" panel for `haldane_applied = true` pairs (D8). Success Metrics: "Row retention ≥ 95%" replaced by "`silver_cases` contains exactly one row per distinct `caseid` (verified: 397,224 = 397,224)" | Haldane-corrected PRRs for exclusive pairs are not interpretable magnitudes and would fill every top slot. The old retention metric penalized correct dedup and fan-out removal. See DECISIONS.md D8 |
 | 2.3 | 2026-09-30 | FR-21: implements the amended D8. Power BI derives `is_exclusive` (`case_count = event_total`); exclusive panel = `SIGNAL` AND `is_exclusive` (106); main leaderboard = `SIGNAL` AND NOT `is_exclusive` (49,878), `haldane_applied` as a tooltip flag. Scope: patient-level (cross-report) duplicate detection added to Out of Scope; new Future Enhancements list. Footer version corrected. Success metrics unchanged | Filtering the exclusive panel on `haldane_applied` would have mislabeled 53 `SIGNAL` pairs that are not exclusive (`b = 0`, not `c = 0`; source query not saved, see DEVELOPER Issue 22). The case-level review showed `case_count` counts reports, not patients (D9). See DECISIONS.md D8 (amended) and D9 |
 | 2.4 | 2026-10-05 | Executive Summary and Success Metrics: extensibility reworded to "designed for; verified on 2026Q1 only"; Scope bullet and Constraints "Scope" row note the same. OBJ-03, Scope bullet and Success Metrics: PRR/ROR computed for all pairs, the Evans minimum applies to classification. Key Relationships and glossary: `primaryid` for joins, `caseid` is the dedup key (D4). Assumptions and Risks: schema validation marked planned, not implemented. Constraints: added "Unit of count" row (D9). | Second-quarter verification is deferred until after release, and the BRD must not claim it. Schema validation (I4) is not implemented |
+| 2.5 | 2026-10-06 | NFR-01: per-stage start, end and duration are recorded in UTC in the `99_run_pipeline.py` output (in-memory, not persisted). The 60-minute limit is unchanged. | T6 verified in a Databricks run on 2026-10-06; see DEVELOPER Issue 25, DECISIONS D10 |
