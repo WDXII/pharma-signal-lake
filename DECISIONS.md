@@ -312,7 +312,7 @@ change.
 | SIGNAL | true | false | 53 |
 | SIGNAL | true | true | 106 |
 
-The SQL that produced this table was not saved; only its output is recorded here (DEVELOPER.md Issue 22).
+The query is saved as P4 in `sql/case_review_rescued_signals.sql`. Re-run on 2026-10-06, it returned the same six rows (DEVELOPER.md Issue 22).
 
 Reconciliation: all exclusive pairs (2,872 + 106) = 2,978 = the pre-fix null-PRR count. All `haldane_applied` pairs = 4,166 + 2,872 + 53 + 106 = 7,197.
 

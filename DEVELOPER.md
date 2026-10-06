@@ -928,7 +928,7 @@ Never read a report count as a patient count. Before trusting a top-ranked signa
 
 **Status:** Resolved (D8 amended 2026-09-30)
 **Date encountered:** 2026-09-30
-**Affected files:** `DECISIONS.md`, `BRD.md` (FR-21), `README.md`
+**Affected files:** `DECISIONS.md`, `BRD.md` (FR-21), `README.md`, `sql/case_review_rescued_signals.sql` (P4)
 
 #### Symptom
 
@@ -936,7 +936,7 @@ D8 as first written filtered the "Exclusive reports" panel on `haldane_applied =
 
 #### Root Cause
 
-`haldane_applied` is true whenever any of the four 2×2 cells is 0, not only `c = 0` (every report of the event involves the drug). A grouping of `gold_signals` (2026Q1) by `signal_flag`, `haldane_applied` and `is_exclusive` (`case_count = event_total`) gave: SIGNAL, `haldane_applied` true, not exclusive = **53 pairs**; SIGNAL, true, exclusive = 106; SIGNAL, false, not exclusive = 49,825 (the full output table is in DECISIONS.md D8, amended). Those 53 pairs have `b = 0` (every report for the drug has this event) and get only a minor correction. The exact SQL text was not saved in the repo; the result table is the evidence.
+`haldane_applied` is true whenever any of the four 2×2 cells is 0, not only `c = 0` (every report of the event involves the drug). A grouping of `gold_signals` (2026Q1) by `signal_flag`, `haldane_applied` and `is_exclusive` (`case_count = event_total`) gave: SIGNAL, `haldane_applied` true, not exclusive = **53 pairs**; SIGNAL, true, exclusive = 106; SIGNAL, false, not exclusive = 49,825 (the full output table is in DECISIONS.md D8, amended). Those 53 pairs have `b = 0` (every report for the drug has this event) and get only a minor correction. The query is saved as P4 in `sql/case_review_rescued_signals.sql`. Re-run on 2026-10-06, it returned the same six rows as the table in DECISIONS.md D8.
 
 #### Resolution
 
