@@ -128,7 +128,7 @@ Queries A–E were run BEFORE the fix (v1, via time travel, Appendix A) and A–
 
 ### 4.3 Unit tests
 
-`tests/run_unit_tests.py` in Databricks (Serverless, pytest 8.4.2, Python 3.12.3): 5 passed / 0 failed (`5 passed in 20.90s`).
+`tests/run_unit_tests.py` in Databricks (Serverless, pytest 8.4.2, Python 3.12.3): 5 passed / 0 failed. Validated at 0862a50; later commits do not change src/ or tests/.
 
 ---
 
