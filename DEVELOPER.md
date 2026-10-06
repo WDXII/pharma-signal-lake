@@ -996,6 +996,8 @@ For elapsed time use `timedelta.total_seconds()`, never `timedelta.seconds`.
 
 **Update 2026-10-06:** the remaining `total_seconds = (pipeline_end - pipeline_start).seconds` line (formerly line 134) was removed in Issue 25. The final summary now computes the total from `time.perf_counter()` and the stage log, so Issue 24 is resolved by Issue 25.
 
+**Update 2026-10-06 (later) — Issues 24 and 25:** Verified in a Databricks run on 2026-10-06: five stages OK, total 2m 39.2s, times UTC. Only the OK path was exercised; the FAILED path remains a documented limitation (D10). This closes the "pending a Databricks run" note in Issue 24 and the "needs a Databricks run" note in Issue 25. The Issue 25 Root Cause is inferred from the notebook structure; the original partial rerun was not reproduced, so read it as "likely", not confirmed.
+
 ---
 
 ### Issue 25 — Pipeline Summary Could Disagree With Its Own Run: Add a Per-Stage Timing Log
@@ -1041,7 +1043,3 @@ The pure signal-math and dedup functions live in `src/signal_math.py` and are te
 
 Do not add `tests/run_unit_tests.py` to `99_run_pipeline.py`.
 
-**Update 2026-10-06 (later):** Verified in a Databricks run on 2026-10-06: five stages OK,
-total 2m 39.2s, times UTC. Only the OK path was exercised; the FAILED path remains a
-documented limitation (D10). The Root Cause above is inferred from the notebook structure;
-the original partial rerun was not reproduced, so read it as "likely", not confirmed.
