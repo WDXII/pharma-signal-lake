@@ -193,7 +193,6 @@ pharma-signal-lake/
 ├── DEVELOPER.md              ← Dev environment notes and known issues
 ├── DECISIONS.md              ← Architecture and correctness decisions, as made
 ├── databricks.yml            ← Databricks Asset Bundle config (sync target + workspace host)
-├── requirements-dev.txt      ← Local editor support only (no local PySpark required)
 ├── notebooks/
 │   ├── 00_config.py
 │   ├── 01_bronze_ingest.py

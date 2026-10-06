@@ -40,7 +40,7 @@ Complete all items before starting Step 1.
 | Web browser | Chrome or Edge recommended for Databricks | — |
 | Storage space | ~2 GB free on your local machine | — |
 | Internet connection | Required throughout; FAERS ZIP files are ~300–500 MB | — |
-| Python + pytest (optional) | Not needed to run the pipeline or the unit tests — tests run inside Databricks via `tests/run_unit_tests.py` (no local Java/Spark on most machines; see DEVELOPER.md Issue 2). Local Python only helps editor tooling (`requirements-dev.txt`) | https://www.python.org |
+| Python + pytest (optional) | Not needed to run the pipeline or the unit tests — tests run inside Databricks via `tests/run_unit_tests.py` (no local Java/Spark on most machines; see DEVELOPER.md Issue 2).
 
 **No paid subscriptions are required.** Databricks Free Edition, GitHub Free, and Power BI Desktop are all zero-cost.
 
