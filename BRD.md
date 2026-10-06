@@ -198,7 +198,7 @@ This project addresses all three problems with a structured, reproducible, scala
 
 | ID | Category | Requirement |
 |----|----------|-------------|
-| NFR-01 | Performance | The full pipeline (Bronze through Gold) shall complete within 60 minutes for a single quarter on Databricks Free Edition compute |
+| NFR-01 | Performance | The full pipeline (Bronze through Gold) shall complete within 60 minutes for a single quarter on Databricks Free Edition compute. Per-stage start, end and duration are recorded in UTC in the `99_run_pipeline.py` output (in-memory, not persisted) |
 | NFR-02 | Scalability | Adding a new quarter shall require only a configuration change — no notebook code changes |
 | NFR-03 | Reliability | All notebooks shall include row-count validation checkpoints after each major transformation |
 | NFR-04 | Maintainability | All PySpark transformations shall be written as named, documented functions |

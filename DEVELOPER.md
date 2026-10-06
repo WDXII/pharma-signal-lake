@@ -974,7 +974,7 @@ A doc may state only what a recorded run showed. Write design intent as "designe
 
 ### Issue 24 — Stage Timers Used `timedelta.seconds`, Which Is Not Elapsed Time
 
-**Status:** Stage timers fixed; total-duration line still uses `.seconds` (see Resolution)
+**Status:** Resolved — stage timers fixed 2026-10-05; the total-duration `.seconds` line was replaced by the stage log (Issue 25, 2026-10-06; pending a Databricks run to verify)
 **Date encountered:** 2026-10-05
 **Affected files:** `notebooks/99_run_pipeline.py`
 
@@ -993,6 +993,34 @@ The five stage timers in `99_run_pipeline.py` now use `.total_seconds():.0f`. Th
 #### Rule to Remember
 
 For elapsed time use `timedelta.total_seconds()`, never `timedelta.seconds`.
+
+**Update 2026-10-06:** the remaining `total_seconds = (pipeline_end - pipeline_start).seconds` line (formerly line 134) was removed in Issue 25. The final summary now computes the total from `time.perf_counter()` and the stage log, so Issue 24 is resolved by Issue 25.
+
+---
+
+### Issue 25 — Pipeline Summary Could Disagree With Its Own Run: Add a Per-Stage Timing Log
+
+**Status:** Fixed in code 2026-10-06; needs a Databricks run to verify
+**Date encountered:** 2026-10-06
+**Affected files:** `notebooks/99_run_pipeline.py`
+
+#### Symptom
+
+A summary printed after a partial rerun of `99_run_pipeline.py` showed a finish time earlier than the start time. Start and finish were also in different timezones, because `datetime.now()` returns the cluster's local time and nothing in the output said which zone that was. The summary also had no per-stage breakdown, only a total.
+
+#### Root Cause
+
+The summary was built in separate cells from different executions. `pipeline_start` lived in the first cell and `pipeline_end` and the total were computed in the last cell, so rerunning only some cells combined values from different runs. Timestamps were naive local time, and durations were differences of those wall-clock values (and the total still used `.seconds`, Issue 24), so a clock adjustment could also skew them.
+
+#### Resolution
+
+`99_run_pipeline.py` now keeps an in-memory `stage_log`. The first cell resets `stage_log`, `pipeline_start` and `pipeline_t0` together, so every full run starts clean. Helpers `stage_begin(name)` and `stage_end(status)` sit in their own normal cell, never in a `%run` cell, and each `%run` stays alone in its cell (Issue 12). Each stage appends `{"stage", "start_utc", "end_utc", "duration_s", "status"}` with `datetime.now(timezone.utc)` timestamps and `time.perf_counter()` durations. The summary reads only `stage_log`, `pipeline_start` and the perf-counter total, prints a stage / start_utc / end_utc / duration_s / status table plus "Times are UTC", and warns (does not fail) if a start precedes `pipeline_start`, an end precedes its start, or the stage durations exceed the total by more than 1 second. Nothing is persisted.
+
+Known limit: Python cannot wrap a `%run` cell in `try/except`, so a stage that raises stops Run All before its end cell. That stage is written as `FAILED` only when `stage_begin` or the summary cell next runs, and its `end_utc` is then that later time, not the moment of failure. The notebook's own error output still shows the real failure time.
+
+#### Rule to Remember
+
+Build a run summary only from data recorded during that same execution, and reset that data in the same cell that records the start. Record timestamps in UTC and durations from a monotonic clock. A `%run` cell cannot be wrapped in `try/except`, so failure timing around `%run` is best-effort.
 
 ---
 

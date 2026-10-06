@@ -338,3 +338,18 @@ Reconciliation: all exclusive pairs (2,872 + 106) = 2,978 = the pre-fix null-PRR
 **Consequences:** `case_count` may overstate patient counts. The case review is a manual check for top signals, not a pipeline stage.
 
 **Alternatives rejected:** Fingerprint-based deduplication now — rejected for scope, because it needs validation against a gold standard and would block the dashboard.
+
+---
+
+## D10 — Per-Stage Timing Log: UTC, `perf_counter`, In-Memory Only
+
+**Date:** 2026-10-06
+**Status:** Accepted (code written; not yet run on Databricks)
+
+**Context:** The `99_run_pipeline.py` summary was built from naive local `datetime.now()` values spread across cells and ended with a `.seconds` total (DEVELOPER Issues 24 and 25). A partial rerun could print a finish time before the start, and there was no per-stage breakdown.
+
+**Decision:** Record one entry per stage in an in-memory `stage_log` (`stage`, `start_utc`, `end_utc`, `duration_s`, `status`). Timestamps are `datetime.now(timezone.utc)` ISO 8601; durations are `time.perf_counter()` differences; the summary table and total are computed only from that execution's log. A stage that fails is still logged as `FAILED`. Nothing is persisted.
+
+**Consequences:** Timing is visible in the notebook output only and is lost when the session ends, so runtimes must be copied into PROJECT-LOG by hand. Python cannot wrap a `%run` cell in `try/except`, so a `FAILED` entry is written on the next `stage_begin` or summary run, with that later time as its end.
+
+**Alternatives deferred:** Writing timing rows to a Delta table or a Volume file — deferred until run history across quarters is needed.
