@@ -86,10 +86,12 @@ ROR = (A / (B - A)) / ((C - A) / (N - B - C + A))
 
 ### Evans Criteria (Signal Classification)
 
+If any contingency-table cell is zero, PRR/ROR get a Haldane-Anscombe correction (+0.5
+to all four cells) before this division, so they're never null.
+
 | Classification | Rule |
 |---|---|
-| `SIGNAL` | case_count ≥ 3 **AND** PRR ≥ 2.0 |
-| `WEAK_SIGNAL` | case_count ≥ 3 **AND** PRR ≥ 1.5 |
+| `SIGNAL` | case_count ≥ 3 **AND** PRR ≥ 2.0 **AND** chi-squared (Yates-corrected) ≥ 4.0 |
 | `NO_SIGNAL` | All other pairs |
 
 ---
@@ -144,6 +146,9 @@ pharma-signal-lake/
 ├── BRD.md                     ← Business Requirements Document
 ├── ARCHITECTURE.md            ← Technical architecture and design decisions
 ├── SETUP.md                   ← Step-by-step environment setup guide
+├── DEVELOPER.md               ← Dev environment notes and known issues/resolutions
+├── DECISIONS.md               ← Architecture and correctness decisions, as made
+├── databricks.yml             ← Databricks Asset Bundle config (notebook/src/test sync)
 ├── .gitignore
 │
 ├── notebooks/
@@ -152,15 +157,33 @@ pharma-signal-lake/
 │   ├── 02_silver_clean.py     ← Cleansing and integration → Silver Delta tables
 │   ├── 03_gold_signals.py     ← PRR/ROR signal detection → Gold Delta tables
 │   ├── 04_export.py           ← Export Gold → CSV for Power BI
+│   ├── 05_profile.py          ← Read-only: before/after row-count and quality metrics
+│   ├── 06_validate_fix.py     ← Read-only: independent signal-correctness validation
 │   ├── 99_run_pipeline.py     ← Run full pipeline end-to-end
 │   └── validation_queries.sql ← Spark SQL for data quality checks
+│
+├── src/
+│   └── signal_math.py         ← Pure PRR/ROR/chi_sq/dedup functions, unit-testable
+│
+├── sql/
+│   ├── verify_signal_fix.sql           ← Independent verification queries (read-only for the assistant, D6)
+│   └── case_review_rescued_signals.sql ← Case-level review of the top rescued signals (manual, read-only)
+│
+├── tests/
+│   ├── conftest.py            ← Spark fixture (attaches to Databricks' running session)
+│   ├── test_signals.py        ← pytest unit tests for src/signal_math.py
+│   └── run_unit_tests.py      ← Notebook runner (installs pytest, runs the suite)
+│
+├── docs/
+│   ├── data_dictionary.md     ← Column-level schema for Bronze/Silver/Gold tables
+│   └── validation-results.md  ← Verified before/after results for the signal-correctness fix (2026Q1)
 │
 ├── data/
 │   ├── .gitignore             ← Prevents raw FAERS files from being committed
 │   └── README.md              ← Instructions for placing FAERS data files here
 │
 └── powerbi/
-    └── pharma_signal_lake.pbix  ← Power BI report file
+    └── pharma_signal_lake.pbix  ← Power BI report file (planned; not yet created)
 ```
 
 ---
@@ -209,6 +232,10 @@ Run in this order. Each notebook depends on the previous layer being complete.
 04_export.py          ← Exports Gold → CSV
 ```
 
+### Option C — Verify a Run
+
+Follow the run order (seven steps plus an optional case review) in **[SETUP.md § Verify Your Environment](SETUP.md#10-step-9--verify-your-environment)**: record the `gold_signals` Delta version, capture the BEFORE baseline, run the pipeline, then run `05_profile.py` (`after`), `06_validate_fix.py` (V1–V10), and `sql/verify_signal_fix.sql`. Notebooks 05 and 06 are read-only and are not part of `99_run_pipeline.py`.
+
 ### Adding a New Quarter
 
 1. Download the new quarter's FAERS files
@@ -217,18 +244,20 @@ Run in this order. Each notebook depends on the previous layer being complete.
    ```python
    QUARTER = "2025Q4"   # ← update this
    ```
-4. Run the pipeline — new data is appended as a new partition. Existing quarters are untouched.
+4. Run the pipeline.
+
+Verified on 2026Q1 only. The notebooks write with `mode("overwrite")` partitioned by `source_quarter` and no `replaceWhere`, so whether a second quarter appends or replaces existing data has not been tested; a second-quarter run is planned after the initial release.
 
 ---
 
 ## Power BI Dashboard
 
-The dashboard has three pages, each reading from a Gold export CSV:
+**Status: in progress; target 2026-10-16.** The dashboard has three pages, each reading from a Gold export CSV:
 
 | Page | Source Table | Key Visuals |
 |------|-------------|-------------|
-| **Signal Leaderboard** | `gold_signals.csv` | Top drug-reaction pairs ranked by PRR; case count, ROR columns; signal flag filter |
-| **Patient Demographics** | `gold_demographics.csv` | Age group bar chart; sex donut chart; top 15 reporter countries bar chart |
+| **Signal Leaderboard** | `gold_signals.csv` | Main leaderboard = non-exclusive `SIGNAL` pairs ranked by PRR, with case count and ROR columns and the Haldane flag in the tooltip. The main leaderboard filter is `SIGNAL` AND NOT `is_exclusive` (49,878 pairs on 2026Q1); a separate "Exclusive reports" panel shows the 106 `SIGNAL` pairs where the drug is the only reporter of the event (D8, amended). `is_exclusive` is derived in Power BI as `case_count = event_total` |
+| **Patient Demographics** | `gold_demographics.csv` | Age group bar chart; sex donut chart; top 10 reporter countries bar chart |
 | **Case Outcomes** | `gold_outcomes.csv` | Outcome distribution (death, hospitalization, etc.); reporter type distribution |
 
 ---
@@ -242,7 +271,15 @@ The dashboard has three pages, each reading from a Gold export CSV:
 | `primaryid` as join key | `caseid` is not unique — a case can have multiple versions. `primaryid` includes the version number. |
 | PS filter in Silver | Signal detection only uses Primary Suspect drugs. Including concomitant drugs would dilute PRR/ROR. |
 | Uppercase + trim for drug names | FAERS has no drug name vocabulary control. Normalization prevents fragmentation (e.g., `"ASPIRIN"` vs `"Aspirin "`). |
-| Evans Criteria ≥ 3 cases | A PRR of 10 on 1 case is statistically meaningless. The case threshold prevents false positives. |
+| Full Evans Criteria (cases, PRR, chi-squared) | A PRR of 10 on 1 case is statistically meaningless. Requiring chi-squared (Yates) ≥ 4 in addition to the case-count and PRR thresholds screens out low-confidence pairs that PRR alone would flag. |
+| Haldane-Anscombe correction on zero cells | Without it, any pair with an empty contingency-table cell gets a null PRR/ROR and silently drops out of signal detection — including some of the most exclusive, clinically interesting drug-event pairs. |
+| D1 — Binary `signal_flag` | `SIGNAL` / `NO_SIGNAL` only; the 1.5 "weak" tier had no literature basis. |
+| D2 — Haldane correction | +0.5 to all four cells when any is 0, for PRR/ROR only, so no pair gets a null PRR. |
+| D3 — Full Evans | `case_count ≥ 3` AND `PRR ≥ 2` AND Yates `chi_sq ≥ 4`. |
+| D4 — Dedup on `caseid` | `primaryid` already includes the version, so deduping on it is a no-op; keep max `caseversion` per `caseid`, semi-join child tables. |
+| D5 — ANSI mode stays on | Division safety comes from the math, not from disabling engine checks. |
+| D6 — Independent verifier | `sql/verify_signal_fix.sql` is written by a human, outside the coding session, and is read-only for the assistant. |
+| D7 — One row per case in Silver | OUTC/RPSR are aggregated per `primaryid` before joining, so `silver_cases` does not fan out. |
 | Power BI via CSV export | No Databricks connector license required. Works entirely within the Free Edition and Power BI Desktop constraints. |
 
 ---
@@ -251,10 +288,30 @@ The dashboard has three pages, each reading from a Gold export CSV:
 
 This is a portfolio project. The following simplifications are documented and intentional:
 
-- **Drug name normalization is basic** (uppercase + trim only). A production system would use a MedDRA or WHO drug dictionary for entity resolution.
+- **Drug name normalization is text-only** (uppercase + trim only). A production system would use a MedDRA or WHO drug dictionary for entity resolution.
 - **No automated scheduling** — Databricks Free Edition does not support job scheduling. The pipeline runs manually.
 - **Single data source** — only FDA FAERS. A production pharmacovigilance system would also ingest EudraVigilance (EU) and WHO VigiAccess for global coverage.
-- **No confidence intervals** — PRR and ROR are computed as point estimates. Production implementations typically include 95% CI and chi-square significance testing.
+- **Haldane is a convention** — +0.5 to each cell is the common continuity correction, not the only defensible one; it affects only sparse pairs and never `chi_sq`.
+- **Single quarter verified** — the signal-fix validation has been run on 2026Q1 only.
+- **Disproportionality is not causality.** Signals are hypotheses for clinical review, not confirmed adverse reactions.
+- **No confidence intervals** — PRR and ROR are computed as point estimates (chi-square significance testing via Evans Criteria is implemented; 95% CI is not).
+- **`case_count` counts reports, not patients.** The same literature case submitted by several manufacturers, related reports filed together, or follow-ups filed under new case IDs can inflate n. Case-ID deduplication (D4) cannot detect these (D9).
+
+---
+
+## Results & Validation
+
+Verified on 2026Q1 against the pre-fix baseline (Delta time travel, `gold_signals` v1 → v3):
+
+- **Independent verification passes:** `06_validate_fix.py` V1–V10 10/10 PASS, and the independent SQL recompute matched all 373,012 pairs (PRR, ROR, χ² and Haldane mismatches all 0).
+- **One row per case in Silver:** `silver_cases` fell from 470,891 to 397,224 rows (73,667 fan-out rows removed, 15.6%), equal to the 397,224 distinct cases.
+- **Exclusive pairs no longer hidden:** null PRR went from 2,978 pairs to 0, and 106 exclusive pairs moved from `NO_SIGNAL` to `SIGNAL`. They are shown in a separate "Exclusive reports" panel, not the main leaderboard.
+- **Stricter classification:** `SIGNAL` went from 56,491 to 49,984 (−6,507, −11.5%). 6,613 pairs (11.7% of 56,491) were lost, all because they failed the χ² ≥ 4 criterion.
+- **Case-level review of the top 10 rescued signals:** 3 rest on fewer than three likely patients (report duplication), see [docs/validation-results.md](docs/validation-results.md).
+- **Label review of the top 10 rescued pairs (2026-10-04):** 7 known/labeled, 1 confounding by indication, 2 likely artifact. This describes these ten pairs only; it does not validate the method.
+- **Dedup was a latent bug:** it removed 0 rows in 2026Q1 (0 superseded case versions), but prevents double-counting when quarters are added.
+
+Baseline-vs-after metrics, check results (V1–V10 and `sql/verify_signal_fix.sql`), the signal transition matrix, and limitations are recorded in **[docs/validation-results.md](docs/validation-results.md)**.
 
 ---
 
@@ -265,6 +322,10 @@ This is a portfolio project. The following simplifications are documented and in
 | [BRD.md](BRD.md) | Business requirements — problem statement, functional requirements, stakeholders, risks |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Technical design — data flow, Medallion layers, signal math, design decisions |
 | [SETUP.md](SETUP.md) | Environment setup — Databricks account, Unity Catalog Volume upload, GitHub, Power BI |
+| [DECISIONS.md](DECISIONS.md) | Architecture and correctness decisions, recorded as they were made, with confirmation evidence |
+| [DEVELOPER.md](DEVELOPER.md) | Dev environment notes and known issues/resolutions, numbered as encountered |
+| [docs/validation-results.md](docs/validation-results.md) | Verified before/after results, checks V1–V10 and the case-level review (2026Q1) |
+| [docs/data_dictionary.md](docs/data_dictionary.md) | Column-level schema reference for every Bronze, Silver, and Gold table |
 
 ---
 
@@ -278,7 +339,9 @@ The FAERS data used is public domain, published by the U.S. Food and Drug Admini
 
 ## Author
 
-**[Your Name]**
-[LinkedIn](https://linkedin.com/in/yourprofile) · [GitHub](https://github.com/yourusername)
+**Will**
+[LinkedIn](https://www.linkedin.com/in/wdaluyen) · [GitHub](https://github.com/WDXII)
 
 *Portfolio project — built to demonstrate Databricks, PySpark, and clinical data engineering skills.*
+
+AI-assisted (Claude, Claude Code). The verification SQL (`sql/verify_signal_fix.sql`) was written by Will and locked read-only to the coding agent (D6, commit `d0f5097`); clinical interpretation is the author's own.

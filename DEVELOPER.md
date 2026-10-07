@@ -1,527 +1,260 @@
 # DEVELOPER.md — PharmaSignalLake
 
-Developer notes, known environment issues, and resolutions encountered during development.
-This file is a living log — add new entries as issues are found and resolved.
+Developer notes: environment, local setup, and a log of problems found and fixed. Add new issues at the end of Section 3 in the same format.
 
----
+> Condensed once on 2026-10-06 after reader feedback. Issue numbers, findings and rules are unchanged; long code dumps and repeated explanations were removed. The pre-trim text is in this file's git history. Append-only again from here.
 
-## Table of Contents
-
-1. [Environment Notes](#1-environment-notes)
-2. [VS Code + Databricks Sync Setup](#2-vs-code--databricks-sync-setup)
-3. [Known Issues and Resolutions](#3-known-issues-and-resolutions)
-   - [Issue 1 — DBFS Root Disabled on Free Edition (Unity Catalog)](#issue-1--dbfs-root-disabled-on-free-edition-unity-catalog)
-
----
-
-## 1. Environment Notes
+## 1. Environment
 
 | Item | Detail |
-|------|--------|
-| Platform | Databricks Free Edition (AWS) |
-| Governance | Unity Catalog enforced by default — cannot be disabled on Free Edition |
-| Compute | Serverless (no persistent cluster) |
-| Databricks Runtime | 15.x (Spark 3.5) |
-| Raw file storage | Unity Catalog Managed Volume (see Issue 1) |
-| Delta table storage | Unity Catalog Managed Volume |
-| Power BI | Desktop (local CSV import — no live connector) |
+|---|---|
+| Platform | Databricks Free Edition (AWS), Unity Catalog enforced |
+| Compute | Serverless (no persistent cluster). Runtime version is not recorded in the run logs (PROJECT-LOG T6) |
+| Storage | Unity Catalog Managed Volume for raw files and Delta tables (Issue 1) |
+| Power BI | Desktop, local CSV import (no live connector) |
 
----
+## 2. VS Code + Databricks Sync
 
-## 2. VS Code + Databricks Sync Setup
+Edit notebooks locally and sync them to Databricks. No local Python environment is needed (Issue 2).
 
-Edit notebooks locally in VS Code and sync them to Databricks without manual copy-paste.
-This is the recommended development workflow for this project.
-
-### Step 1 — Generate a Personal Access Token (PAT) in Databricks
-
-A PAT is how the VS Code extension authenticates to your workspace.
-
-1. Log in to your Databricks workspace
-2. Click your profile icon (top right) → **Settings**
-3. In the left sidebar, click **Developer**
-4. Under **Access tokens**, click **Manage**
-5. Click **Generate new token**
-6. Set a description (e.g., `vscode-databricks` or `local-dev`) and an expiry (90 days is reasonable)
-   - Use a generic name — one PAT works for all projects in your workspace
-7. Click **Generate**
-8. **Copy the token immediately** — it is only shown once
-
-Store the token somewhere safe (password manager). If you lose it, generate a new one.
-
----
-
-### Step 2 — Install the Databricks Extension in VS Code
-
-1. Open VS Code
-2. Go to the **Extensions** panel (`Ctrl+Shift+X`)
-3. Search for `Databricks`
-4. Install the extension published by **Databricks** (official, not third-party)
-5. Reload VS Code if prompted
-
----
-
-### Step 3 — Connect the Extension to Your Workspace
-
-1. Click the **Databricks icon** in the VS Code left sidebar (appears after install)
-2. Click **Configure Databricks**
-3. Enter your workspace URL — format: `https://dbc-xxxxxxxx.cloud.databricks.com`
-   - Find this in your browser address bar when logged into Databricks
-4. When prompted for authentication, choose **Personal Access Token**
-5. Paste the PAT you generated in Step 1
-6. Click **Connect** — the extension will verify the connection
-
-If successful, you will see your workspace name appear in the Databricks panel.
-
----
-
-### Step 4 — Sync Your Local Notebooks to Databricks
-
-The project uses a **Databricks Asset Bundle (DAB)** config (`databricks.yml`) to control what gets synced and where. This replaces the manual right-click upload approach.
-
-**`databricks.yml` is already configured** with:
-- `sync.paths: [notebooks]` — only the `notebooks/` folder is synced (docs, README, etc. are excluded)
-- `root_path: /Workspace/Users/williamdataworks@gmail.com/PharmaSignalLake` — DAB automatically appends `/files`, so notebooks land at `.../PharmaSignalLake/files/notebooks/`
-
-**How DAB constructs the remote path:**
-
-| Part | Value |
-|------|-------|
-| `root_path` | `.../PharmaSignalLake` |
-| DAB always appends | `/files` |
-| `sync.paths` adds | `/notebooks` |
-| **Final remote path** | `.../PharmaSignalLake/files/notebooks/` |
-
-**To start syncing:**
-
-In the VS Code Databricks panel, click **Sync State: STOPPED** to start continuous sync. After that, any save to a `.py` file in `notebooks/` is automatically pushed to Databricks.
-
-Alternatively, run from the terminal:
-```powershell
-databricks bundle sync
-```
-
----
-
-### Step 5 — Run Notebooks from VS Code (Optional)
-
-The extension allows you to run notebooks and see output inside VS Code:
-
-1. Open a `.py` notebook file in VS Code
-2. Click the **Run** button in the Databricks panel, or right-click → **Run on Databricks**
-3. Select your serverless compute
-4. Output streams back to VS Code
-
-**Note:** Running from VS Code requires a Python environment with `databricks-connect`. See Issue 2 below before attempting this. Running notebooks directly in the **Databricks web UI** is simpler and has no local Python requirement.
-
----
-
-### Recommended Workflow
-
-```
-Edit .py file in VS Code
-        │
-        ▼
-Auto-synced to Databricks (sync must be running in VS Code panel)
-        │
-        ▼
-Run notebook in Databricks web UI
-        │
-        ▼
-Commit and push to GitHub from VS Code Source Control
-```
-
----
-
-### Troubleshooting
+1. **Step 1 — Create a PAT:** Databricks → profile icon → Settings → Developer → Access tokens → Manage → Generate new token. Use a generic name (`vscode-databricks`), 90-day expiry, copy it immediately (shown once), store it in a password manager. Never commit it.
+2. **Step 2 — Install** the official **Databricks** extension in VS Code.
+3. **Step 3 — Connect:** Databricks icon → Configure Databricks → workspace URL (`https://dbc-xxxxxxxx.cloud.databricks.com`, no trailing slash) → Personal Access Token → paste.
+4. **Step 4 — Sync:** `databricks.yml` (Databricks Asset Bundle) controls what syncs. `sync.paths` lists `notebooks`, `src`, `tests`, `sql`. DAB appends `/files` to `root_path`, so notebooks land at `<root_path>/files/notebooks/`. Start sync with **Sync State: STOPPED** in the panel (it does not auto-start), or run `databricks bundle sync`.
+5. **Step 5 — Run notebooks in the Databricks web UI**, then commit and push from VS Code.
 
 | Problem | Fix |
-|---------|-----|
-| Extension shows "Connection failed" | Verify workspace URL has no trailing slash; re-paste the PAT |
-| PAT rejected | Token may have expired — generate a new one in Databricks Settings → Developer |
-| Sync State shows STOPPED | Click it in the Databricks panel to start — it does not auto-start |
-| Notebooks land at wrong path (e.g. `/files/notebooks/files`) | Check `databricks.yml` — `root_path` must NOT end in `/notebooks`; DAB appends `/files` automatically |
-| Notebook runs but uses old code | Confirm sync is running (not STOPPED) before running the notebook |
-
----
+|---|---|
+| "Connection failed" | Remove trailing slash from the URL; re-paste the PAT |
+| PAT rejected | Expired; generate a new one |
+| Notebook runs old code | Sync is STOPPED; start it first |
+| Notebooks land at `/files/notebooks/files` | `root_path` must not end in `/notebooks` |
 
 ## 3. Known Issues and Resolutions
 
----
-
-### Issue 1 — DBFS Root Disabled on Free Edition (Unity Catalog)
-
-**Status:** Resolved  
-**Date encountered:** June 2026  
-**Affected files:** `notebooks/00_config.py`, `ARCHITECTURE.md`
-
-#### Symptom
-
-Running any notebook that references `/FileStore/...` or `dbfs:/FileStore/...` paths raised:
-
-```
-AnalysisException: DBFS_DISABLED
-SQLSTATE: 56038
-DBFS root access is not allowed in Unity Catalog-enabled workspaces.
-```
-
-#### Root Cause
-
-Databricks Free Edition provisions workspaces with **Unity Catalog enabled by default**. Unity Catalog enforces stricter data governance and explicitly **disables DBFS root access** — the `/FileStore/` path (also written as `dbfs:/FileStore/`) is part of the DBFS root and is inaccessible in this mode.
-
-The original `00_config.py` was written assuming DBFS paths, which is the correct assumption for legacy Databricks workspaces and Community Edition (retired January 2026). It is the wrong assumption for any workspace provisioned after Unity Catalog became the default.
-
-#### Resolution
-
-Created a Unity Catalog **Managed Volume** to serve as the raw file storage layer:
-
-| Setting | Value |
-|---------|-------|
-| Catalog | `workspace` |
-| Schema | `default` |
-| Volume name | `pharma_raw` |
-| Full volume path | `/Volumes/workspace/default/pharma_raw` |
-
-Uploaded all 7 FAERS `.txt` files for 2026Q1 to:
-```
-/Volumes/workspace/default/pharma_raw/2026Q1/
-    DEMO26Q1.txt
-    DRUG26Q1.txt
-    INDI26Q1.txt
-    OUTC26Q1.txt
-    REAC26Q1.txt
-    RPSR26Q1.txt
-    THER26Q1.txt
-```
-
-Updated `00_config.py` — all five base paths now point to the Volume:
-
-```python
-# Unity Catalog Volume — DBFS root is disabled on Free Edition (Unity Catalog default)
-BASE_RAW    = f"/Volumes/workspace/default/pharma_raw/{QUARTER}"
-BASE_BRONZE = "/Volumes/workspace/default/pharma_raw/bronze"
-BASE_SILVER = "/Volumes/workspace/default/pharma_raw/silver"
-BASE_GOLD   = "/Volumes/workspace/default/pharma_raw/gold"
-BASE_EXPORT = "/Volumes/workspace/default/pharma_raw/exports"
-```
-
-All downstream path variables (`RAW_FILES`, `BRONZE`, `SILVER`, `GOLD`, `EXPORTS`) derive from these base paths and required no changes.
-
-#### How to Create the Volume (for a new workspace)
-
-If you need to recreate this setup from scratch:
-
-1. In Databricks, go to **Catalog** (left sidebar)
-2. Expand **workspace** catalog → **default** schema
-3. Click **Create** → **Volume**
-4. Set **Volume name** to `pharma_raw`, type **Managed**
-5. Click **Create**
-6. Go to **Data** → **Add Data** → **Upload to Volume**
-7. Set target path to `/Volumes/workspace/default/pharma_raw/2026Q1/`
-8. Upload all 7 FAERS `.txt` files
-
-#### Adding a Second Quarter
-
-When adding a new quarter, upload files to a new subfolder within the same volume:
-
-```
-/Volumes/workspace/default/pharma_raw/2025Q4/
-    DEMO25Q4.txt
-    ...
-```
-
-Then update `QUARTER` in `00_config.py`. No other changes needed.
-
-#### Why Not Use a Different Catalog or Schema?
-
-The `workspace` catalog is the default catalog provisioned by Databricks Free Edition. Using it avoids any additional catalog setup. In a production environment with multiple environments (dev/staging/prod), you would create a dedicated catalog (e.g., `pharma_dev`) and isolate schemas per environment.
-
-#### Reference
-
-- [Databricks Unity Catalog Volumes documentation](https://docs.databricks.com/en/connect/unity-catalog/volumes.html)
-- [DBFS deprecation in Unity Catalog workspaces](https://docs.databricks.com/en/dbfs/index.html)
+| # | Issue | Status |
+|---|---|---|
+| 1 | DBFS root disabled on Free Edition | Resolved |
+| 2 | `databricks-connect` not needed | Resolved |
+| 3 | `%run` needs the `# MAGIC` prefix | Resolved |
+| 4 | FAERS filenames use 2-digit years | Resolved |
+| 5 | `source_quarter` dropped in an intermediate select | Resolved |
+| 6 | `.desc().nulls_last()` is not valid PySpark | Resolved |
+| 7 | ANSI mode `DIVIDE_BY_ZERO` (fix superseded by D5) | Superseded |
+| 8 | `count` variable shadowed the PySpark function | Resolved |
+| 9 | Dedup on `primaryid` was a no-op | Resolved |
+| 10 | New `sync.paths` folders did not appear | Workaround |
+| 11 | Case-only column name collision corrupted PRR/ROR | Resolved |
+| 12 | `%run` sharing a cell silently no-ops | Resolved |
+| 13 | BRD still documented pre-fix behavior | Resolved |
+| 14 | `silver_cases` fan-out despite a comment saying otherwise | Resolved |
+| 15 | Notebook attached to a SQL Warehouse | Resolved |
+| 16 | Validation query 2.1 could never fail | Resolved |
+| 17 | Zero-cell nulls hid exclusive signals | Resolved |
+| 18 | Baseline not snapshotted; time travel blocked | Workaround |
+| 19 | `sql/` missing from `sync.paths` | Resolved |
+| 20 | Unit-test runner failed on `__pycache__` writes | Resolved |
+| 21 | `case_count` counts reports, not patients | Documented limitation |
+| 22 | `haldane_applied` is not "exclusive" | Resolved |
+| 23 | Docs claimed more than was verified | Docs corrected |
+| 24 | Stage timers used `timedelta.seconds` | Resolved |
+| 25 | Run summary could disagree with its own run | Resolved |
 
 ---
 
-### Issue 2 — databricks-connect Is Not Required for This Workflow
-
-**Status:** Resolved (by not installing it)
-**Date encountered:** June 2026
-
-#### Symptom
-
-The VS Code Databricks panel shows two warnings:
-```
-⚠ Activate an environment with Python 3.12 or greater
-⚠ Can't install databricks-connect without an active Python environment
-```
-
-Attempting to install `databricks-connect` on Python 3.13 fails because it pins `numpy<2`, and numpy 1.26.x has no pre-built wheel for Python 3.13 — it requires a C compiler (MSVC or GCC) to build from source, which is not installed.
-
-#### Root Cause
-
-`databricks-connect` is only needed for one specific workflow: executing Spark code **locally on your laptop** and sending it to a remote Databricks cluster. This is not how this project works.
-
-#### Resolution
-
-**Do nothing.** The warnings are advisory and can be ignored.
-
-This project's workflow is:
-1. Edit `.py` files locally in VS Code
-2. Auto-sync to Databricks via the extension (no Python env required)
-3. Run notebooks in the **Databricks web UI** (no Python env required)
-
-No `.venv`, no `databricks-connect`, no local Python environment is needed. The `.venv` folder was created during troubleshooting and subsequently deleted.
-
-#### If You Want Local Notebook Execution in the Future
-
-You would need Python 3.12 (not 3.13) installed, since `databricks-connect 15.4` requires `numpy<2` which has no Python 3.13 wheel. Install Python 3.12 from python.org, then:
-
-```powershell
-py -3.12 -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install databricks-connect==15.4.*
-```
-
-This is optional and not part of the standard development workflow for this project.
-
----
-
-### Issue 3 — `%run` Magic Commands Must Use `# MAGIC` Prefix
-
-**Status:** Resolved  
-**Date encountered:** June 2026  
-**Affected files:** `notebooks/01_bronze_ingest.py`, `02_silver_clean.py`, `03_gold_signals.py`, `04_export.py`, `99_run_pipeline.py`
-
-#### Symptom
-
-Running any notebook after `00_config.py` raised:
-
-```
-NameError: name 'QUARTER' is not defined
-```
-
-Despite `00_config.py` running successfully and all variables appearing to be defined there.
-
-#### Root Cause
-
-Databricks `.py` notebook source files use a special comment syntax to encode magic commands. A line like `%run ./00_config` must be written as:
-
-```python
-# MAGIC %run ./00_config
-```
-
-Without the `# MAGIC` prefix, Databricks treats the line as a plain Python comment — it is never executed, so `00_config` is never loaded and none of its variables (`QUARTER`, `RAW_FILES`, `BRONZE`, etc.) exist in the notebook's scope.
-
-All five downstream notebooks had the `%run` line commented out as a plain comment (`# %run ./00_config`), not as a magic command.
-
-#### Resolution
-
-Changed the `%run` line in all five notebooks from:
-
-```python
-# %run ./00_config
-```
-
-to:
-
-```python
-# MAGIC %run ./00_config
-```
-
-#### Rule to Remember
-
-In Databricks `.py` source files, every magic command (`%run`, `%sql`, `%md`, `%pip`, etc.) must be prefixed with `# MAGIC `. Without it, the line is inert Python source and will never execute.
-
----
-
-### Issue 4 — FAERS Filenames Use 2-Digit Years; Config Was Generating 4-Digit
-
-**Status:** Resolved  
-**Date encountered:** June 2026  
-**Affected files:** `notebooks/00_config.py`
-
-#### Symptom
-
-Bronze ingestion failed with `PATH_NOT_FOUND` for all 7 FAERS files:
-
-```
-Path does not exist: dbfs:/Volumes/workspace/default/pharma_raw/2026Q1/DEMO2026Q1.txt
-```
-
-#### Root Cause
-
-FDA FAERS filenames use **2-digit years**, not 4-digit. For quarter `2026Q1`, the actual files are:
-```
-DEMO26Q1.txt   DRUG26Q1.txt   REAC26Q1.txt   INDI26Q1.txt
-OUTC26Q1.txt   RPSR26Q1.txt   THER26Q1.txt
-```
-
-The original `RAW_FILES` config built paths using `QUARTER` directly (`DEMO{QUARTER}.txt` → `DEMO2026Q1.txt`), which doesn't match the FDA naming convention.
-
-Confirmed by running `dbutils.fs.ls("/Volumes/workspace/default/pharma_raw/2026Q1/")` — all 7 files were present with 2-digit year names.
-
-#### Note on `dbfs:/Volumes/` Path Display
-
-`dbutils.fs.ls()` displays Volume paths with a `dbfs:` prefix (`dbfs:/Volumes/...`). This is Databricks' internal representation and is correct — it does NOT indicate DBFS root access. `spark.read` correctly resolves these paths.
-
-#### Resolution
-
-Added `QUARTER_SHORT = QUARTER[2:]` in `00_config.py` to strip the century digits (`"2026Q1"` → `"26Q1"`), then used `QUARTER_SHORT` in all `RAW_FILES` path definitions.
-
-#### Rule to Remember
-
-FDA FAERS filenames always use 2-digit years regardless of the century. When building file paths, use `QUARTER[2:]` to match the FDA convention. This applies to all quarters: `2024Q3` → `24Q3`, `2025Q1` → `25Q1`, etc.
-
----
-
-### Issue 5 — `source_quarter` Dropped in `silver_drug_reactions` Intermediate Select
-
-**Status:** Resolved  
-**Date encountered:** June 2026  
-**Affected files:** `notebooks/02_silver_clean.py`
-
-#### Symptom
-
-`silver_drug_reactions` failed with:
-
-```
-[UNRESOLVED_COLUMN.WITH_SUGGESTION] A column, variable, or function parameter
-with name `source_quarter` cannot be resolved.
-```
-
-`silver_cases` and `silver_therapy` succeeded; only `silver_drug_reactions` failed.
-
-#### Root Cause
-
-In `build_silver_drug_reactions()`, the intermediate `.select()` on the `drug` DataFrame (after filtering to PS and uppercasing) explicitly listed columns but omitted `source_quarter`. Since `source_quarter` was not carried forward into the join, it was unavailable when the final `.select()` referenced it.
-
-#### Resolution
-
-Added `"source_quarter"` to the intermediate `.select()` on the `drug` DataFrame so it is present in the joined result.
-
-#### Rule to Remember
-
-When chaining `.select()` → `.join()` → `.select()`, every column needed in the final output must survive each intermediate projection. Audit trail columns (`source_quarter`, `load_timestamp`) are easy to silently drop if not explicitly included at every select step.
-
----
-
-### Issue 6 — `Column.desc().nulls_last()` Is Not Valid PySpark Syntax
-
-**Status:** Resolved  
-**Date encountered:** June 2026  
-**Affected files:** `notebooks/03_gold_signals.py`
-
-#### Symptom
-
-`gold_signals` failed with:
-
-```
-'Column' object is not callable
-```
-
-`gold_demographics` and `gold_outcomes` succeeded.
-
-#### Root Cause
-
-`col("prr").desc()` returns a PySpark `Column` object. Calling `.nulls_last()` on that result fails because `nulls_last` is not a method on `Column` — it is not callable. PySpark does not chain null-ordering as a separate method after `desc()`.
-
-#### Resolution
-
-Replaced `.desc().nulls_last()` with the combined method `.desc_nulls_last()`:
-
-```python
-# Wrong
-.orderBy(col("prr").desc().nulls_last())
-
-# Correct
-.orderBy(col("prr").desc_nulls_last())
-```
-
-#### Rule to Remember
-
-PySpark null-ordering is set via combined methods directly on `Column`:
-- `col("x").asc_nulls_first()`
-- `col("x").asc_nulls_last()`
-- `col("x").desc_nulls_first()`
-- `col("x").desc_nulls_last()`
-
-There is no separate `.nulls_first()` or `.nulls_last()` method. Chaining `.desc().nulls_last()` will always raise `'Column' object is not callable`.
-
----
-
-### Issue 7 — Photon ANSI Mode Throws DIVIDE_BY_ZERO Inside `when()` Guards
-
-**Status:** Resolved  
-**Date encountered:** June 2026  
-**Affected files:** `notebooks/03_gold_signals.py`
-
-#### Symptom
-
-`gold_signals` failed during the Delta write with:
-
-```
-[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0
-and return NULL instead. If necessary set "spark.sql.ansi.enabled" to "false".
-SQLSTATE: 22012
-```
-
-#### Root Cause
-
-Databricks Serverless uses the **Photon** execution engine, which enforces **ANSI SQL mode** by default. In ANSI mode, division by zero raises a hard error at the physical execution layer — even when the division expression is wrapped inside a `when()` condition that should logically prevent it from executing.
-
-The PRR and ROR `when()` guards in the code are logically correct (they check denominators before dividing), but Photon evaluates all expressions at the row level and can still encounter the division before the condition short-circuits.
-
-#### Resolution
-
-Added `spark.conf.set("spark.sql.ansi.enabled", "false")` at the top of `03_gold_signals.py`, immediately after `%run ./00_config`. This makes Spark return `NULL` on divide-by-zero instead of throwing — which is the intended behavior for our division guards.
-
-#### Why Not Use `try_divide`?
-
-`try_divide(a, b)` is the ANSI-safe alternative, but it requires restructuring nested expressions like `(A/B) / ((C-A)/(N-B))` into multiple intermediate columns. Disabling ANSI mode for this notebook is simpler and appropriate here — the division guards are correct, we just need NULL-safe arithmetic.
-
-#### Rule to Remember
-
-Databricks Serverless + Photon enforces ANSI SQL mode by default. Any notebook performing division must either use `try_divide`, pre-filter to exclude zero denominators, or disable ANSI mode with `spark.conf.set("spark.sql.ansi.enabled", "false")`. The `when()` guard alone is not sufficient in Photon ANSI mode.
-
----
-
-### Issue 8 — Notebook-Level `count` Assignment Shadows PySpark `count` Function
-
-**Status:** Resolved  
-**Date encountered:** June 2026  
-**Affected files:** `notebooks/03_gold_signals.py`
-
-#### Symptom
-
-Signal detection stats section failed with:
-
-```
-TypeError: 'int' object is not callable
-```
-
-immediately after the Gold layer summary printed successfully.
-
-#### Root Cause
-
-The execution block used `count` as a local variable name to capture the return value of `write_gold()`:
-
-```python
-count = write_gold(df_signals, "signals")   # count = 373012 (int)
-count = write_gold(df_demo, "demographics") # count = 34 (int)
-count = write_gold(df_outc, "outcomes")     # count = 11 (int)
-```
-
-These assignments are at **notebook scope** (not inside a function), so they overwrite the `count` name imported from `pyspark.sql.functions`. When the summary section later called `count("*")` in `.agg()`, `count` was the integer `11`, not the aggregation function.
-
-#### Resolution
-
-Renamed the local variable from `count` to `n_rows` in all three execution block assignments.
-
-#### Rule to Remember
-
-In Databricks notebooks, all cell code runs in a shared global namespace. Assigning a variable at notebook level (outside a function) will shadow any imported name with the same identifier for all subsequent cells. Never use the same name as an imported function for a local result variable at notebook scope. Common collisions: `count`, `sum`, `max`, `min`, `round`, `filter`, `map`.
+### Issue 1 — DBFS Root Disabled on Free Edition
+*Resolved · June 2026 · `00_config.py`, `ARCHITECTURE.md`*
+- **Symptom:** Any `/FileStore/` or `dbfs:/FileStore/` path raised `DBFS_DISABLED` (SQLSTATE 56038).
+- **Cause:** Free Edition enables Unity Catalog, which blocks DBFS root. The original config assumed DBFS.
+- **Fix:** Created Managed Volume `workspace.default.pharma_raw`, uploaded the 7 FAERS files to `/Volumes/workspace/default/pharma_raw/2026Q1/`, and pointed the five base paths in `00_config.py` (`BASE_RAW`, `BASE_BRONZE`, `BASE_SILVER`, `BASE_GOLD`, `BASE_EXPORT`) at the Volume. Derived paths needed no change.
+- **Recreate:** Catalog → `workspace` → `default` → Create → Volume (`pharma_raw`, Managed) → Add Data → Upload to Volume at `.../2026Q1/`. For a new quarter, use a new subfolder and set `QUARTER` (second-quarter run untested, Issue 23).
+- **Rule:** On Free Edition, use Unity Catalog Volumes, never DBFS paths.
+
+### Issue 2 — `databricks-connect` Is Not Required
+*Resolved by not installing it · June 2026*
+- **Symptom:** VS Code warns "Activate an environment with Python 3.12 or greater" and can't install `databricks-connect` (Python 3.13 has no `numpy<2` wheel).
+- **Cause:** It is only for running Spark locally against a remote cluster, which this project does not do.
+- **Fix:** Ignore the warnings. Edit locally, sync, run in the web UI. No venv. (Optional later: Python 3.12 + `databricks-connect==15.4.*`.)
+- **Rule:** No local Python environment is needed. There is also no Java locally, so no local Spark (Section 4).
+
+### Issue 3 — `%run` Needs the `# MAGIC` Prefix
+*Resolved · June 2026 · notebooks 01–04, 99*
+- **Symptom:** `NameError: name 'QUARTER' is not defined` after `00_config.py` ran fine.
+- **Cause:** `# %run ./00_config` is just a comment, so the config never loaded.
+- **Fix:** Changed to `# MAGIC %run ./00_config` in all five notebooks.
+- **Rule:** In Databricks `.py` source, every magic command (`%run`, `%sql`, `%md`, `%pip`) needs the `# MAGIC ` prefix.
+
+### Issue 4 — FAERS Filenames Use 2-Digit Years
+*Resolved · June 2026 · `00_config.py`*
+- **Symptom:** `PATH_NOT_FOUND` for `DEMO2026Q1.txt` and the other six files.
+- **Cause:** FDA names files `DEMO26Q1.txt`; config built names from `QUARTER` directly.
+- **Fix:** `QUARTER_SHORT = QUARTER[2:]`, used in all `RAW_FILES` paths.
+- **Note:** `dbutils.fs.ls()` shows Volume paths as `dbfs:/Volumes/...`. That is display only, not DBFS root access.
+- **Rule:** FAERS file names always use the 2-digit year (`2024Q3` → `24Q3`).
+
+### Issue 5 — `source_quarter` Dropped in `silver_drug_reactions`
+*Resolved · June 2026 · `02_silver_clean.py`*
+- **Symptom:** `UNRESOLVED_COLUMN` for `source_quarter`; only `silver_drug_reactions` failed.
+- **Cause:** The intermediate `.select()` on `drug` omitted it.
+- **Fix:** Added `"source_quarter"` to that select.
+- **Rule:** In `.select()` → `.join()` → `.select()` chains, audit columns (`source_quarter`, `load_timestamp`) must be carried through every projection.
+
+### Issue 6 — `.desc().nulls_last()` Is Not Valid PySpark
+*Resolved · June 2026 · `03_gold_signals.py`*
+- **Symptom:** `'Column' object is not callable` in `gold_signals`.
+- **Cause:** `nulls_last` is not a `Column` method.
+- **Fix:** `col("prr").desc_nulls_last()`.
+- **Rule:** Null ordering uses combined methods: `asc_nulls_first`, `asc_nulls_last`, `desc_nulls_first`, `desc_nulls_last`.
+
+### Issue 7 — ANSI Mode `DIVIDE_BY_ZERO` (Superseded)
+*Resolved, then superseded by D5 · June 2026 · `03_gold_signals.py`*
+- **Symptom:** `DIVIDE_BY_ZERO` (SQLSTATE 22012) during the Delta write.
+- **Cause (as diagnosed then):** Serverless/Photon enforces ANSI, and the division ran despite the `when()` guard. Later found: a ROR guard really did let `C − A = 0` through (D5).
+- **Fix then:** Disabled ANSI. **Superseded (Sept 2026):** ANSI is back on and Haldane (D2) removes zero denominators. Do not repeat the original fix.
+- **Rule:** Never disable ANSI. It turned a data-shape problem into null PRR for the most exclusive pairs (Issue 17). Fix the math or use `try_divide` and handle the null.
+
+### Issue 8 — `count` Variable Shadowed the PySpark Function
+*Resolved · June 2026 · `03_gold_signals.py`*
+- **Symptom:** `TypeError: 'int' object is not callable` right after the Gold summary printed.
+- **Cause:** `count = write_gold(...)` at notebook scope overwrote `pyspark.sql.functions.count`.
+- **Fix:** Renamed to `n_rows`.
+- **Rule:** Notebook cells share one namespace. Never name a variable `count`, `sum`, `max`, `min`, `round`, `filter` or `map`.
+
+### Issue 9 — Dedup on `primaryid` Was a No-Op
+*Resolved · Sept 2026 · `02_silver_clean.py`, `src/signal_math.py`*
+- **Symptom:** No error. `silver_cases` always had one row per `primaryid`. 2026Q1 hid it (397,224 = 397,224, 0 superseded).
+- **Cause:** `primaryid = caseid + caseversion` is unique, so `Window.partitionBy("primaryid")` gives one row per partition and the `rn == 1` filter removes nothing. Child tables also ignored which `primaryid`s survived.
+- **Fix:** Partition by `caseid`, order by `try_cast(caseversion AS INT)` descending, nulls last (now `dedup_cases()` in `src/signal_math.py`, called from `02_silver_clean.py`). `left_semi` join `DRUG`, `REAC`, `OUTC`, `RPSR`, `THER` to surviving `primaryid`s (`INDI` is unused there). Added before/after row-count prints.
+- **Rule:** Dedup on the entity key. Zero impact on a sample means the sample did not exercise the bug, not that the bug was unreal.
+
+### Issue 10 — New `sync.paths` Folders Did Not Appear
+*Workaround · Sept 2026 · `databricks.yml`*
+- **Symptom:** After adding `src/` and `tests/` to `sync.paths` during a running sync, only `notebooks/` appeared remotely.
+- **Cause:** Not confirmed. Sync likely won't create a new top-level remote folder mid-session.
+- **Fix:** Created empty `src` and `tests` folders in the Workspace UI; the next sync filled them. Restarting sync or `databricks bundle sync` might also work (untested).
+- **Rule:** After adding a folder, restart sync or run `databricks bundle sync`. Creating the empty folder manually is the fallback.
+
+### Issue 11 — Case-Only Column Name Collision Corrupted PRR/ROR
+*Resolved · Sept 2026 · `src/signal_math.py`*
+- **Symptom:** 2 of 5 unit tests failed with plain `AssertionError`: `drug_total` was not 8, and `prr` was non-null but not 3.5714.
+- **Cause:** Columns `A`/`B`/`C` and `a`/`b`/`c`/`d` differ only by case. Classic Spark raises an ambiguity error; under Spark Connect (Serverless) `col("b")` silently resolved to the wrong one.
+- **Fix:** Renamed to `pair_n`, `drug_n`, `reaction_n`, `total_n`, `cell_a`…`cell_d`, `cell_a_h`…`cell_d_h`.
+- **Rule:** Never name two columns that differ only by case. This fails silently with plausible wrong numbers. Catch it with unit tests against hand-computed values.
+
+### Issue 12 — `%run` Sharing a Cell Silently No-Ops
+*Resolved · Sept 2026 · `99_run_pipeline.py`*
+- **Symptom:** Run All printed `✓ Silver complete` etc. for every stage, but none of `02_silver_clean.py`'s own output appeared, only the warning "you are using the ipython `%run` line magic".
+- **Cause:** After Issue 3, each `# MAGIC %run` still shared a cell with other statements. Databricks then falls back to IPython's `%run` without erroring, and the unconditional success `print` ran regardless.
+- **Fix:** Each `# MAGIC %run ./0N_...` now sits alone in its own `# COMMAND ----------` cell; `stage_start` and `print` are in separate cells.
+- **Rule:** `%run` must be the only statement in its cell. Don't trust a "✓ complete" banner; look for the target notebook's own output.
+
+### Issue 13 — BRD Still Documented Pre-Fix Behavior
+*Resolved · Sept 2026 · `BRD.md`*
+- **Symptom:** BRD v2.0 still specified `primaryid` dedup (FR-06), Evans without χ² (FR-16, Scope, Glossary), a three-tier classification (Scope), and PRR/ROR formulas with no Haldane correction (FR-14/15).
+- **Cause:** DECISIONS was updated per decision; the BRD was never revisited.
+- **Fix:** BRD v2.1: FR-06, FR-14, FR-15, FR-16, Scope, Glossary updated (plus a Haldane-Anscombe entry), cross-referenced from D1–D4.
+- **Rule:** Update the requirements doc in the same pass as the decision. Periodically ask "does this match the BRD?" as its own check.
+
+### Issue 14 — `silver_cases` Fan-Out Despite a Comment Saying Otherwise
+*Resolved · Sept 2026 · `02_silver_clean.py`, `03_gold_signals.py`*
+- **Symptom:** `V1` failed: 470,891 rows for 397,224 distinct cases. The 73,667-row fan-out was known from the `05_profile.py` baseline and had been accepted on 09-28, yet the function's own comment said it aggregated.
+- **Cause:** Only `dropDuplicates(["primaryid", "outc_cod"])` and the `rpsr_cod` equivalent preceded the joins. A case with 2 outcome and 3 report-source codes produced 6 rows.
+- **Fix:** `02`: aggregate `outc_cod` and `rpsr_cod` per `primaryid` (`collect_set` + `concat_ws`). `03`: `build_gold_outcomes()` explodes them back, so `gold_outcomes` and Power BI are unchanged. Recorded as D7 (supersedes the 09-28 call); `docs/data_dictionary.md` updated.
+- **Rule:** A comment is a claim, not a guarantee. When a row count misses its grain, check whether a comment already promised the missing fix. When reversing a decision, record the reversal.
+
+### Issue 15 — Notebook Attached to a SQL Warehouse
+*Resolved (workflow) · Sept 2026 · no repo files*
+- **Symptom:** Banner "Non-SQL cells will fail during execution" instead of a run.
+- **Cause:** The notebook was attached to a SQL Warehouse (SQL and Markdown only), likely inherited from the last-used compute after the SQL Editor.
+- **Fix:** Switch the compute selector to Serverless or an interactive cluster and re-run.
+- **Rule:** Check the compute attachment before blaming code, especially right after using the SQL Editor.
+
+### Issue 16 — Validation Query 2.1 Could Never Fail
+*Resolved · Sept 2026 · `notebooks/validation_queries.sql`*
+- **Symptom:** Query 2.1 ("no duplicate `primaryid`") returned 0 on every run, even with superseded versions (Issue 9) and fan-out (Issue 14). Section 0 also used disabled DBFS paths.
+- **Cause:** `primaryid` is unique by construction, so the check tested something that cannot be violated.
+- **Fix:** 2.1 compares `COUNT(*)` with `COUNT(DISTINCT caseid)` and states in a comment what would make it fail. Section 0 uses `/Volumes/workspace/default/pharma_raw/{bronze,silver,gold}/`. Queries 3.3/3.4 changed from `signal_flag != 'NO_SIGNAL'` to `= 'SIGNAL'` (D1). Header points to `sql/verify_signal_fix.sql` (Will-owned, D6).
+- **Rule:** For every check, name the broken output that would make it fail. If you can't, it is decoration. Check uniqueness on `caseid`.
+
+### Issue 17 — Zero-Cell Nulls Hid Exclusive Signals
+*Resolved (D2) · Sept 2026 · `03_gold_signals.py`, `src/signal_math.py`*
+- **Symptom:** Pairs with `case_count = event_total` (`C − A = 0`) had null PRR and fell to `NO_SIGNAL`. Baseline: 2,978 null-PRR pairs, 106 with `case_count ≥ 3` (query E).
+- **Cause:** Zero denominators made the guards return null; null fails every `>=`, so the default `NO_SIGNAL` won. Disabling ANSI (Issue 7) had hidden it.
+- **Fix:** Haldane correction for PRR/ROR plus a `haldane_applied` column; ANSI on (D2, D5). Verified 2026-09-29: null PRR 2,978 → 0, the 106 pairs now `SIGNAL`.
+- **Rule:** A null metric must never fall silently into a default class. Give every branch an explicit null outcome and count nulls per class.
+
+### Issue 18 — Baseline Not Snapshotted; Time Travel Blocked
+*Workaround · 2026-09-29 · Delta table properties, no repo files*
+- **Symptom:** `VERSION AS OF 1` failed with `DELTA_UNSUPPORTED_TIME_TRAVEL_BEYOND_DELETED_FILE_RETENTION_DURATION`.
+- **Cause:** The baseline was never copied out before the re-run (T3). Default `delta.deletedFileRetentionDuration` is 168 hours; v1 was months old.
+- **Fix:** Temporarily raised `delta.deletedFileRetentionDuration` and `delta.logRetentionDuration` to 180 days, restored v1 to `_baseline` paths, then UNSET both. The widen (v4, 08:20 UTC) and reset (v5, 09:35 UTC) hold data identical to v3. This only worked because the old files were not yet physically removed. Cells are in `docs/validation-results.md` Appendix A.
+- **Rule:** Time travel is not a backup. Snapshot the baseline to its own table or path, and record the Delta version, before any comparison re-run.
+
+### Issue 19 — `sql/` Missing from `sync.paths`
+*Resolved · 2026-09-29 · `databricks.yml`*
+- **Symptom:** `sql/verify_signal_fix.sql` existed locally and in git but not in the workspace.
+- **Cause:** `sync.paths` listed only `notebooks`, `src`, `tests`.
+- **Fix:** Added `sql`. If it doesn't appear, see Issue 10.
+- **Rule:** Add any new top-level folder to `sync.paths` in the same commit, then confirm it appears in the Workspace browser.
+
+### Issue 20 — Unit-Test Runner Failed on `__pycache__` Writes
+*Resolved · 2026-09-29 · `tests/run_unit_tests.py`*
+- **Symptom:** On Serverless, `ImportError while loading conftest`, `OSError: [Errno 95] ... tests/__pycache__`, then pytest exit code 4. No test ran.
+- **Cause:** Workspace files don't allow bytecode or pytest cache writes.
+- **Fix:** Before the run: `sys.dont_write_bytecode = True`, then `pytest.main(["-v", "-p", "no:cacheprovider", TESTS_DIR])`.
+- **Rule:** Exit code 4 means the tests never ran. Never report a test count without seeing the "N passed" line.
+
+### Issue 21 — `case_count` Counts Reports, Not Patients
+*Documented limitation (D9), no pipeline change · 2026-09-29/30*
+- **Symptom:** The case review (P1/P2) of the top 10 rescued signals found many reports per pair sharing a fingerprint, literature reference or sender. Simvastatin / Glycogen Storage Disease Type IX: 5 reports, 5 senders, 4 citing the same article. Cariprazine: 3 reports with the same event and FDA dates. Zolgensma: 5 reports that read as about 2 patients. 3 of the 10 rest on fewer than three likely patients.
+- **Cause:** `case_count` is `countDistinct(primaryid)`. D4 only catches updated versions of one case, not the same literature case sent by several manufacturers, related reports, or follow-ups under new case IDs. Exclusive pairs top any PRR/χ² ranking, so inflation shows there first.
+- **Fix:** None in the pipeline. Documented in README and `docs/validation-results.md` §7; P1–P3 is the manual check.
+- **Rule:** Never read a report count as a patient count. P1's fingerprint uses `concat_ws`, which skips NULLs, so missing fields collapse together; review rows (P2) before calling anything a duplicate.
+
+### Issue 22 — `haldane_applied` Is Not "Exclusive"
+*Resolved (D8 amended 2026-09-30) · `DECISIONS.md`, `BRD.md` FR-21, `README.md`, `sql/case_review_rescued_signals.sql`*
+- **Symptom:** D8 first filtered the "Exclusive reports" panel on `haldane_applied = true`, showing 159 `SIGNAL` pairs instead of 106.
+- **Cause:** `haldane_applied` is true when any cell is 0. The 53 `SIGNAL` pairs with `b = 0` (every report for the drug has this event) are Haldane-adjusted but not exclusive. Cross-tab in D8; query saved as P4 and re-run 2026-10-06 with the same six rows.
+- **Fix:** Panel filter is `is_exclusive` (106 pairs). Main leaderboard is `SIGNAL` and not `is_exclusive` (49,878), with `haldane_applied` as a tooltip. Power BI derives it; no pipeline change.
+- **Rule:** Name a filter after the property it tests. Cross-tabulate a flag against the concept it represents before building a visual on it.
+
+### Issue 23 — Docs Claimed More Than Was Verified
+*Docs corrected (BRD v2.4); second-quarter behavior untested · 2026-10-05*
+- **Symptom:** BRD v2.3 said extensibility was "verified with a second quarter" and would "scale to any number of quarters without code changes". README and ARCHITECTURE said a new quarter "is appended as a new partition; existing quarters are untouched". The BRD promised Bronze schema validation, which is not in code (PROJECT-LOG I4).
+- **Cause:** Design intent was never re-checked against a recorded run. `01`–`03` write with `mode("overwrite")` partitioned by `source_quarter` and no `replaceWhere`, which does not by itself preserve other quarters.
+- **Fix:** BRD v2.4: "designed for; verified on 2026Q1 only", schema validation "planned, not yet implemented (I4)". README, ARCHITECTURE, SETUP: "Verified on 2026Q1 only"; append claim removed. Second-quarter run and write-mode check deferred to after release (T9).
+- **Rule:** A doc may state only what a recorded run showed. Write intent as "designed to" and name the verifying run.
+
+### Issue 24 — Stage Timers Used `timedelta.seconds`
+*Resolved · 2026-10-05, closed by Issue 25 · `99_run_pipeline.py`*
+- **Symptom:** Stage timings printed `(datetime.now()-stage_start).seconds`. Correct on the 2026Q1 run, but wrong in principle.
+- **Cause:** `.seconds` is only the seconds component: it drops fractions and wraps after 24 hours.
+- **Fix:** Stage timers use `.total_seconds():.0f`. The remaining total-duration `.seconds` line was removed by Issue 25. Verified in a Databricks run on 2026-10-06 (five stages OK, total 2m 39.2s, UTC; OK path only).
+- **Rule:** For elapsed time use `total_seconds()`, never `.seconds`.
+
+### Issue 25 — Run Summary Could Disagree With Its Own Run
+*Resolved · 2026-10-06 (verified on Databricks, OK path only) · `99_run_pipeline.py`*
+- **Symptom:** After a partial rerun the summary showed a finish time before the start. Times were naive local time with no zone, and there was no per-stage breakdown.
+- **Cause:** `pipeline_start` and `pipeline_end` lived in different cells, so a partial rerun mixed executions; durations were wall-clock differences. This cause is inferred from the notebook structure; the partial rerun was not reproduced, so read it as likely, not confirmed.
+- **Fix:** An in-memory `stage_log` (D10). The first cell resets `stage_log`, `pipeline_start` and `pipeline_t0` together. `stage_begin(name)` and `stage_end(status)` live in their own normal cell, never in a `%run` cell (Issue 12). Entries hold `stage`, `start_utc`, `end_utc`, `duration_s`, `status` (UTC timestamps, `perf_counter` durations). The summary prints a stage table plus "Times are UTC", and warns (not fails) on inconsistent times. Nothing is persisted.
+- **Known limit:** `%run` cannot be wrapped in `try/except`, so a failed stage is logged `FAILED` only when `stage_begin` or the summary next runs, with that later time as its end. The notebook's own error output shows the real failure time.
+- **Rule:** Build a summary only from data recorded in that same execution, reset in the cell that records the start. Use UTC timestamps and a monotonic clock for durations.
 
 ---
 
 *Add new issues below this line using the same format.*
+
+---
+
+## 4. Running Unit Tests
+
+`src/signal_math.py` is tested by `tests/test_signals.py` (hand-computed 2×2 table, `C == A`, low case count, low χ², dedup).
+
+**Run them in Databricks, not locally** (no Java here, so no local `SparkSession`; Issue 2).
+
+1. Sync the bundle (`sync.paths` includes `notebooks`, `src`, `tests`; if `src`/`tests` don't appear, see Issue 10).
+2. Open `tests/run_unit_tests.py` and attach it to Serverless or interactive compute, not a SQL Warehouse (Issue 15).
+3. Run All. It runs `%pip install pytest`, restarts Python, and calls `pytest.main()`. `tests/conftest.py` uses the notebook's Spark session via `SparkSession.builder.getOrCreate()`.
+4. Expect every test to pass, and confirm the "N passed" line (Issue 20).
+
+Do not add `tests/run_unit_tests.py` to `99_run_pipeline.py`.

@@ -20,17 +20,27 @@
 # COMMAND ----------
 # MAGIC %md
 # MAGIC ## Imports
+# MAGIC
+# MAGIC `dedup_cases()` lives in `src/signal_math.py`, not in this notebook, so it
+# MAGIC can be unit tested with plain pytest (`tests/test_signals.py`) without
+# MAGIC needing `spark`/`dbutils` or this notebook's `%run ./00_config` globals.
 
 # COMMAND ----------
+
+import os
+import sys
+
+# databricks.yml syncs src/ as a sibling of notebooks/ (both under .../files/).
+sys.path.append(os.path.join(os.getcwd(), "..", "src"))
 
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import (
     col, upper, trim, max as spark_max, when, coalesce,
     current_timestamp, lit, to_date, datediff,
-    row_number, cast
+    collect_set, concat_ws
 )
-from pyspark.sql.window import Window
-from pyspark.sql.types import DoubleType, IntegerType
+from pyspark.sql.types import DoubleType
+from signal_math import dedup_cases
 
 # COMMAND ----------
 # MAGIC %md
@@ -77,42 +87,60 @@ def write_silver(df: DataFrame, table_key: str) -> int:
 
 # COMMAND ----------
 # MAGIC %md
-# MAGIC ## Silver Table 1 — silver_cases
-# MAGIC ### Source: DEMO + OUTC + RPSR
-# MAGIC
-# MAGIC **Transformations:**
-# MAGIC 1. Deduplicate DEMO — keep latest `caseversion` per `primaryid`
-# MAGIC 2. Normalize age to years using `age_cod` multiplier
-# MAGIC 3. Flag missing/invalid ages (do NOT drop — preserves case count)
-# MAGIC 4. Left join OUTC on `primaryid`
-# MAGIC 5. Left join RPSR on `primaryid`
+# MAGIC ## Case Deduplication — DEMO
+# MAGIC FAERS reporters can update a case by submitting a new `caseversion`.
+# MAGIC `primaryid` already encodes `caseid` + `caseversion`, so partitioning by
+# MAGIC `primaryid` is a no-op — every `primaryid` is already unique. The entity
+# MAGIC key is `caseid`: we keep exactly one row per `caseid`, the highest
+# MAGIC `caseversion`, and every downstream child table is filtered (left_semi
+# MAGIC join) to the surviving `primaryid`s so superseded-version rows never
+# MAGIC reach Silver.
 
 # COMMAND ----------
 
-def build_silver_cases() -> DataFrame:
+def dedup_demo() -> DataFrame:
     """
-    Build silver_cases: deduplicated case demographics with outcome
-    and reporter source joined in.
+    Deduplicate DEMO to one row per caseid, keeping the highest caseversion.
+    Delegates the actual dedup logic to dedup_cases() (src/signal_math.py),
+    which is unit tested directly in tests/test_signals.py.
     """
+    demo_raw  = read_bronze("demo")
+    raw_count = demo_raw.count()
 
-    # ── Step 1: Load and deduplicate DEMO ─────────────────────────────────────
-    # FAERS allows reporters to update a case by submitting a new caseversion.
-    # We keep the record with the highest caseversion per primaryid.
+    demo_dedup  = dedup_cases(demo_raw)
+    dedup_count = demo_dedup.count()
 
-    demo_raw = read_bronze("demo")
-
-    window_latest = Window.partitionBy("primaryid").orderBy(
-        col("caseversion").cast(IntegerType()).desc()
+    print(
+        f"  DEMO dedup (by caseid, keep max caseversion): "
+        f"{raw_count:,} -> {dedup_count:,} rows "
+        f"({raw_count - dedup_count:,} superseded versions removed)"
     )
 
-    demo_dedup = (
-        demo_raw
-        .withColumn("rn", row_number().over(window_latest))
-        .filter(col("rn") == 1)
-        .drop("rn")
-    )
+    return demo_dedup
 
-    # ── Step 2: Normalize age to years ────────────────────────────────────────
+# COMMAND ----------
+# MAGIC %md
+# MAGIC ## Silver Table 1 — silver_cases
+# MAGIC ### Source: DEMO (deduplicated) + OUTC + RPSR
+# MAGIC
+# MAGIC **Transformations:**
+# MAGIC 1. Normalize age to years using `age_cod` multiplier
+# MAGIC 2. Flag missing/invalid ages (do NOT drop — preserves case count)
+# MAGIC 3. Left-semi-join OUTC and RPSR to the surviving primaryids, aggregate each to a
+# MAGIC    comma-separated list of codes per `primaryid` (one row per case, not one per
+# MAGIC    outcome/source combination), then left join on `primaryid`
+
+# COMMAND ----------
+
+def build_silver_cases(demo_dedup: DataFrame) -> DataFrame:
+    """
+    Build silver_cases from an already-deduplicated DEMO DataFrame,
+    joined with the OUTC and RPSR rows belonging to surviving cases.
+    """
+
+    survivors = demo_dedup.select("primaryid")
+
+    # ── Step 1: Normalize age to years ────────────────────────────────────────
     # FAERS stores age as a number + a unit code (YR, MON, WK, DY, HR, DEC).
     # We convert everything to years for consistent demographic analysis.
 
@@ -148,23 +176,40 @@ def build_silver_cases() -> DataFrame:
         )
     )
 
-    # ── Step 3: Load OUTC and RPSR ────────────────────────────────────────────
-    # RPSR can have multiple rows per primaryid (multiple report sources).
-    # We aggregate to a comma-separated list to avoid fan-out on the join.
+    # ── Step 2: Load OUTC and RPSR, filtered to surviving cases ───────────────
+    # OUTC and RPSR can have multiple rows per primaryid (multiple outcomes,
+    # multiple report sources). Aggregate each to a comma-separated list per
+    # primaryid so the joins below don't fan out silver_cases into one row
+    # per (outcome, source) combination (see DEVELOPER.md Issue 14 — the
+    # previous code didn't aggregate despite this same comment claiming it
+    # did). gold_outcomes explodes the list back out before its per-code
+    # distribution, so its output is unaffected by this change.
 
+    outc_raw   = read_bronze("outc")
+    outc_count = outc_raw.count()
     outc = (
-        read_bronze("outc")
+        outc_raw
+        .join(survivors, on="primaryid", how="left_semi")
         .select("primaryid", "outc_cod")
         .dropDuplicates(["primaryid", "outc_cod"])
+        .groupBy("primaryid")
+        .agg(concat_ws(",", collect_set("outc_cod")).alias("outc_cod"))
     )
+    print(f"  OUTC: {outc_count:,} rows -> {outc.count():,} cases with at least one outcome")
 
+    rpsr_raw   = read_bronze("rpsr")
+    rpsr_count = rpsr_raw.count()
     rpsr = (
-        read_bronze("rpsr")
+        rpsr_raw
+        .join(survivors, on="primaryid", how="left_semi")
         .select("primaryid", "rpsr_cod")
         .dropDuplicates(["primaryid", "rpsr_cod"])
+        .groupBy("primaryid")
+        .agg(concat_ws(",", collect_set("rpsr_cod")).alias("rpsr_cod"))
     )
+    print(f"  RPSR: {rpsr_count:,} rows -> {rpsr.count():,} cases with at least one source")
 
-    # ── Step 4: Join DEMO + OUTC + RPSR ───────────────────────────────────────
+    # ── Step 3: Join DEMO + OUTC + RPSR ───────────────────────────────────────
     silver_cases = (
         demo_aged
         .join(outc, on="primaryid", how="left")
@@ -199,28 +244,34 @@ def build_silver_cases() -> DataFrame:
 # COMMAND ----------
 # MAGIC %md
 # MAGIC ## Silver Table 2 — silver_drug_reactions
-# MAGIC ### Source: DRUG (PS only) + REAC
+# MAGIC ### Source: DRUG (PS only, surviving cases) + REAC (surviving cases)
 # MAGIC
 # MAGIC **Transformations:**
-# MAGIC 1. Filter DRUG to Primary Suspect drugs only (`role_cod = 'PS'`)
-# MAGIC 2. Standardize `drugname` and `prod_ai` — UPPER + TRIM
-# MAGIC 3. Standardize `pt` (MedDRA Preferred Term) — UPPER + TRIM
-# MAGIC 4. Join DRUG to REAC on `primaryid`
+# MAGIC 1. Left-semi-join DRUG and REAC to the surviving primaryids
+# MAGIC 2. Filter DRUG to Primary Suspect drugs only (`role_cod = 'PS'`)
+# MAGIC 3. Standardize `drugname` and `prod_ai` — UPPER + TRIM
+# MAGIC 4. Standardize `pt` (MedDRA Preferred Term) — UPPER + TRIM
+# MAGIC 5. Join DRUG to REAC on `primaryid`
 
 # COMMAND ----------
 
-def build_silver_drug_reactions() -> DataFrame:
+def build_silver_drug_reactions(survivors: DataFrame) -> DataFrame:
     """
-    Build silver_drug_reactions: one row per (case, PS drug, reaction).
+    Build silver_drug_reactions: one row per (case, PS drug, reaction),
+    restricted to the surviving (highest-caseversion) primaryids.
     This is the source table for PRR/ROR signal detection.
     """
 
-    # ── Step 1: Load and filter DRUG to Primary Suspects ──────────────────────
+    # ── Step 1: Load DRUG, filter to surviving cases and Primary Suspects ─────
     # We only want drugs that reporters identified as likely causes.
     # Concomitant (C) and interacting (I) drugs would dilute signal math.
 
+    drug_raw   = read_bronze("drug")
+    drug_count = drug_raw.count()
+
     drug = (
-        read_bronze("drug")
+        drug_raw
+        .join(survivors, on="primaryid", how="left_semi")
         .filter(col("role_cod") == PRIMARY_SUSPECT_CODE)
         .withColumn("drugname",  upper(trim(col("drugname"))))
         .withColumn("prod_ai",   upper(trim(col("prod_ai"))))
@@ -238,14 +289,20 @@ def build_silver_drug_reactions() -> DataFrame:
             "source_quarter",
         )
     )
+    print(f"  DRUG: {drug_count:,} rows -> {drug.count():,} rows kept for surviving cases (PS only)")
 
-    # ── Step 2: Load REAC and standardize Preferred Terms ─────────────────────
+    # ── Step 2: Load REAC, filter to surviving cases, standardize PTs ─────────
+    reac_raw   = read_bronze("reac")
+    reac_count = reac_raw.count()
+
     reac = (
-        read_bronze("reac")
+        reac_raw
+        .join(survivors, on="primaryid", how="left_semi")
         .withColumn("pt", upper(trim(col("pt"))))
         .select("primaryid", "pt", "drug_rec_act")
         .dropDuplicates(["primaryid", "pt"])   # remove exact duplicate reactions
     )
+    print(f"  REAC: {reac_count:,} rows -> {reac.count():,} rows kept for surviving cases")
 
     # ── Step 3: Join DRUG + REAC ──────────────────────────────────────────────
     # Inner join: we only want cases where both a PS drug AND a reaction exist.
@@ -278,21 +335,27 @@ def build_silver_drug_reactions() -> DataFrame:
 # COMMAND ----------
 # MAGIC %md
 # MAGIC ## Silver Table 3 — silver_therapy
-# MAGIC ### Source: THER
+# MAGIC ### Source: THER (surviving cases)
 # MAGIC
 # MAGIC **Transformations:**
-# MAGIC 1. Parse `start_dt` and `end_dt` from YYYYMMDD string to date type
-# MAGIC 2. Compute therapy duration in days where both dates are present
-# MAGIC 3. Flag rows where date parsing failed
+# MAGIC 1. Left-semi-join THER to the surviving primaryids
+# MAGIC 2. Parse `start_dt` and `end_dt` from YYYYMMDD string to date type
+# MAGIC 3. Compute therapy duration in days where both dates are present
+# MAGIC 4. Flag rows where date parsing failed
 
 # COMMAND ----------
 
-def build_silver_therapy() -> DataFrame:
+def build_silver_therapy(survivors: DataFrame) -> DataFrame:
     """
-    Build silver_therapy: cleaned therapy dates with duration computed.
+    Build silver_therapy: cleaned therapy dates with duration computed,
+    restricted to the surviving (highest-caseversion) primaryids.
     """
 
-    ther = read_bronze("ther")
+    ther_raw   = read_bronze("ther")
+    ther_count = ther_raw.count()
+
+    ther = ther_raw.join(survivors, on="primaryid", how="left_semi")
+    print(f"  THER: {ther_count:,} rows -> {ther.count():,} rows kept for surviving cases")
 
     silver_ther = (
         ther
@@ -358,10 +421,15 @@ print("=" * 60)
 
 silver_log = {}
 
+# ── case deduplication (shared by all three tables below) ─────────────────────
+print("\n[DEDUP]  Deduplicating DEMO on caseid...")
+demo_dedup = dedup_demo()
+survivors  = demo_dedup.select("primaryid")
+
 # ── silver_cases ──────────────────────────────────────────────────────────────
-print("\n[SILVER_CASES]  Building from DEMO + OUTC + RPSR...")
+print("\n[SILVER_CASES]  Building from DEMO (deduped) + OUTC + RPSR...")
 try:
-    df_cases = build_silver_cases()
+    df_cases = build_silver_cases(demo_dedup)
     count    = write_silver(df_cases, "cases")
     silver_log["silver_cases"] = {"status": "SUCCESS", "rows": count}
 except Exception as e:
@@ -369,9 +437,9 @@ except Exception as e:
     silver_log["silver_cases"] = {"status": "FAILED", "rows": 0, "error": str(e)}
 
 # ── silver_drug_reactions ─────────────────────────────────────────────────────
-print("\n[SILVER_DRUG_REACTIONS]  Building from DRUG (PS) + REAC...")
+print("\n[SILVER_DRUG_REACTIONS]  Building from DRUG (PS, surviving) + REAC (surviving)...")
 try:
-    df_dr = build_silver_drug_reactions()
+    df_dr = build_silver_drug_reactions(survivors)
     count = write_silver(df_dr, "drug_reactions")
     silver_log["silver_drug_reactions"] = {"status": "SUCCESS", "rows": count}
 except Exception as e:
@@ -379,9 +447,9 @@ except Exception as e:
     silver_log["silver_drug_reactions"] = {"status": "FAILED", "rows": 0, "error": str(e)}
 
 # ── silver_therapy ────────────────────────────────────────────────────────────
-print("\n[SILVER_THERAPY]  Building from THER...")
+print("\n[SILVER_THERAPY]  Building from THER (surviving)...")
 try:
-    df_ther = build_silver_therapy()
+    df_ther = build_silver_therapy(survivors)
     count   = write_silver(df_ther, "therapy")
     silver_log["silver_therapy"] = {"status": "SUCCESS", "rows": count}
 except Exception as e:

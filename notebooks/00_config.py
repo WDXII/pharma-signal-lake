@@ -104,6 +104,19 @@ EXPORTS = {
 
 # COMMAND ----------
 # MAGIC %md
+# MAGIC ## Validation Table Paths
+# MAGIC Written only by `05_profile` and `06_validate_fix` (read-only tooling, not part of `99_run_pipeline`).
+# MAGIC The `_` prefix marks them as non-pipeline tables.
+
+# COMMAND ----------
+
+VALIDATION = {
+    "profile_results"       : f"{BASE_GOLD}/_profile_results",
+    "gold_signals_baseline" : f"{BASE_GOLD}/_gold_signals_baseline",
+}
+
+# COMMAND ----------
+# MAGIC %md
 # MAGIC ## Pipeline Constants
 
 # COMMAND ----------
@@ -114,12 +127,13 @@ FAERS_DELIMITER = "$"
 # Drug role code for Primary Suspect — only PS drugs are used in signal detection
 PRIMARY_SUSPECT_CODE = "PS"
 
-# Evans Criteria thresholds for signal classification
+# Full Evans Criteria thresholds for signal classification (D3):
+# SIGNAL iff case_count >= EVANS_MIN_CASES AND prr >= EVANS_MIN_PRR
+#        AND chi_sq (Yates) >= EVANS_MIN_CHI2. Binary classification only —
+# there is no WEAK_SIGNAL tier (D1).
 EVANS_MIN_CASES = 3
 EVANS_MIN_PRR   = 2.0
-
-# PRR lower bound for weak signal (below EVANS_MIN_PRR, above this = weak signal)
-WEAK_SIGNAL_PRR = 1.5
+EVANS_MIN_CHI2  = 4.0
 
 # Age codes and their multiplier to convert to years
 AGE_TO_YEARS = {
@@ -147,5 +161,5 @@ print(f"  Silver path : {BASE_SILVER}")
 print(f"  Gold path   : {BASE_GOLD}")
 print(f"  Export path : {BASE_EXPORT}")
 print("=" * 60)
-print(f"  Evans Criteria: cases >= {EVANS_MIN_CASES}, PRR >= {EVANS_MIN_PRR}")
+print(f"  Evans Criteria: cases >= {EVANS_MIN_CASES}, PRR >= {EVANS_MIN_PRR}, chi_sq >= {EVANS_MIN_CHI2}")
 print("=" * 60)

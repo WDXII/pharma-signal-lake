@@ -4,6 +4,8 @@
 -- Purpose : Ad-hoc Spark SQL for data quality checks,
 --           pipeline validation, and exploratory analysis.
 --
+-- Signal-fix verification lives in sql/verify_signal_fix.sql.
+--
 -- Usage   : Paste any query into a Databricks SQL cell.
 --           Replace table paths with your actual Delta paths,
 --           or register the tables first using the CREATE VIEW
@@ -23,59 +25,59 @@
 -- SECTION 0 — Register Delta Tables as Temp Views
 -- ============================================================
 -- Run these once per session so the SQL below works cleanly.
--- Replace the paths with your actual DBFS paths.
+-- Paths match 00_config.py (Unity Catalog Volume); DBFS root is disabled on Free Edition.
 
 CREATE OR REPLACE TEMP VIEW bronze_demo
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/bronze/bronze_demo');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/bronze/bronze_demo');
 
 CREATE OR REPLACE TEMP VIEW bronze_drug
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/bronze/bronze_drug');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/bronze/bronze_drug');
 
 CREATE OR REPLACE TEMP VIEW bronze_reac
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/bronze/bronze_reac');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/bronze/bronze_reac');
 
 CREATE OR REPLACE TEMP VIEW bronze_indi
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/bronze/bronze_indi');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/bronze/bronze_indi');
 
 CREATE OR REPLACE TEMP VIEW bronze_outc
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/bronze/bronze_outc');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/bronze/bronze_outc');
 
 CREATE OR REPLACE TEMP VIEW bronze_rpsr
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/bronze/bronze_rpsr');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/bronze/bronze_rpsr');
 
 CREATE OR REPLACE TEMP VIEW bronze_ther
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/bronze/bronze_ther');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/bronze/bronze_ther');
 
 CREATE OR REPLACE TEMP VIEW silver_cases
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/silver/silver_cases');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/silver/silver_cases');
 
 CREATE OR REPLACE TEMP VIEW silver_drug_reactions
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/silver/silver_drug_reactions');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/silver/silver_drug_reactions');
 
 CREATE OR REPLACE TEMP VIEW silver_therapy
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/silver/silver_therapy');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/silver/silver_therapy');
 
 CREATE OR REPLACE TEMP VIEW gold_signals
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/gold/gold_signals');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/gold/gold_signals');
 
 CREATE OR REPLACE TEMP VIEW gold_demographics
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/gold/gold_demographics');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/gold/gold_demographics');
 
 CREATE OR REPLACE TEMP VIEW gold_outcomes
 USING delta
-OPTIONS (path '/FileStore/pharma_signal_lake/gold/gold_outcomes');
+OPTIONS (path '/Volumes/workspace/default/pharma_raw/gold/gold_outcomes');
 
 
 -- ============================================================
@@ -126,11 +128,13 @@ ORDER BY record_count DESC;
 -- SECTION 2 — Silver Validation
 -- ============================================================
 
--- 2.1 Deduplication check — confirm no duplicate primaryid in silver_cases
+-- 2.1 Deduplication check — confirm exactly one row per caseid in silver_cases
+-- (primaryid is unique by construction, so checking it can never fail — see DEVELOPER.md Issue 9)
+-- Fails (duplicate_rows > 0) if a superseded caseversion survives or a join fans out.
 SELECT
     COUNT(*)                   AS total_rows,
-    COUNT(DISTINCT primaryid)  AS distinct_cases,
-    COUNT(*) - COUNT(DISTINCT primaryid) AS duplicate_rows
+    COUNT(DISTINCT caseid)     AS distinct_cases,
+    COUNT(*) - COUNT(DISTINCT caseid) AS duplicate_rows
 FROM silver_cases
 WHERE source_quarter = '2026Q1';
 
@@ -245,7 +249,7 @@ SELECT
 FROM   gold_signals
 WHERE  source_quarter = '2026Q1'
   AND  drugname       = 'WARFARIN'
-  AND  signal_flag   != 'NO_SIGNAL'
+  AND  signal_flag    = 'SIGNAL'
 ORDER BY prr DESC;
 
 
@@ -260,7 +264,7 @@ SELECT
 FROM   gold_signals
 WHERE  source_quarter = '2026Q1'
   AND  pt             = 'CARDIAC ARREST'
-  AND  signal_flag   != 'NO_SIGNAL'
+  AND  signal_flag    = 'SIGNAL'
 ORDER BY prr DESC;
 
 

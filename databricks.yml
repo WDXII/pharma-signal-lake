@@ -8,6 +8,9 @@ bundle:
 sync:
   paths:
     - notebooks
+    - src
+    - tests
+    - sql
 
 targets:
   dev:

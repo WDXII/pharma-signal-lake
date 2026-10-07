@@ -1,9 +1,18 @@
 # ARCHITECTURE.md
 
 **Project:** PharmaSignalLake  
-**Version:** 1.0  
-**Date:** May 2026  
+**Version:** 1.2  
+**Date:** May 2026 (Revised 2026-10-05)  
 **Stack:** Databricks Free Edition · PySpark · Delta Lake · Power BI Desktop
+
+> **Revision 1.2** — Dashboard section aligned to D8 (main leaderboard = `SIGNAL` AND NOT `is_exclusive`;
+> separate "Exclusive reports" panel); repository tree now lists `sql/` and `validation_queries.sql`; D8/D9 added to the design-decisions table; new-quarter wording no longer claims
+> append behavior (verified on 2026Q1 only).
+>
+> **Revision 1.1** — Updated the Silver dedup key, the `gold_signals` schema, the PRR/ROR
+> formulas, and Signal Classification to match `DECISIONS.md` D1-D4 and D7; updated the
+> repository structure to include `src/`, `tests/`, `docs/`, `DECISIONS.md`, and notebooks
+> 05-06 (see `DEVELOPER.md` Issues 13-14).
 
 ---
 
@@ -23,6 +32,7 @@
 12. [Notebook Execution Order](#12-notebook-execution-order)
 13. [Data Dictionary](#13-data-dictionary)
 14. [Design Decisions and Why](#14-design-decisions-and-why)
+15. [Validation Layer](#15-validation-layer)
 
 ---
 
@@ -36,7 +46,7 @@ PharmaSignalLake is a batch data pipeline that:
 4. **Computes** drug safety signals in a Gold layer using PRR and ROR disproportionality math
 5. **Exposes** the results to Power BI for dashboarding
 
-The pipeline runs manually on Databricks Free Edition (no scheduling). One run processes one or more quarters.
+The pipeline runs manually on Databricks Free Edition (no scheduling). One run processes the quarter set by `QUARTER` in `00_config.py`.
 
 ---
 
@@ -181,6 +191,7 @@ pharma-signal-lake/
 ├── ARCHITECTURE.md
 ├── SETUP.md
 ├── DEVELOPER.md              ← Dev environment notes and known issues
+├── DECISIONS.md              ← Architecture and correctness decisions, as made
 ├── databricks.yml            ← Databricks Asset Bundle config (sync target + workspace host)
 ├── notebooks/
 │   ├── 00_config.py
@@ -188,11 +199,24 @@ pharma-signal-lake/
 │   ├── 02_silver_clean.py
 │   ├── 03_gold_signals.py
 │   ├── 04_export.py
-│   └── 99_run_pipeline.py
+│   ├── 05_profile.py        ← Read-only: before/after profiling (not part of 99_run_pipeline)
+│   ├── 06_validate_fix.py   ← Read-only: independent signal-correctness validation
+│   ├── 99_run_pipeline.py
+│   └── validation_queries.sql
+├── src/
+│   └── signal_math.py       ← Pure PRR/ROR/chi_sq/dedup functions, unit-testable
+├── sql/
+│   ├── verify_signal_fix.sql           ← Independent verification (read-only for the assistant, D6)
+│   └── case_review_rescued_signals.sql ← Manual case-level review of rescued signals (D9)
+├── tests/
+│   ├── conftest.py
+│   ├── test_signals.py
+│   └── run_unit_tests.py
 ├── docs/
-│   └── data_dictionary.md
+│   ├── data_dictionary.md
+│   └── validation-results.md
 └── powerbi/
-    └── pharma_signal_lake.pbix
+    └── pharma_signal_lake.pbix   ← planned; not yet created
 ```
 
 ---
@@ -254,11 +278,11 @@ The Medallion Architecture is a three-layer pattern for organizing data in a lak
 
 | Step | What | Why |
 |------|------|-----|
-| Deduplication | Keep highest `caseversion` per `primaryid` | Prevents double-counting updated cases |
+| Deduplication | Keep highest `caseversion` per `caseid` (the case entity key — `primaryid` already includes `caseversion` and is unique per row) | Prevents double-counting updated cases |
 | Age casting | Cast `age` + `age_cod` to a normalized numeric age in years | Enables demographic analysis |
 | Age flag | Flag nulls/invalid ages as `age_quality = 'MISSING'` instead of dropping | Preserves case count; flags data quality |
-| Outcome join | Left join OUTC on `primaryid` | Adds `outc_cod` to the case record |
-| Source join | Left join RPSR on `primaryid` | Adds `rpsr_cod` (reporter type) to the case record |
+| Outcome join | Aggregate OUTC to a comma-separated `outc_cod` list per `primaryid`, then left join | A case can have multiple outcome codes; joining without aggregating would fan `silver_cases` out to one row per (case, outcome) combination instead of one row per case |
+| Source join | Aggregate RPSR to a comma-separated `rpsr_cod` list per `primaryid`, then left join | Same reasoning as the outcome join |
 | Audit columns | `silver_load_timestamp`, `source_quarter` | Traceability |
 
 ### silver_drug_reactions (DRUG + REAC)
@@ -301,9 +325,11 @@ Built from `silver_drug_reactions`. Contains one row per unique `(drug, reaction
 | `drug_total` | Total cases reporting this drug for any reaction (B) |
 | `event_total` | Total cases reporting this reaction for any drug (C) |
 | `total_reports` | Total cases in the dataset (N) |
-| `prr` | Proportional Reporting Ratio |
-| `ror` | Reporting Odds Ratio |
-| `signal_flag` | `"SIGNAL"`, `"WEAK_SIGNAL"`, or `"NO_SIGNAL"` |
+| `prr` | Proportional Reporting Ratio. Haldane-Anscombe corrected when any cell is zero — never null |
+| `ror` | Reporting Odds Ratio. Same correction as `prr` — never null |
+| `chi_sq` | Yates-corrected chi-squared, computed on the raw (uncorrected) cells. Null if any marginal is zero |
+| `haldane_applied` | `true` if any contingency-table cell was zero and the Haldane-Anscombe correction was applied |
+| `signal_flag` | `"SIGNAL"` or `"NO_SIGNAL"` (binary) |
 | `source_quarter` | Quarter the data came from |
 
 ### gold_demographics
@@ -346,7 +372,7 @@ PRR = (A / B) / ((C - A) / (N - B))
 
 - PRR = 1.0 → no disproportionality (expected rate)
 - PRR = 3.0 → this reaction is reported 3x more often for this drug than for all other drugs combined
-- PRR ≥ 2 AND cases ≥ 3 → Evans Criteria signal threshold
+- PRR ≥ 2 AND cases ≥ 3 AND chi-squared ≥ 4 → full Evans Criteria signal threshold
 
 ### ROR — Reporting Odds Ratio
 
@@ -358,12 +384,22 @@ ROR = (A / (B - A)) / ((C - A) / (N - B - C + A))
 
 ROR is more statistically stable than PRR when case counts are small. Both are computed and included in `gold_signals`.
 
+### Haldane-Anscombe Correction
+
+If any of the four contingency-table cells (`A`, `B-A`, `C-A`, `N-B-C+A`) is zero, PRR and ROR
+are undefined by the formulas above. Rather than let those pairs fall out of signal detection
+with a null value, 0.5 is added to all four cells before computing PRR/ROR (not `chi_sq`, which
+always uses the raw cells). This is recorded per-pair in a `haldane_applied` column, so every
+pair — including the most exclusive, clinically interesting ones — gets a finite, if
+conservative, PRR/ROR.
+
 ### Signal Classification
+
+Full Evans Criteria — binary, no intermediate tier:
 
 | Classification | Rule |
 |----------------|------|
-| `SIGNAL` | `case_count >= 3` AND `prr >= 2` |
-| `WEAK_SIGNAL` | `case_count >= 3` AND `1.5 <= prr < 2` |
+| `SIGNAL` | `case_count >= 3` AND `prr >= 2` AND `chi_sq (Yates) >= 4` |
 | `NO_SIGNAL` | Everything else |
 
 ---
@@ -375,8 +411,9 @@ Power BI Desktop reads from exported CSV/Parquet files from the Gold layer.
 ### Dashboard Pages
 
 **Page 1 — Signal Leaderboard**
-- Table: Top drug-event pairs ranked by PRR descending
-- Columns: Drug Name, Reaction (PT), Case Count, PRR, ROR, Signal Flag
+- Main leaderboard: `SIGNAL` pairs where NOT `is_exclusive`, ranked by PRR descending (49,878 on 2026Q1). `is_exclusive` is derived in Power BI as `case_count = event_total`
+- Columns: Drug Name, Reaction (PT), Case Count, PRR, ROR; `haldane_applied` as a tooltip flag
+- Separate "Exclusive reports" panel: `SIGNAL` AND `is_exclusive` (106 on 2026Q1), without PRR, because Haldane-corrected magnitudes are not interpretable (D8, amended)
 - Filters: Signal Flag, Drug Name
 - KPI cards: Total signals detected, Total cases analyzed
 
@@ -417,7 +454,11 @@ Run notebooks in this sequence. Each notebook depends on the previous layer bein
 99_run_pipeline.py     ← (Optional) Runs 01 through 04 in sequence via %run magic
 ```
 
-**Adding a new quarter:** Update `QUARTER` in `00_config.py` and upload the new files to the Volume. Run notebooks 01 through 04. New data is written as a new partition; existing quarters are untouched.
+**Stage timing:** `99_run_pipeline.py` keeps an in-memory `stage_log` with one entry per stage (`stage`, `start_utc`, `end_utc`, `duration_s`, `status`). Timestamps are UTC and durations come from `time.perf_counter()`. The log is reset at the start of each run and is not persisted (DECISIONS D10).
+
+At the end of the run the notebook prints a stage / start_utc / end_utc / duration_s / status table and the total, then warns (without failing) if the timestamps or durations are inconsistent. 
+
+**Adding a new quarter:** Update `QUARTER` in `00_config.py` and upload the new files to the Volume. Run notebooks 01 through 04. Verified on 2026Q1 only. The notebooks write with `mode("overwrite")` partitioned by `source_quarter` and no `replaceWhere`, so whether a second quarter appends or replaces existing data has not been tested; a second-quarter run is planned after the initial release.
 
 ---
 
@@ -492,12 +533,42 @@ These rationales are worth memorizing — they are real interview questions.
 | **primaryid as join key, not caseid** | `caseid` alone doesn't uniquely identify a record — a case can have multiple versions. `primaryid` = `caseid` + version. Using `caseid` as the join key would produce duplicate rows. |
 | **PS filter in Silver (role_cod = 'PS')** | Signal detection asks "did this drug cause this reaction?" Concomitant drugs are present but not suspected. Including them would dilute PRR/ROR values and produce false negatives. |
 | **Uppercase + trim for drug names** | FAERS has no controlled vocabulary for drug names. The same drug appears as "aspirin", "ASPIRIN", "Aspirin ", and "ASPIR IN" across different reports. Without normalization, the signal math fragments across variants. |
-| **Deduplication on highest caseversion** | FAERS allows reporters to update a case by submitting a new version. If both versions are kept, the case is double-counted. The latest version (`max(caseversion)`) is the most current report. |
-| **Evans Criteria (≥3 cases, PRR ≥2)** | A PRR of 10 on 1 case is statistically meaningless — one unusual case is not a signal. The Evans minimum case threshold prevents false positives from rare single-report associations. |
+| **Deduplication on `caseid`, keep highest `caseversion`** | FAERS allows reporters to update a case by submitting a new version. `primaryid` = `caseid` + version, so it's already unique per row — deduplicating on it is a no-op. `caseid` is the actual case entity key; keeping the highest `caseversion` per `caseid` is the fix. |
+| **Full Evans Criteria (≥3 cases, PRR ≥2, chi-squared ≥4)** | A PRR of 10 on 1 case is statistically meaningless — one unusual case is not a signal. The case-count and chi-squared thresholds together screen out both rare single-report associations and pairs where PRR alone would overstate confidence. |
+| **Haldane-Anscombe correction on zero cells** | Without it, PRR/ROR are undefined (null) whenever a contingency-table cell is zero — including the most exclusive drug-event pairs, the ones most worth flagging. The correction (+0.5 to all four cells) trades a small amount of precision for making every pair classifiable. |
+| **Aggregate OUTC/RPSR before joining in `silver_cases`** | Both files can have multiple rows per case. Joining without aggregating first fans `silver_cases` out to one row per (case, outcome, source) combination instead of one row per case. `gold_outcomes` explodes the aggregated list back out before its per-code distribution, so its output is unaffected. |
+| **D1 — Binary `signal_flag`** | Evans defines one threshold; the earlier 1.5 "weak" tier had no literature basis and diluted the meaning of a flag. See DECISIONS.md D1. |
+| **D2 — Haldane correction, PRR/ROR only** | Applied only when a cell is 0, and never to `chi_sq`, so the significance test stays on real counts. See DECISIONS.md D2. |
+| **D3 — Full Evans (n ≥ 3 AND PRR ≥ 2 AND χ² ≥ 4)** | See the Evans row above and DECISIONS.md D3. |
+| **D4 — Dedup on `caseid`; child tables semi-joined** | See the deduplication row above and DECISIONS.md D4. |
+| **D5 — ANSI mode stays ON** | Division safety comes from the math (Haldane makes every cell positive), not from disabling engine checks. Disabling ANSI (DEVELOPER.md Issue 7) hid the zero-cell problem instead of fixing it. See DECISIONS.md D5. |
+| **D6 — Verifier is independent** | `sql/verify_signal_fix.sql` is written by a human outside the coding session and is read-only for the assistant; a fix cannot be graded by the code that made it. See DECISIONS.md D6. |
+| **D7 — One row per case in `silver_cases`** | See the OUTC/RPSR aggregation row above and DECISIONS.md D7. |
+| **D8 — Exclusive pairs in a separate panel** | The exclusive-panel filter is `is_exclusive` (`case_count = event_total`), not `haldane_applied`. See DECISIONS.md D8 (amended). |
+| **D9 — Report-level (not patient-level) counts** | `case_count` counts reports, not patients; patient-level deduplication is deferred. See DECISIONS.md D9. |
 | **Power BI over Tableau** | Power BI Desktop is free. Tableau requires a license. For a portfolio project, using a free tool with full functionality is the correct choice. Power BI is also the dominant tool in clinical data organizations. |
 | **Manual notebook execution** | Databricks Free Edition does not support job scheduling. This is a constraint, not a design choice. In a production environment on paid Databricks, notebooks would be wrapped in a Workflow and scheduled. The architecture already supports this — `99_run_pipeline.py` is the scheduling entrypoint. |
 | **One notebook per pipeline stage** | Mirrors professional Databricks project structure. Each notebook is independently testable and debuggable. A single monolithic notebook is harder to maintain and impossible to unit test. |
 
 ---
 
-*End of ARCHITECTURE.md — Version 1.0 — PharmaSignalLake*
+## 15. Validation Layer
+
+The validation layer sits *beside* the Medallion layers. It reads pipeline tables and never
+writes to them; it is **not** part of `99_run_pipeline.py`.
+
+| Component | Role | Writes to |
+|-----------|------|-----------|
+| `notebooks/05_profile.py` | Row-count and data-quality metrics per layer; run once as `baseline` on the unfixed tables, once as `after` | `gold/_profile_results`, `gold/_gold_signals_baseline` (baseline run only) |
+| `notebooks/06_validate_fix.py` | Checks V1–V10 (PASS/FAIL, raises on any FAIL), an independent plain-SQL recompute of every pair (V9), and the before/after report | its own `_`-prefixed tables only |
+| `sql/verify_signal_fix.sql` | Independent SQL verification, written by Will (D6); read-only for the assistant | nothing |
+| `src/signal_math.py` + `tests/` | Pure signal-math and dedup functions and their pytest suite, run in Databricks via `tests/run_unit_tests.py` | nothing |
+| `notebooks/validation_queries.sql` | Ad-hoc exploration and data-quality queries | nothing |
+| `sql/case_review_rescued_signals.sql` | Manual case-level review of the top rescued signals (P1 duplicate fingerprint, P2 case listing, P3 reporter occupation). Run after verification, read-only, and not part of `99_run_pipeline.py`. Results go in `docs/validation-results.md` (D9) | nothing |
+
+Run order is in [SETUP.md § Verify Your Environment](SETUP.md#10-step-9--verify-your-environment);
+results are recorded in [docs/validation-results.md](docs/validation-results.md).
+
+---
+
+*End of ARCHITECTURE.md — Version 1.2 — PharmaSignalLake*

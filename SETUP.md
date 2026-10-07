@@ -1,9 +1,13 @@
 # SETUP.md
 
 **Project:** PharmaSignalLake  
-**Version:** 1.0  
-**Date:** May 2026  
+**Version:** 1.1  
+**Date:** May 2026 (Revised 2026-09-29)  
 **Purpose:** Environment setup guide — from zero to a running pipeline
+
+> **Revision 1.1** — Updated Step 6's notebook list and sync instructions to include
+> `05_profile.py`, `06_validate_fix.py`, and the `src/`/`tests/` sync paths added since
+> the original setup (see `DEVELOPER.md` Issue 10).
 
 ---
 
@@ -36,6 +40,7 @@ Complete all items before starting Step 1.
 | Web browser | Chrome or Edge recommended for Databricks | — |
 | Storage space | ~2 GB free on your local machine | — |
 | Internet connection | Required throughout; FAERS ZIP files are ~300–500 MB | — |
+| Python + pytest (optional) | Not needed to run the pipeline or the unit tests — tests run inside Databricks via `tests/run_unit_tests.py` (no local Java/Spark on most machines; see DEVELOPER.md Issue 2).
 
 **No paid subscriptions are required.** Databricks Free Edition, GitHub Free, and Power BI Desktop are all zero-cost.
 
@@ -185,7 +190,7 @@ When you add a second quarter later:
     ...
 ```
 
-No other changes required — `00_config.py` handles the rest.
+No other changes are intended — `00_config.py` handles the rest. This has been verified on 2026Q1 only; a second-quarter run is planned after the initial release.
 
 ---
 
@@ -202,7 +207,13 @@ Notebooks are maintained locally and synced to Databricks using the VS Code Data
 | `02_silver_clean.py` | Clean and integrate → write Silver Delta tables |
 | `03_gold_signals.py` | Compute PRR/ROR → write Gold Delta tables |
 | `04_export.py` | Export Gold tables to CSV for Power BI |
-| `99_run_pipeline.py` | Run all notebooks in order via `%run` |
+| `05_profile.py` | Read-only: before/after row-count and data-quality profiling. Not run by `99_run_pipeline.py` |
+| `06_validate_fix.py` | Read-only: independent validation of signal-detection correctness. Not run by `99_run_pipeline.py` |
+| `99_run_pipeline.py` | Run notebooks 01-04 in order via `%run` |
+
+`src/signal_math.py` holds the pure PRR/ROR/chi_sq/dedup functions that `02_silver_clean.py`
+and `03_gold_signals.py` import, and `tests/` holds their pytest unit tests (run inside
+Databricks via `tests/run_unit_tests.py` — see Section 11, no local Python/Spark needed).
 
 ### How to Sync
 
@@ -210,12 +221,14 @@ Notebooks are maintained locally and synced to Databricks using the VS Code Data
 2. Install the **Databricks** VS Code extension (see DEVELOPER.md Step 2)
 3. Connect the extension to your workspace using a PAT (see DEVELOPER.md Steps 1 and 3)
 4. In the Databricks panel, click **Sync State: STOPPED** to start continuous sync
-5. Notebooks are automatically pushed to Databricks on every save
+5. `notebooks/`, `src/`, and `tests/` (per `databricks.yml`'s `sync.paths`) are automatically pushed to Databricks on every save
 
 Notebooks land at:
 ```
 /Workspace/Users/<your-email>/PharmaSignalLake/files/notebooks/
 ```
+`src/` and `tests/` land as sibling folders under `.../files/`. If a newly added top-level
+sync folder doesn't appear remotely on its own, see DEVELOPER.md Issue 10 for the workaround.
 
 > **No Python environment required.** The sync uses the Databricks API directly — no local PySpark or `databricks-connect` installation is needed. See DEVELOPER.md Issue 2 for details.
 
@@ -313,6 +326,25 @@ print("Delta write successful")
 ```
 Expected output: `Delta write successful`
 
+### Verify a Signal-Correctness Run (run order)
+
+Run these in order. Steps 1–3 must happen **before** the fixed pipeline is run, because they capture the unfixed state.
+
+| # | Action | Record / screenshot |
+|---|--------|---------------------|
+| 1 | `DESCRIBE HISTORY` on `gold_signals` | The current version number — call it `<V>` (time-travel fallback) |
+| 2 | `sql/verify_signal_fix.sql` queries **A–E** | Save the output as BEFORE |
+| 3 | `05_profile.py` with widget `run_label = baseline` (on the current, unfixed tables; also snapshots `_gold_signals_baseline`) | Printed metrics and the Delta version it reports |
+| 4 | `99_run_pipeline.py` with the fixed code | Row counts per stage; confirm no stage silently skipped |
+| 5 | `05_profile.py` with `run_label = after` | Printed metrics |
+| 6 | `06_validate_fix.py` | The V1–V10 PASS/FAIL table, the transition matrix, and the RESUME NUMBERS block (it raises if any check FAILs) |
+| 7 | `sql/verify_signal_fix.sql` queries **A–I** with `<V>` from step 1 | Save the output as AFTER |
+| 8 (optional) | Case-level review: run P1–P3 from `sql/case_review_rescued_signals.sql` for the top rescued signals | Save the output; record findings in `docs/validation-results.md` |
+
+Unit tests (independent of the steps above): run `tests/run_unit_tests.py` in Databricks; expect all tests to pass.
+
+Fill in [docs/validation-results.md](docs/validation-results.md) from these outputs. Notebooks 05 and 06 only read pipeline tables and are not part of `99_run_pipeline.py`. Attach them to Serverless/interactive compute, not a SQL Warehouse.
+
 ### Power BI Verification
 
 1. Open Power BI Desktop
@@ -353,6 +385,15 @@ Expected output: `Delta write successful`
 
 - This is expected on a re-run. All tables (Bronze, Silver, and Gold) use `.mode("overwrite")` partitioned by `source_quarter` — re-running for the same quarter is safe and idempotent
 
+### Delta write fails after adding columns
+
+- `gold_signals` gained `chi_sq` and `haldane_applied`. Writing new columns over an existing table fails with a schema-mismatch error unless the write sets `.option("overwriteSchema", "true")`. `03_gold_signals.py` already does; if you write the table from elsewhere, add it
+
+### DIVIDE_BY_ZERO under ANSI mode
+
+- A division guard is wrong. Do **not** disable ANSI mode (`spark.sql.ansi.enabled`) — that only hides the bad denominator (DECISIONS.md D5, DEVELOPER.md Issue 7). Find the expression that divides and fix the math so the denominator cannot be zero (the Haldane correction handles zero contingency-table cells)
+- Similarly, multiplying several BIGINT marginals in raw SQL can raise `ARITHMETIC_OVERFLOW`; cast to DOUBLE first
+
 ### Compute shows "quota exceeded"
 
 - You have used your daily DBU allowance
@@ -372,4 +413,4 @@ Expected output: `Delta write successful`
 
 ---
 
-*End of SETUP.md — Version 1.0 — PharmaSignalLake*
+*End of SETUP.md — Version 1.1 — PharmaSignalLake*

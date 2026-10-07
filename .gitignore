@@ -106,3 +106,10 @@ config_local.py
 *.key
 
 .databricks
+
+
+# ── Personal working notes (not for the public repo) ────────
+PROJECT-LOG.md
+
+# Local working spreadsheets
+working/
