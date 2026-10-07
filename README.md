@@ -78,16 +78,17 @@ N = total cases in the dataset
 
 ### Reporting Odds Ratio (ROR)
 
-ROR is an odds-ratio-based complement to PRR, more statistically stable at low case counts.
+ROR is an odds-ratio-based complement to PRR.
 
 ```
 ROR = (A / (B - A)) / ((C - A) / (N - B - C + A))
 ```
 
-### Evans Criteria (Signal Classification)
+### Zero Cells (Haldane-Anscombe Correction)
 
-If any contingency-table cell is zero, PRR/ROR get a Haldane-Anscombe correction (+0.5
-to all four cells) before this division, so they're never null.
+If any contingency-table cell is zero, PRR and ROR are computed after adding 0.5 to all four cells (Haldane-Anscombe correction), so they are never null. The `haldane_applied` column marks these pairs. `chi_sq` always uses the raw cells (D2).
+
+### Evans Criteria (Signal Classification)
 
 | Classification | Rule |
 |---|---|
@@ -217,8 +218,8 @@ See **[SETUP.md § Step 5](SETUP.md#6-step-5--upload-data-to-unity-catalog-volum
 ### Option A — Run the Full Pipeline in One Click
 
 1. Open `notebooks/99_run_pipeline.py` in Databricks
-2. Uncomment all `%run` lines
-3. Click **Run All**
+2. Attach it to **Serverless** compute (not a SQL Warehouse, which cannot run these cells)
+3. Click **Run All**. It ends with a per-stage UTC timing table
 
 ### Option B — Run Notebooks Individually
 
@@ -236,7 +237,7 @@ Run in this order. Each notebook depends on the previous layer being complete.
 
 Follow the run order (seven steps plus an optional case review) in **[SETUP.md § Verify Your Environment](SETUP.md#10-step-9--verify-your-environment)**: record the `gold_signals` Delta version, capture the BEFORE baseline, run the pipeline, then run `05_profile.py` (`after`), `06_validate_fix.py` (V1–V10), and `sql/verify_signal_fix.sql`. Notebooks 05 and 06 are read-only and are not part of `99_run_pipeline.py`.
 
-### Adding a New Quarter
+### Adding a New Quarter (untested)
 
 1. Download the new quarter's FAERS files
 2. Upload to Unity Catalog Volume at `/Volumes/workspace/default/pharma_raw/{QUARTER}/`
@@ -280,6 +281,9 @@ Verified on 2026Q1 only. The notebooks write with `mode("overwrite")` partitione
 | D5 — ANSI mode stays on | Division safety comes from the math, not from disabling engine checks. |
 | D6 — Independent verifier | `sql/verify_signal_fix.sql` is written by a human, outside the coding session, and is read-only for the assistant. |
 | D7 — One row per case in Silver | OUTC/RPSR are aggregated per `primaryid` before joining, so `silver_cases` does not fan out. |
+| D8 — Exclusive pairs in a separate panel | Pairs where every report of the event names this drug can rank high on few reports. They go in their own Power BI panel (`is_exclusive`), not the main leaderboard. |
+| D9 — Report-level dedup deferred | `case_count` counts reports, not patients. Patient-level duplicate detection is deferred (see Limitations). |
+| D10 — Per-stage timing log | `99_run_pipeline.py` logs stage times in UTC, in memory only. |
 | Power BI via CSV export | No Databricks connector license required. Works entirely within the Free Edition and Power BI Desktop constraints. |
 
 ---
@@ -339,8 +343,12 @@ The FAERS data used is public domain, published by the U.S. Food and Drug Admini
 
 ## Author
 
-**Will**
-[LinkedIn](https://www.linkedin.com/in/wdaluyen) · [GitHub](https://github.com/WDXII)
+**Will Daluyen**
+
+- LinkedIn: [linkedin.com/in/wdaluyen](https://www.linkedin.com/in/wdaluyen/)
+- GitHub: [github.com/WDXII](https://github.com/WDXII)
+- Portfolio: [placeholder]
+- Email: william.daluyen@gmail.com
 
 *Portfolio project — built to demonstrate Databricks, PySpark, and clinical data engineering skills.*
 
