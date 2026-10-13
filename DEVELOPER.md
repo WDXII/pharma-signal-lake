@@ -244,6 +244,13 @@ Edit notebooks locally and sync them to Databricks. No local Python environment 
 
 *Add new issues below this line using the same format.*
 
+### Issue 26 — Power BI Card Abbreviated the Case Count to "397K"
+*Logged · 2026-10-13 · Power BI Desktop, measure `Cases` (not a pipeline change)*
+- **Symptom:** The Cases card on the Signal Leaderboard page showed an abbreviated value with a "K" suffix instead of 397,224.
+- **Cause:** A card visual applies automatic display units to a numeric measure, so large values are abbreviated.
+- **Fix:** `Cases = FORMAT( MAX ( gold_signals[total_reports] ), "#,0")`. `FORMAT` returns text, so the card shows the full number with a thousands separator. Setting the card's Display units to None is the alternative that keeps the measure numeric.
+- **Rule:** Use a `FORMAT` measure only for a display-only card, and never in a calculation. Check every card against the verified count (397,224) before taking a screenshot.
+
 ---
 
 ## 4. Running Unit Tests
