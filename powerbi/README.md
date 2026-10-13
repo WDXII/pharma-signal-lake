@@ -12,7 +12,7 @@ The Power BI report for PharmaSignalLake. It reads the three Gold-layer CSV expo
 | **Patient Demographics** | `gold_demographics` | Who the reports describe: age group, sex, top 10 reporter countries |
 | **Case Outcomes** | `gold_outcomes` | What happened in the reported cases and who reported them |
 
-Signals are binary: `SIGNAL` or `NO SIGNAL` (Evans criteria: n ≥ 3 and PRR ≥ 2.0). There is no "weak signal" tier.
+Signals are binary: `SIGNAL` or `NO SIGNAL` (Evans criteria: n ≥ 3, PRR ≥ 2.0 and Yates chi-square ≥ 4.0). There is no "weak signal" tier.
 
 **How to read it:** counts are *reports*, not patients. A signal is a statistical lead for review. It is not evidence that a drug caused the event.
 
@@ -23,7 +23,7 @@ powerbi/
 ├── PharmaSignals.pbip              ← open this in Power BI Desktop
 ├── PharmaSignals.Report/           ← pages and visuals (text files)
 ├── PharmaSignals.SemanticModel/    ← tables, columns, measures (TMDL text files)
-├── screenshots/                    ← page images used in the main README
+├── screenshots/                    ← page images for the main README (added when pages are done)
 └── README.md
 ```
 
@@ -51,7 +51,7 @@ True when every report of the event names this drug. These pairs can rank very h
 
 | Measure | Meaning | Expected on 2026Q1 |
 |---|---|---|
-| `Cases` | Distinct cases in the dataset | 397,224 |
+| `Cases` | N, the signal denominator: cases with at least one primary-suspect drug. Returns text via `FORMAT`, so it is display-only (Issue 26). Card title: "Reports analysed" | 397,209 |
 | `Total Pairs` | All drug–reaction pairs | 373,012 |
 | `Signal Pairs` | Pairs flagged `SIGNAL` | 49,984 |
 | `Leaderboard Pairs` | `SIGNAL` and not exclusive | 49,878 |
@@ -60,6 +60,8 @@ True when every report of the event names this drug. These pairs can rank very h
 | `Haldane %` | Haldane Pairs ÷ Total Pairs | 1.93% |
 
 Check: 49,984 − 106 = 49,878.
+
+`Cases` is 397,209, not 397,224. `silver_cases` holds 397,224 cases, but 15 have no primary-suspect drug, so they never enter the signal math (validation V8). The 397,224 total is the sum of any one dimension in `gold_demographics` (for example the AGE_GROUP rows).
 
 ## Setup
 
@@ -92,12 +94,12 @@ Light background with a pastel palette: `#9ADBCC`, `#C7F2D1`, `#E3FFD6`, `#FFFBF
 | Power BI Project saved (`.pbip`) | Done |
 | Three tables loaded with types | Done |
 | Measures defined | Done |
-| `is_exclusive` column | **Not yet added.** Four measures depend on it and will error until it exists |
-| Theme and page header | Started (one page, header band only) |
-| Signal Leaderboard page | Not started |
+| `is_exclusive` column | Done |
+| Theme and page header | Done (header band, page navigator) |
+| Signal Leaderboard page | In progress (shell and "Reports analysed" card only; leaderboard and exclusive panel not built) |
 | Patient Demographics page | Not started |
 | Case Outcomes page | Not started |
-| Counts verified against "Expected" | Not started |
+| Counts verified against "Expected" | Partly. "Reports analysed" = 397,209 confirmed in Power BI. The other values were confirmed against the CSV exports (2026-10-14) but not yet checked on their cards |
 | Screenshots | Not started |
 
 Update this table as each item is finished. Screenshots go in `screenshots/` only after the counts match.
@@ -105,5 +107,4 @@ Update this table as each item is finished. Screenshots go in `screenshots/` onl
 ## Known limitations
 
 - **Single quarter (2026Q1).** The pipeline supports more quarters through config. The report has not been extended yet.
-- **Hardcoded CSV paths.** See Setup step 6. A Power Query parameter for the folder would remove the manual edit. This is a suggested improvement and has not been done.
 - **Report counts, not patient counts.** One patient can appear in several reports, and one case can carry several outcome codes. Outcome bars can add up to more than the case count.
