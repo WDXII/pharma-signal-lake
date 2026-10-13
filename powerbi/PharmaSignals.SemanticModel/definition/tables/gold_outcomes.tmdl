@@ -1,0 +1,56 @@
+table gold_outcomes
+	lineageTag: d8c04675-dcfb-48c2-95d1-19530cc12644
+
+	column dimension
+		dataType: string
+		lineageTag: c98c0371-a38f-4aba-8240-fdc5114293e4
+		summarizeBy: none
+		sourceColumn: dimension
+
+		annotation SummarizationSetBy = Automatic
+
+	column code
+		dataType: string
+		lineageTag: 2a96fcaa-6162-47a1-b94d-bc19b71b3c13
+		summarizeBy: none
+		sourceColumn: code
+
+		annotation SummarizationSetBy = Automatic
+
+	column label
+		dataType: string
+		lineageTag: 7696d950-9546-46e3-a395-5de1689f06e9
+		summarizeBy: none
+		sourceColumn: label
+
+		annotation SummarizationSetBy = Automatic
+
+	column case_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 4d8b1996-326c-40d5-8cf1-581336f7ba4d
+		summarizeBy: sum
+		sourceColumn: case_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_quarter
+		dataType: string
+		lineageTag: 00d5329a-82bf-4ed9-9be6-33f0a6ce731f
+		summarizeBy: none
+		sourceColumn: source_quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_outcomes = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Projects\Claude\pharma-signal-lake\exports\gold_outcomes.csv"),[Delimiter=",", Columns=5, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"dimension", type text}, {"code", type text}, {"label", type text}, {"case_count", Int64.Type}, {"source_quarter", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

@@ -113,3 +113,7 @@ PROJECT-LOG.md
 
 # Local working spreadsheets
 working/
+
+# ── PowerBi files ────────
+powerbi/**/.pbi/cache.abf
+powerbi/**/.pbi/localSettings.json

@@ -1,0 +1,21 @@
+model Model
+	culture: en-PH
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-PH
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["gold_signals","gold_outcomes","gold_demographics"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table gold_signals
+ref table gold_outcomes
+ref table gold_demographics
+
+ref cultureInfo en-PH
+
