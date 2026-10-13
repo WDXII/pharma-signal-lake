@@ -68,7 +68,7 @@ Check: 49,984 − 106 = 49,878.
 3. Download `gold_signals.csv`, `gold_demographics.csv` and `gold_outcomes.csv` from the Databricks Catalog UI. Each should be one file, not a folder.
 4. Put them in a local `exports/` folder. The CSVs are git-ignored on purpose.
 5. Open `PharmaSignals.pbip`.
-6. **Point the data sources at your folder.** The model currently reads from `C:\Projects\Claude\pharma-signal-lake\exports\`. In Power BI Desktop: Home → Transform data → Data source settings → Change Source, once per file.
+6. **Set the `ExportsFolder` parameter.** All three tables read from one folder parameter, which defaults to `C:\Projects\Claude\pharma-signal-lake\exports`. In Power BI Desktop: Home → Transform data → Manage parameters → set `ExportsFolder` to the folder that holds your three CSVs (no trailing backslash).
 7. Refresh, then compare the card values with the "Expected" column above. If a number differs, check the column types first.
 
 No credentials are stored in this project. It reads local CSV files only, with no Databricks connection.

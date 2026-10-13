@@ -165,7 +165,7 @@ table gold_signals
 		mode: import
 		source =
 				let
-				    Source = Csv.Document(File.Contents("C:\Projects\Claude\pharma-signal-lake\exports\gold_signals.csv"),[Delimiter=",", Columns=12, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(File.Contents(ExportsFolder & "\gold_signals.csv"),[Delimiter=",", Columns=12, Encoding=1252, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"drugname", type text}, {"pt", type text}, {"case_count", Int64.Type}, {"drug_total", Int64.Type}, {"event_total", Int64.Type}, {"total_reports", Int64.Type}, {"prr", type number}, {"ror", type number}, {"chi_sq", type number}, {"haldane_applied", type logical}, {"signal_flag", type text}, {"source_quarter", type text}})
 				in

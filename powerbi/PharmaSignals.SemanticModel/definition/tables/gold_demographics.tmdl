@@ -38,7 +38,7 @@ table gold_demographics
 		mode: import
 		source =
 				let
-				    Source = Csv.Document(File.Contents("C:\Projects\Claude\pharma-signal-lake\exports\gold_demographics.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(File.Contents(ExportsFolder & "\gold_demographics.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"dimension", type text}, {"dimension_value", type text}, {"case_count", Int64.Type}, {"source_quarter", type text}})
 				in

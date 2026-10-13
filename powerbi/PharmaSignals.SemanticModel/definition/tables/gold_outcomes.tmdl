@@ -46,7 +46,7 @@ table gold_outcomes
 		mode: import
 		source =
 				let
-				    Source = Csv.Document(File.Contents("C:\Projects\Claude\pharma-signal-lake\exports\gold_outcomes.csv"),[Delimiter=",", Columns=5, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(File.Contents(ExportsFolder & "\gold_outcomes.csv"),[Delimiter=",", Columns=5, Encoding=1252, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"dimension", type text}, {"code", type text}, {"label", type text}, {"case_count", Int64.Type}, {"source_quarter", type text}})
 				in

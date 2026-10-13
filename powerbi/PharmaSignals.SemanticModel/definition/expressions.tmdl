@@ -1,0 +1,5 @@
+expression ExportsFolder = "C:\Projects\Claude\pharma-signal-lake\exports" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 910f73d7-7e54-4a6c-97a0-febac9e18bad
+
+	annotation PBI_ResultType = Text
+
