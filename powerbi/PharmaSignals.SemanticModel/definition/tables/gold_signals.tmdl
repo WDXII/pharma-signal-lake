@@ -44,9 +44,11 @@ table gold_signals
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure Cases = MAX ( gold_signals[total_reports] )
-		formatString: 0
+	measure Cases = FORMAT( MAX ( gold_signals[total_reports] ), "#,0")
+		isHidden
 		lineageTag: 5dcc6c7e-b114-4416-bfff-cb691c43a59a
+
+		changedProperty = IsHidden
 
 	column drugname
 		dataType: string
