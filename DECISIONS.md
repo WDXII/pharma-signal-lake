@@ -16,6 +16,7 @@ Architecture and correctness decisions, recorded as they were made. Each entry: 
 | D8 | Exclusive pairs in a separate dashboard panel, filtered on `is_exclusive` | 2026-09-29, amended 09-30 | Accepted |
 | D9 | Defer patient-level (report) deduplication | 2026-09-30 | Accepted |
 | D10 | Per-stage timing log: UTC, `perf_counter`, in-memory | 2026-10-06 | Accepted (verified on Databricks 2026-10-06, OK path only) |
+| D11 | Exclude `EU` and `COUNTRY NOT SPECIFIED` from the Top 10 reporter countries chart (report layer only) | 2026-10-14 | Accepted |
 
 ---
 
@@ -111,3 +112,11 @@ Check: exclusive 2,872 + 106 = 2,978 (the pre-fix null-PRR count); all `haldane_
 **Effect:** Timing shows in notebook output only; copy runtimes into PROJECT-LOG by hand. `%run` cannot be wrapped in `try/except`, so a `FAILED` entry is written on the next `stage_begin` or summary, with that later time as its end.
 **Deferred:** Writing timing rows to a Delta table or Volume file, until run history across quarters is needed.
 **Evidence:** Databricks run 2026-10-06: five stages OK, total 2m 39.2s. Only the OK path was exercised.
+
+## D11 — Top 10 Reporter Countries: Exclude `EU` and `COUNTRY NOT SPECIFIED` in the Report Layer
+
+**Problem:** `gold_demographics` keeps the top 20 `reporter_country` values as FAERS reports them. In 2026Q1 rank 2 is `EU` (40,633 reports), a regional code and not a country, and rank 7 is `COUNTRY NOT SPECIFIED` (4,012), a missing-data bucket. An unfiltered "Top 10 reporter countries" chart would show both as countries. Neither BRD v2.5 (FR-18, FR-20) nor ARCHITECTURE.md says how to treat them.
+**Decision:** Exclude both values from the Top 10 chart in Power BI only. Derive `is_country` on `gold_demographics` (`NOT IN { "EU", "COUNTRY NOT SPECIFIED" }`), the same pattern as `is_exclusive` (D8). Show the excluded counts in a footnote under the chart. No pipeline change.
+**Effect:** The chart lists the real top 10 countries (US, CA, GB, JP, CN, AU, IN, CO, BR, KR on 2026Q1). `gold_demographics.csv` and all verified counts are unchanged. The pipeline already keeps 20 country rows, so the chart still has at least 10 countries after the exclusion.
+**Rejected:** Leaving the chart unfiltered (shows non-countries as countries); filtering in the pipeline (changes verified Gold outputs and forces a re-run and re-validation for a display issue); dropping the rows without a footnote (hides data without saying so).
+**Check:** The chart shows 10 bars, US first at 268,928, with no `EU` or `COUNTRY NOT SPECIFIED`. The footnote shows 40,633 and 4,012. Update the footnote when a new quarter is loaded.
