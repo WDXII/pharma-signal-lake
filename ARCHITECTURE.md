@@ -414,12 +414,12 @@ Power BI Desktop reads from exported CSV/Parquet files from the Gold layer.
 - Main leaderboard: `SIGNAL` pairs where NOT `is_exclusive`, ranked by PRR descending (49,878 on 2026Q1). `is_exclusive` is derived in Power BI as `case_count = event_total`
 - Columns: Drug Name, Reaction (PT), Case Count, PRR, ROR; `haldane_applied` as a tooltip flag
 - Separate "Exclusive reports" panel: `SIGNAL` AND `is_exclusive` (106 on 2026Q1), without PRR, because Haldane-corrected magnitudes are not interpretable (D8, amended)
-- Filters: Signal Flag, Drug Name
-- KPI cards: Total signals detected, Total cases analyzed
+- Filter: Drug Name slicer (optional). No Signal Flag filter, because the main leaderboard is fixed to `SIGNAL` (BRD FR-21)
+- KPI cards: reports analysed (N = 397,209 on 2026Q1: cases with a primary-suspect drug; `silver_cases` holds 397,224), drug–event pairs, `SIGNAL` pairs, leaderboard pairs, exclusive reports, Haldane applied
 
 **Page 2 — Patient Demographics**
-- Charts: Age group distribution (bar), Sex distribution (donut), Top 10 reporter countries (bar)
-- Filter: Drug Name (to see demographics for a specific drug's cases)
+- Charts: Age group distribution (bar), Sex distribution (donut), Top 10 reporter countries (bar), excluding `EU` and `COUNTRY NOT SPECIFIED` with a footnote (D11; `is_country` is derived in Power BI)
+- No drug filter: `gold_demographics` has no drug dimension, so drug-level demographics is out of scope (D12). The visuals do not cross-filter each other (Edit interactions: None)
 
 **Page 3 — Case Outcomes**
 - Chart: Outcome code distribution (bar: DE=Death, HO=Hospitalized, LT=Life-threatening, etc.)

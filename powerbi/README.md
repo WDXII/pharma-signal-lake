@@ -9,7 +9,7 @@ The Power BI report for PharmaSignalLake. It reads the three Gold-layer CSV expo
 | Page | Source table | What it answers |
 |---|---|---|
 | **Signal Leaderboard** | `gold_signals` | Which drug–reaction pairs show the strongest statistical signal, ranked by PRR, plus a separate panel for pairs that rest on very few reports |
-| **Patient Demographics** | `gold_demographics` | Who the reports describe: age group, sex, top 10 reporter countries |
+| **Patient Demographics** | `gold_demographics` | Who the reports describe: age group, sex, top 10 reporter countries (`EU` and unspecified excluded) |
 | **Case Outcomes** | `gold_outcomes` | What happened in the reported cases and who reported them |
 
 Signals are binary: `SIGNAL` or `NO SIGNAL` (Evans criteria: n ≥ 3, PRR ≥ 2.0 and Yates chi-square ≥ 4.0). There is no "weak signal" tier.
@@ -39,13 +39,19 @@ Three tables, **no relationships** (by design). Each table is already aggregated
 | `gold_demographics` | 34 | dimension, dimension_value, case_count, source_quarter |
 | `gold_outcomes` | 11 | dimension, code, label, case_count, source_quarter |
 
-### Derived column
+### Derived columns
 
 ```dax
 is_exclusive = gold_signals[case_count] = gold_signals[event_total]
 ```
 
 True when every report of the event names this drug. These pairs can rank very high on few reports, so they get their own panel instead of the main leaderboard.
+
+```dax
+is_country = NOT ( gold_demographics[dimension_value] IN { "EU", "COUNTRY NOT SPECIFIED" } )
+```
+
+On `gold_demographics`, used only by the Top 10 reporter countries chart (D11). `EU` is a regional code and `COUNTRY NOT SPECIFIED` is a missing-data bucket, so neither is a country. The column is TRUE for rows of the other dimensions, which is harmless because each visual also filters on `dimension`. Not yet built: see Build status.
 
 ### Measures (on `gold_signals`)
 
@@ -86,6 +92,8 @@ Light background with a pastel palette: `#9ADBCC`, `#C7F2D1`, `#E3FFD6`, `#FFFBF
 - **Only charts the Gold schema supports** (FR-18). Nothing speculative.
 - **Exclusive panel shows `drugname`, `pt` and `case_count` only.** It has no PRR or ROR, because a Haldane-corrected PRR is not an interpretable magnitude for these pairs (FR-21).
 - **Haldane-corrected rows are flagged** in the leaderboard tooltip (FR-21).
+- **Top 10 countries excludes `EU` and `COUNTRY NOT SPECIFIED`** and says so in a footnote (D11).
+- **Optional Drug Name slicer on the leaderboard only.** No drug filter on the other pages, and no cross-filtering between visuals on the Demographics and Outcomes pages (D12).
 
 ## Build status
 
@@ -95,6 +103,7 @@ Light background with a pastel palette: `#9ADBCC`, `#C7F2D1`, `#E3FFD6`, `#FFFBF
 | Three tables loaded with types | Done |
 | Measures defined | Done |
 | `is_exclusive` column | Done |
+| `is_country` column on `gold_demographics` | Not yet added. The Top 10 countries chart needs it (D11) |
 | Theme and page header | Done (header band, page navigator) |
 | Signal Leaderboard page | In progress (shell and "Reports analysed" card only; leaderboard and exclusive panel not built) |
 | Patient Demographics page | Not started |
@@ -107,4 +116,5 @@ Update this table as each item is finished. Screenshots go in `screenshots/` onl
 ## Known limitations
 
 - **Single quarter (2026Q1).** The pipeline supports more quarters through config. The report has not been extended yet.
+- **Demographics and Outcomes cannot be filtered by drug.** Those Gold tables have no drug dimension (D12).
 - **Report counts, not patient counts.** One patient can appear in several reports, and one case can carry several outcome codes. Outcome bars can add up to more than the case count.

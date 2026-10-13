@@ -258,7 +258,7 @@ Verified on 2026Q1 only. The notebooks write with `mode("overwrite")` partitione
 | Page | Source Table | Key Visuals |
 |------|-------------|-------------|
 | **Signal Leaderboard** | `gold_signals.csv` | Main leaderboard = non-exclusive `SIGNAL` pairs ranked by PRR, with case count and ROR columns and the Haldane flag in the tooltip. The main leaderboard filter is `SIGNAL` AND NOT `is_exclusive` (49,878 pairs on 2026Q1); a separate "Exclusive reports" panel shows the 106 `SIGNAL` pairs where the drug is the only reporter of the event (D8, amended). `is_exclusive` is derived in Power BI as `case_count = event_total` |
-| **Patient Demographics** | `gold_demographics.csv` | Age group bar chart; sex donut chart; top 10 reporter countries bar chart |
+| **Patient Demographics** | `gold_demographics.csv` | Age group bar chart; sex donut chart; top 10 reporter countries bar chart (`EU` and unspecified excluded, D11) |
 | **Case Outcomes** | `gold_outcomes.csv` | Outcome distribution (death, hospitalization, etc.); reporter type distribution |
 
 ---

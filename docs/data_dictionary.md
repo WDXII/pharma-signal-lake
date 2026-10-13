@@ -240,6 +240,8 @@ If any of the four cells (`A`, `B−A`, `C−A`, `N−B−C+A`) is zero, add 0.5
 | `case_count` | BIGINT | No | Distinct cases with this value |
 | `source_quarter`, `gold_load_timestamp` | STRING, TIMESTAMP | No | Audit |
 
+`REPORTER_COUNTRY` rows are the top 20 values by case count and include `EU` (a regional code) and `COUNTRY NOT SPECIFIED`. Power BI derives `is_country` to exclude them from the Top 10 chart (D11); it is not a pipeline column. The table has no drug dimension, so it cannot be filtered by drug (D12).
+
 ### 3.3 gold_outcomes
 
 **Built from:** silver_cases (`outc_cod` and `rpsr_cod` exploded to one row per code) · **Grain:** one row per (dimension, code) pair per quarter · **Purpose:** Case Outcomes dashboard page

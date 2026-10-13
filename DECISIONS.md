@@ -17,6 +17,7 @@ Architecture and correctness decisions, recorded as they were made. Each entry: 
 | D9 | Defer patient-level (report) deduplication | 2026-09-30 | Accepted |
 | D10 | Per-stage timing log: UTC, `perf_counter`, in-memory | 2026-10-06 | Accepted (verified on Databricks 2026-10-06, OK path only) |
 | D11 | Exclude `EU` and `COUNTRY NOT SPECIFIED` from the Top 10 reporter countries chart (report layer only) | 2026-10-14 | Accepted |
+| D12 | No drug filter on Patient Demographics; optional Drug Name slicer on the leaderboard only; no cross-filtering between same-table visuals | 2026-10-14 | Accepted |
 
 ---
 
@@ -120,3 +121,11 @@ Check: exclusive 2,872 + 106 = 2,978 (the pre-fix null-PRR count); all `haldane_
 **Effect:** The chart lists the real top 10 countries (US, CA, GB, JP, CN, AU, IN, CO, BR, KR on 2026Q1). `gold_demographics.csv` and all verified counts are unchanged. The pipeline already keeps 20 country rows, so the chart still has at least 10 countries after the exclusion.
 **Rejected:** Leaving the chart unfiltered (shows non-countries as countries); filtering in the pipeline (changes verified Gold outputs and forces a re-run and re-validation for a display issue); dropping the rows without a footnote (hides data without saying so).
 **Check:** The chart shows 10 bars, US first at 268,928, with no `EU` or `COUNTRY NOT SPECIFIED`. The footnote shows 40,633 and 4,012. Update the footnote when a new quarter is loaded.
+
+## D12 — No Drug Filter on Patient Demographics; Slicer on the Leaderboard Only
+
+**Problem:** ARCHITECTURE.md listed "Filter: Drug Name" on Patient Demographics ("demographics for a specific drug's cases") and "Filters: Signal Flag, Drug Name" on the leaderboard. BRD v2.5 (FR-20, FR-21) requires neither. `gold_demographics` and `gold_outcomes` have no drug dimension and the model has no relationships, so a drug filter cannot work on those pages. A Signal Flag filter on the leaderboard has no effect, because the leaderboard is fixed to `SIGNAL` (FR-21). Separately, visuals that read different rows of the same table blank each other when one is clicked (for example, clicking ADULT filters the sex donut to rows where `dimension_value = ADULT`).
+**Decision:** No drug filter on Patient Demographics or Case Outcomes; drug-level demographics is out of scope. An optional Drug Name slicer goes on the Signal Leaderboard only, where `gold_signals` is at drug × reaction grain. No Signal Flag filter. Visuals on Demographics and Outcomes do not cross-filter each other (Edit interactions: None).
+**Effect:** ARCHITECTURE.md matches the BRD and the data model. No pipeline or Gold change.
+**Rejected:** A new Gold table at drug × dimension grain (pipeline change, re-run and re-validation of verified outputs for a feature nobody required); leaving cross-filtering on (clicking a bar blanks the other charts).
+**Check:** On Demographics and Outcomes, clicking any bar leaves every other visual populated. On the leaderboard, typing a drug name filters both the leaderboard and the exclusive panel.
