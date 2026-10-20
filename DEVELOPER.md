@@ -278,6 +278,14 @@ Edit notebooks locally and sync them to Databricks. No local Python environment 
 - **Cause:** A Top N filter needs a per-row field, but a visual-level filter can also be set on a measure.
 - **Fix:** `Rank = RANKX ( ALLSELECTED ( gold_signals ), CALCULATE ( MAX ( gold_signals[prr] ) ) * 1000000 + CALCULATE ( MAX ( gold_signals[case_count] ) ), , DESC, DENSE )`. Add it as the first column (header `#`) and filter the table with Rank is less than or equal to 10. The `case_count` term breaks PRR ties so the numbers run 1 to 10. Delete the `Pair` column and remove the Top N filter on it. Build steps updated.
 - **Rule:** Apply the Rank filter before relying on the visual: RANKX over `ALLSELECTED ( gold_signals )` with only the SIGNAL and is_exclusive filters covers about 50,000 rows and is very slow. Ranking by `prr` surfaces thin 3-to-5-report pairs (D3); decide whether to rank by `case_count` and record it in DECISIONS.
+- **Amended:** The ranking order in this entry's `Rank` measure was changed from PRR to report count. See Issue 33 and DECISIONS D13. The `Pair` column removal and the `Rank <= 10` filter stand.
+
+### Issue 33 — Leaderboard Rank Switched from PRR to Report Count
+*Logged · 2026-10-21 · Power BI Desktop, `Rank` measure (amends the measure in Issue 32; no pipeline change)*
+- **Symptom:** With the Issue 32 `Rank` measure (ordered by `prr`, `case_count` breaking ties), 7 of the top 10 rows had 7 reports or fewer, four had exactly 3, and three were Haldane-corrected with PRRs of 53,000 to 77,000.
+- **Cause:** PRR is unstable on very few reports, and the Evans floor is only 3 (D3). FR-21 says Haldane-corrected PRR is not an interpretable magnitude. Ranking by PRR put these pairs first.
+- **Fix:** Swap the two terms: `CALCULATE ( MAX ( gold_signals[case_count] ) ) * 1000000 + CALCULATE ( MAX ( gold_signals[prr] ) )`. The subtitle reads "Ranked by report count." The top 10 is now Dupixent, Tymlos and Paragard pairs with 2,270 to 5,080 reports. Build steps and the HTML mockup updated; decision recorded as D13.
+- **Rule:** Do not rank a leaderboard by a ratio measure alone when its minimum count is low. Rank by volume and show the ratio beside it. The `Rank <= 10` filter must be applied first, or `RANKX` runs over about 49,878 rows.
 
 ---
 
