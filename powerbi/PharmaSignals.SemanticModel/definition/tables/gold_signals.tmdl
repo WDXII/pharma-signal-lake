@@ -1,15 +1,17 @@
 table gold_signals
 	lineageTag: 86d2be9a-ad41-464c-b527-e7782ba09385
 
-	measure 'Total Pairs' = COUNTROWS ( gold_signals )
-		formatString: 0
+	measure 'Total Pairs' = FORMAT( COUNTROWS ( gold_signals ) , "#,0")
 		lineageTag: 70a5c84f-74f5-4667-89f4-3beb1e806db8
+
+		changedProperty = IsHidden
 
 	measure 'Signal Pairs' =
 			
-			CALCULATE ( COUNTROWS ( gold_signals ), gold_signals[signal_flag] = "SIGNAL" )
-		formatString: 0
+			FORMAT(CALCULATE ( COUNTROWS ( gold_signals ), gold_signals[signal_flag] = "SIGNAL" ), "#,0")
 		lineageTag: 5ab7f5cf-d24f-4ad5-8c00-0e40bbdf6c41
+
+		changedProperty = IsHidden
 
 	measure 'Exclusive Signal Pairs' =
 			
@@ -23,32 +25,68 @@ table gold_signals
 
 	measure 'Leaderboard Pairs' =
 			
-			CALCULATE (
+			FORMAT(CALCULATE (
 			    COUNTROWS ( gold_signals ),
 			    gold_signals[signal_flag] = "SIGNAL",
 			    gold_signals[is_exclusive] = FALSE ()
-			)
-		formatString: 0
+			), "#,0")
 		lineageTag: 3a36ec89-5522-472c-a0fc-302b72b8369c
 
 	measure 'Haldane Pairs' = ```
 			
-			CALCULATE ( COUNTROWS ( gold_signals ), gold_signals[haldane_applied] = TRUE () )
+			FORMAT(CALCULATE ( COUNTROWS ( gold_signals ), gold_signals[haldane_applied] = TRUE () ), "#,0")
 			
 			```
-		formatString: 0
 		lineageTag: 8520f652-6ddd-4a2a-b648-3ffc8b1be0f4
 
-	measure 'Haldane %' = DIVIDE ( [Haldane Pairs], [Total Pairs] )
+	measure 'Haldane %' = FORMAT( DIVIDE ( [Haldane Pairs], [Total Pairs] ), "0.00%")
 		lineageTag: bf8bd699-d0b6-43aa-9ca9-f0b99da7f9ec
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	measure Cases = FORMAT( MAX ( gold_signals[total_reports] ), "#,0")
-		isHidden
+	measure Cases = ```
+			FORMAT( MAX ( gold_signals[total_reports] ), "#,0") 
+			```
 		lineageTag: 5dcc6c7e-b114-4416-bfff-cb691c43a59a
 
 		changedProperty = IsHidden
+
+	measure 'Subtitle Cases' = ```
+			
+			    "N for PRR/ROR: cases with a"
+			    & UNICHAR(10)
+			    & "primary-suspect drug"
+			```
+		lineageTag: 1f73fe82-8ae0-49ab-97cb-83a4cf99aefa
+
+	measure 'Subtitle Haldane Pairs' = ```
+			[Haldane %]     
+			    & " of pairs"
+			```
+		lineageTag: baeab5df-2c0d-40c6-9304-ff863dbaab1b
+
+	measure 'Subtitle Leaderboard' = "SIGNAL, not exclusive"
+		lineageTag: aed4216e-0f97-44dc-a4c4-6665c4068ba8
+
+	measure 'Subtitle Total Pairs' = "scored in gold signals"
+		lineageTag: 0023a377-7be1-40a8-8125-41d5c8441179
+
+	measure 'Subtitle Signal Pairs' = "full Evans criteria"
+		lineageTag: e6bbb5e5-8009-4894-b7c9-628288691bfb
+
+	measure 'Subtle Exclusive Signal Pairs' = "few-report screening flag"
+		lineageTag: 142f64d3-e286-481a-b86d-2cdc4863aa8b
+
+	measure Rank =
+			
+			RANKX (
+			    ALLSELECTED ( gold_signals ),
+			    CALCULATE ( MAX ( gold_signals[prr] ) ) * 1000000
+			        + CALCULATE ( MAX ( gold_signals[case_count] ) ),
+			    ,
+			    DESC,
+			    DENSE
+			)
+		formatString: 0
+		lineageTag: ea517cd1-b4f5-41be-8d41-db98474d34e3
 
 	column drugname
 		dataType: string
@@ -157,6 +195,18 @@ table gold_signals
 	column is_exclusive = gold_signals[case_count] = gold_signals[event_total]
 		formatString: """TRUE"";""TRUE"";""FALSE"""
 		lineageTag: 4fac65eb-8f3c-421d-9bd6-b8ee12833cf1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pair = [drugname] & " | " & [pt]
+		lineageTag: 9cfa101d-5d84-4a08-8a51-416cae4b5846
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Haldane flag' = IF ( gold_signals[haldane_applied], "H", "" )
+		lineageTag: 414519b5-dd78-4773-be3f-e3599e4c1027
 		summarizeBy: none
 
 		annotation SummarizationSetBy = Automatic

@@ -1,2 +1,4571 @@
 cultureInfo en-PH
 
+	linguisticMetadata =
+			{
+			  "Version": "4.1.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "gold_signal": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "gold signal": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "gold_signals": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "signal": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "gold indication": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "gold pointer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "indication": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "pointer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "gold sign": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "gold gesture": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "gold indicator": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "gold motion": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "gold hint": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "sign": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.drugname": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "drugname"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "drugname": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "DRUG": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.pt": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "pt"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "pt": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "REACTION (PT)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.case_count": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "case_count"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "case count": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "case_count": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "case amount": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.drug_total": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "drug_total"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "drug total": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "drug_total": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "drug aggregate": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "drug overall": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.event_total": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "event_total"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "event total": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "event_total": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "event aggregate": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "event overall": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.total_report": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "total_reports"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "total report": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "total_reports": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "report": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "total information": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "total commentary": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "total description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "total presentation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "total statement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "information": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "commentary": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "presentation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "statement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.prr": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "prr"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "prr": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.ror": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "ror"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "ror": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.chi_sq": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "chi_sq"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "chi sq": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "chi_sq": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.haldane_applied": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "haldane_applied"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "haldane applied": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "haldane_applied": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.signal_flag": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "signal_flag"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "signal flag": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "signal_flag": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "flag": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "signal ensign": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "signal pennant": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "signal pennon": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "signal emblem": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "signal streamer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "ensign": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "pennant": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "pennon": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "emblem": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "streamer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.source_quarter": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "source_quarter"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "source quarter": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "source_quarter": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "source qtr": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.833
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.is_exclusive": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "is_exclusive"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "is exclusive": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "is_exclusive": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "exclusive": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "high-class": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "select": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "private": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "fashionable": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "special": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "elite": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "sole": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "whole": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "absolute": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.total_pairs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Total Pairs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "total pairs": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "pairs": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "aggregate pair": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "overall pair": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "total duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "total twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "total couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "total brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "total set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "DRUG-EVENT PAIRS": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.signal_pairs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Signal Pairs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "signal pairs": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "pairs": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "signal duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "signal twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "signal couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "signal brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "signal set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.exclusive_signal_pairs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Exclusive Signal Pairs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "exclusive signal pairs": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "pairs": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "exclusive signal duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "exclusive signal twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "exclusive signal couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "exclusive signal brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "exclusive signal set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "EXCLUSIVE REPORTS": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.leaderboard_pairs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Leaderboard Pairs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "leaderboard pairs": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "pairs": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "leaderboard duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "leaderboard twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "leaderboard couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "leaderboard brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "leaderboard set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "LEADERBOARD": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.haldane_pairs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Haldane Pairs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "haldane pairs": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "pairs": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "haldane duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "haldane twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "haldane couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "haldane brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "haldane set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "HALDANE APPLIED": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.haldane_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Haldane %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "haldane %": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "haldane percentage": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "haldane pct": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.cases": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Cases"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "cases": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "suitcase": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "bag": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "belonging": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "gear": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "situation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.466
+			          }
+			        },
+			        {
+			          "circumstance": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "instance": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "event": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "occasion": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "incident": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "REPORTS ANALYSED": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "gold_outcome": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_outcomes"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "gold outcome": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "gold_outcomes": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "outcome": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "gold consequence": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "gold product": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "gold conclusion": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "gold upshot": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "gold aftermath": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "gold sequel": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "gold aftereffect": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "consequence": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "product": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "conclusion": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        }
+			      ]
+			    },
+			    "gold_outcome.dimension": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_outcomes",
+			          "ConceptualProperty": "dimension"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "dimension": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "measurement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "length": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "height": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "width": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "breadth": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "aspect": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.466
+			          }
+			        },
+			        {
+			          "element": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.466
+			          }
+			        },
+			        {
+			          "facet": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "feature": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "factor": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        }
+			      ]
+			    },
+			    "gold_outcome.code": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_outcomes",
+			          "ConceptualProperty": "code"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "code": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "key": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.714
+			          }
+			        }
+			      ]
+			    },
+			    "gold_outcome.label": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_outcomes",
+			          "ConceptualProperty": "label"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "label": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "sticker": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "tag": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.714
+			          }
+			        },
+			        {
+			          "decal": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.714
+			          }
+			        },
+			        {
+			          "name tag": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.571
+			          }
+			        }
+			      ]
+			    },
+			    "gold_outcome.case_count": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_outcomes",
+			          "ConceptualProperty": "case_count"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "case count": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "case_count": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "case amount": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "gold_outcome.source_quarter": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_outcomes",
+			          "ConceptualProperty": "source_quarter"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "source quarter": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "source_quarter": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "source qtr": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.833
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "gold demographics": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "gold_demographics": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "demographics": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.dimension": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "dimension"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "dimension": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "measurement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "length": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "height": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "width": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "breadth": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "aspect": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.466
+			          }
+			        },
+			        {
+			          "element": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.466
+			          }
+			        },
+			        {
+			          "facet": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "feature": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "factor": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.dimension_value": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "dimension_value"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "dimension value": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "dimension_value": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "value": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "dimension assessment": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "assessment": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "dimension worth": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "dimension price": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "dimension cost": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "dimension charge": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "dimension rate": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "worth": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "price": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "cost": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.case_count": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "case_count"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "case count": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "case_count": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "case amount": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.source_quarter": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "source_quarter"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "source quarter": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "source_quarter": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "source qtr": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.833
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.subtitle_cases": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Subtitle Cases"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "subtitle cases": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "subtitle suitcase": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "subtitle bag": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "subtitle belonging": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "subtitle gear": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "subtitle situation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.475
+			          }
+			        },
+			        {
+			          "subtitle circumstance": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.461
+			          }
+			        },
+			        {
+			          "subtitle instance": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.461
+			          }
+			        },
+			        {
+			          "subtitle event": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.461
+			          }
+			        },
+			        {
+			          "subtitle occasion": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.461
+			          }
+			        },
+			        {
+			          "subtitle incident": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.461
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.subtitle_haldane_pairs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Subtitle Haldane Pairs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "subtitle haldane pairs": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "pairs": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "subtitle haldane duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "subtitle haldane twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "subtitle haldane couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "subtitle haldane brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "subtitle haldane set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.subtitle_leaderboard": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Subtitle Leaderboard"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "subtitle leaderboard": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.subtitle_total_pairs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Subtitle Total Pairs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "subtitle total pairs": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "pairs": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "subtitle aggregate pair": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        },
+			        {
+			          "subtitle overall pair": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        },
+			        {
+			          "subtitle total duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "subtitle total twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "subtitle total couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "subtitle total brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "subtitle total set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.subtitle_signal_pairs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Subtitle Signal Pairs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "subtitle signal pairs": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "pairs": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "subtitle signal duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "subtitle signal twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "subtitle signal couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "subtitle signal brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "subtitle signal set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.subtle_exclusive_signal_pairs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Subtle Exclusive Signal Pairs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "subtle exclusive signal pairs": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "pairs": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "subtle exclusive signal duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.514
+			          }
+			        },
+			        {
+			          "subtle exclusive signal twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.514
+			          }
+			        },
+			        {
+			          "subtle exclusive signal couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "subtle exclusive signal brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "subtle exclusive signal set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.pair": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Pair"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "pair": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "duo": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "twosome": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "couple": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "brace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "set": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.rank": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Rank"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "rank": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "flourishing": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "sheer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "absolute": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "#": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "gold_signal.haldane_flag": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_signals",
+			          "ConceptualProperty": "Haldane flag"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "haldane flag": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "flag": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "haldane ensign": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "haldane pennant": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "haldane pennon": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "haldane emblem": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "haldane streamer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "ensign": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "pennant": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "pennon": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "emblem": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "streamer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        }
+			      ]
+			    }
+			  },
+			  "Relationships": {
+			    "gold_signal_has_rank": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.rank": {
+			          "Target": {
+			            "Entity": "gold_signal.rank"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.rank"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_rank"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_pair": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.pair": {
+			          "Target": {
+			            "Entity": "gold_signal.pair"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.pair"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_pair"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_subtle_exclusive_signal_pairs": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.subtle_exclusive_signal_pairs": {
+			          "Target": {
+			            "Entity": "gold_signal.subtle_exclusive_signal_pairs"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.subtle_exclusive_signal_pairs"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_subtle_exclusive_signal_pairs"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_subtitle_signal_pairs": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.subtitle_signal_pairs": {
+			          "Target": {
+			            "Entity": "gold_signal.subtitle_signal_pairs"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.subtitle_signal_pairs"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_subtitle_signal_pairs"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_subtitle_total_pairs": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.subtitle_total_pairs": {
+			          "Target": {
+			            "Entity": "gold_signal.subtitle_total_pairs"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.subtitle_total_pairs"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_subtitle_total_pairs"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_subtitle_leaderboard": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.subtitle_leaderboard": {
+			          "Target": {
+			            "Entity": "gold_signal.subtitle_leaderboard"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.subtitle_leaderboard"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_subtitle_leaderboard"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_subtitle_haldane_pairs": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.subtitle_haldane_pairs": {
+			          "Target": {
+			            "Entity": "gold_signal.subtitle_haldane_pairs"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.subtitle_haldane_pairs"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_subtitle_haldane_pairs"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_subtitle_cases": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.subtitle_cases": {
+			          "Target": {
+			            "Entity": "gold_signal.subtitle_cases"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.subtitle_cases"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_subtitle_cases"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_source_quarter": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.source_quarter": {
+			          "Target": {
+			            "Entity": "gold_demographics.source_quarter"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.source_quarter"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_source_quarters"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_case_count": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.case_count": {
+			          "Target": {
+			            "Entity": "gold_demographics.case_count"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.case_count"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_case_counts"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_dimension_value": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.dimension_value": {
+			          "Target": {
+			            "Entity": "gold_demographics.dimension_value"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.dimension_value"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_dimension_values"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_dimension": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.dimension": {
+			          "Target": {
+			            "Entity": "gold_demographics.dimension"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.dimension"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_dimensions"
+			        }
+			      ]
+			    },
+			    "gold_outcome_has_source_quarter": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_outcomes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_outcome": {
+			          "Target": {
+			            "Entity": "gold_outcome"
+			          }
+			        },
+			        "gold_outcome.source_quarter": {
+			          "Target": {
+			            "Entity": "gold_outcome.source_quarter"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_outcome"
+			            },
+			            "Object": {
+			              "Role": "gold_outcome.source_quarter"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_outcomes_have_source_quarters"
+			        }
+			      ]
+			    },
+			    "gold_outcome_has_case_count": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_outcomes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_outcome": {
+			          "Target": {
+			            "Entity": "gold_outcome"
+			          }
+			        },
+			        "gold_outcome.case_count": {
+			          "Target": {
+			            "Entity": "gold_outcome.case_count"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_outcome"
+			            },
+			            "Object": {
+			              "Role": "gold_outcome.case_count"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_outcomes_have_case_counts"
+			        }
+			      ]
+			    },
+			    "gold_outcome_has_label": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_outcomes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_outcome": {
+			          "Target": {
+			            "Entity": "gold_outcome"
+			          }
+			        },
+			        "gold_outcome.label": {
+			          "Target": {
+			            "Entity": "gold_outcome.label"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_outcome"
+			            },
+			            "Object": {
+			              "Role": "gold_outcome.label"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_outcomes_have_labels"
+			        }
+			      ]
+			    },
+			    "gold_outcome_has_code": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_outcomes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_outcome": {
+			          "Target": {
+			            "Entity": "gold_outcome"
+			          }
+			        },
+			        "gold_outcome.code": {
+			          "Target": {
+			            "Entity": "gold_outcome.code"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_outcome"
+			            },
+			            "Object": {
+			              "Role": "gold_outcome.code"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_outcomes_have_codes"
+			        }
+			      ]
+			    },
+			    "gold_outcome_has_dimension": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_outcomes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_outcome": {
+			          "Target": {
+			            "Entity": "gold_outcome"
+			          }
+			        },
+			        "gold_outcome.dimension": {
+			          "Target": {
+			            "Entity": "gold_outcome.dimension"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_outcome"
+			            },
+			            "Object": {
+			              "Role": "gold_outcome.dimension"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_outcomes_have_dimensions"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_cases": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.cases": {
+			          "Target": {
+			            "Entity": "gold_signal.cases"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.cases"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_cases"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_haldane_": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.haldane_": {
+			          "Target": {
+			            "Entity": "gold_signal.haldane_"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.haldane_"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_haldane_"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_haldane_pairs": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.haldane_pairs": {
+			          "Target": {
+			            "Entity": "gold_signal.haldane_pairs"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.haldane_pairs"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_haldane_pairs"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_leaderboard_pairs": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.leaderboard_pairs": {
+			          "Target": {
+			            "Entity": "gold_signal.leaderboard_pairs"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.leaderboard_pairs"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_leaderboard_pairs"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_exclusive_signal_pairs": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.exclusive_signal_pairs": {
+			          "Target": {
+			            "Entity": "gold_signal.exclusive_signal_pairs"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.exclusive_signal_pairs"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_exclusive_signal_pairs"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_signal_pairs": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.signal_pairs": {
+			          "Target": {
+			            "Entity": "gold_signal.signal_pairs"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.signal_pairs"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_signal_pairs"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_total_pairs": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.total_pairs": {
+			          "Target": {
+			            "Entity": "gold_signal.total_pairs"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.total_pairs"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_total_pairs"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_is_exclusive": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.is_exclusive": {
+			          "Target": {
+			            "Entity": "gold_signal.is_exclusive"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.is_exclusive"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_is_exclusives"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_source_quarter": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.source_quarter": {
+			          "Target": {
+			            "Entity": "gold_signal.source_quarter"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.source_quarter"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_source_quarters"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_signal_flag": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.signal_flag": {
+			          "Target": {
+			            "Entity": "gold_signal.signal_flag"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.signal_flag"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_signal_flags"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_haldane_applied": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.haldane_applied": {
+			          "Target": {
+			            "Entity": "gold_signal.haldane_applied"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.haldane_applied"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_haldane_applied"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_chi_sq": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.chi_sq": {
+			          "Target": {
+			            "Entity": "gold_signal.chi_sq"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.chi_sq"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_chi_sqs"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_ror": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.ror": {
+			          "Target": {
+			            "Entity": "gold_signal.ror"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.ror"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_rors"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_prr": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.prr": {
+			          "Target": {
+			            "Entity": "gold_signal.prr"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.prr"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_prrs"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_total_report": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.total_report": {
+			          "Target": {
+			            "Entity": "gold_signal.total_report"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.total_report"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_total_reports"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_event_total": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.event_total": {
+			          "Target": {
+			            "Entity": "gold_signal.event_total"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.event_total"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_event_totals"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_drug_total": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.drug_total": {
+			          "Target": {
+			            "Entity": "gold_signal.drug_total"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.drug_total"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_drug_totals"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_case_count": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.case_count": {
+			          "Target": {
+			            "Entity": "gold_signal.case_count"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.case_count"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_case_counts"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_pt": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.pt": {
+			          "Target": {
+			            "Entity": "gold_signal.pt"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.pt"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_pt"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_drugname": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.drugname": {
+			          "Target": {
+			            "Entity": "gold_signal.drugname"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.drugname"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_drugnames"
+			        }
+			      ]
+			    },
+			    "gold_signal_is_exclusive": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.is_exclusive": {
+			          "Target": {
+			            "Entity": "gold_signal.is_exclusive"
+			          }
+			        }
+			      },
+			      "Conditions": [
+			        {
+			          "Target": {
+			            "Role": "gold_signal.is_exclusive"
+			          },
+			          "Operator": "Equals",
+			          "Value": {
+			            "Boolean": [
+			              true
+			            ]
+			          }
+			        }
+			      ],
+			      "Phrasings": [
+			        {
+			          "Adjective": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Adjectives": [
+			              {
+			                "exclusive": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ]
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "some_gold_signals_are_exclusive_gold_signals"
+			        }
+			      ]
+			    },
+			    "gold_signal_is_haldane_applied": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.haldane_applied": {
+			          "Target": {
+			            "Entity": "gold_signal.haldane_applied"
+			          }
+			        }
+			      },
+			      "Conditions": [
+			        {
+			          "Target": {
+			            "Role": "gold_signal.haldane_applied"
+			          },
+			          "Operator": "Equals",
+			          "Value": {
+			            "Boolean": [
+			              true
+			            ]
+			          }
+			        }
+			      ],
+			      "Phrasings": [
+			        {
+			          "Adjective": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Adjectives": [
+			              {
+			                "haldane applied": {
+			                  "State": "Generated"
+			                }
+			              },
+			              {
+			                "haldane-applied": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ]
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "some_gold_signals_are_haldane_applied_gold_signals"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_haldane_flag": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.haldane_flag": {
+			          "Target": {
+			            "Entity": "gold_signal.haldane_flag"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.haldane_flag"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_haldane_flags"
+			        }
+			      ]
+			    }
+			  },
+			  "Agents": {
+			    "Internal": {
+			      "Version": "1.1.0"
+			    }
+			  }
+			}
+		contentType: json
+

@@ -251,6 +251,34 @@ Edit notebooks locally and sync them to Databricks. No local Python environment 
 - **Fix:** `Cases = FORMAT( MAX ( gold_signals[total_reports] ), "#,0")`. `FORMAT` returns text, so the card shows the full number with a thousands separator. Setting the card's Display units to None is the alternative that keeps the measure numeric.
 - **Rule:** Use a `FORMAT` measure only for a display-only card, and never in a calculation. Check every card against the verified count (397,224) before taking a screenshot.
 
+### Issue 29 — Power BI Error: "Cannot convert value '' of type Text to type Number" on `Haldane %`
+*Logged · 2026-10-20 · Power BI Desktop, measure `Haldane %` (not a pipeline change)*
+- **Symptom:** A visual using `[Haldane %]` failed with `Cannot convert value '' of type Text to type Number`.
+- **Cause:** The measure was written as `FORMAT( DIVIDE ( [Haldane Pairs], [Total Pairs] ), "0.00%")`. `FORMAT` returns text, and a blank `DIVIDE` result becomes `''`, which a visual expecting a number cannot convert. The build steps define it without `FORMAT`.
+- **Fix:** `Haldane % = DIVIDE ( [Haldane Pairs], [Total Pairs] )`, then Measure tools > Format > Percentage, 2 decimals.
+- **Rule:** A measure that feeds a visual returns a number; format it in the model, not with `FORMAT`. Use `FORMAT` only in a display-only measure (Issue 26) or a separate label measure.
+
+### Issue 30 — Clicking a Table Row Filtered the KPI Cards
+*Logged · 2026-10-20 · Power BI Desktop, Signal Leaderboard page*
+- **Symptom:** Clicking a drug row in the leaderboard changed the six KPI cards from their verified whole-quarter values.
+- **Cause:** Power BI cross-filters every visual on a page by default. The build steps make the Drug Name slicer the only drug filter and say nothing about row clicks driving the cards.
+- **Fix:** Edit interactions: set the six cards to None from both tables and from the Drug Name slicer. Added to the build steps.
+- **Rule:** KPI cards show fixed totals. Turn off cross-filtering to them, then click a row and confirm 397,209 / 373,012 / 49,984 / 49,878 / 106 / 7,197.
+
+### Issue 31 — Top 10 on the Leaderboard Needs a Per-Row Key
+*Logged · 2026-10-20 · Power BI Desktop, Main leaderboard table*
+- **Symptom:** There was no way to filter the leaderboard to the top 10 rows by `prr` directly. Dragging `prr` into the filter pane offers only numeric filters, not Top N.
+- **Cause:** A Top N filter ranks the items in the field it is applied to. On `drugname` or `pt` it keeps the top 10 drugs or reactions with all their rows, not 10 rows. Filters on two fields combine independently, not as a pair.
+- **Fix:** Calculated column (New column, not New measure; a measure has no row context and fails with "no current row"): `Pair = [drugname] & " | " & [pt]`. Apply a Top N filter on `Pair`, Top 10, By value = `prr` (Maximum), alongside the existing `signal_flag` and `is_exclusive` filters.
+- **Rule:** Top N needs a field that is unique per row; build it as a calculated column. Ranking by `prr` surfaces 3-to-5-report pairs because the Evans floor is 3 reports (D3); decide whether to rank by `case_count` or add a higher minimum, and record it in DECISIONS.
+
+### Issue 32 — Rank Measure Replaces the `Pair` Column for the Top 10 Leaderboard
+*Logged · 2026-10-21 · Power BI Desktop, Main leaderboard table (supersedes the fix in Issue 31)*
+- **Symptom:** Issue 31's fix (a `Pair` calculated column plus a Top N filter) added a text column across 373,012 rows only to rank 10 rows, and the leaderboard had no rank column.
+- **Cause:** A Top N filter needs a per-row field, but a visual-level filter can also be set on a measure.
+- **Fix:** `Rank = RANKX ( ALLSELECTED ( gold_signals ), CALCULATE ( MAX ( gold_signals[prr] ) ) * 1000000 + CALCULATE ( MAX ( gold_signals[case_count] ) ), , DESC, DENSE )`. Add it as the first column (header `#`) and filter the table with Rank is less than or equal to 10. The `case_count` term breaks PRR ties so the numbers run 1 to 10. Delete the `Pair` column and remove the Top N filter on it. Build steps updated.
+- **Rule:** Apply the Rank filter before relying on the visual: RANKX over `ALLSELECTED ( gold_signals )` with only the SIGNAL and is_exclusive filters covers about 50,000 rows and is very slow. Ranking by `prr` surfaces thin 3-to-5-report pairs (D3); decide whether to rank by `case_count` and record it in DECISIONS.
+
 ---
 
 ## 4. Running Unit Tests

@@ -29,6 +29,26 @@
           }
         }
       }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "width": {
+            "expr": {
+              "Literal": {
+                "Value": "374L"
+              }
+            }
+          }
+        }
+      }
     ]
-  }
+  },
+  "visualInteractions": [
+    {
+      "source": "3154a1c034acf4a34a06",
+      "target": "ceea96e6e343563052a6",
+      "type": "NoFilter"
+    }
+  ]
 }

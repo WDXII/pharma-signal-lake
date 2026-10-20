@@ -484,21 +484,5 @@
   ],
   "background": "#FFFFFF",
   "foreground": "#16283F",
-  "tableAccent": "#9EB2DB",
-  "visualStyles": {
-    "page": {
-      "*": {
-        "background": [
-          {
-            "color": {
-              "solid": {
-                "color": "#FFFBF0"
-              }
-            },
-            "transparency": 0
-          }
-        ]
-      }
-    }
-  }
+  "tableAccent": "#9EB2DB"
 }

@@ -18,6 +18,7 @@ Architecture and correctness decisions, recorded as they were made. Each entry: 
 | D10 | Per-stage timing log: UTC, `perf_counter`, in-memory | 2026-10-06 | Accepted (verified on Databricks 2026-10-06, OK path only) |
 | D11 | Exclude `EU` and `COUNTRY NOT SPECIFIED` from the Top 10 reporter countries chart (report layer only) | 2026-10-14 | Accepted |
 | D12 | No drug filter on Patient Demographics; optional Drug Name slicer on the leaderboard only; no cross-filtering between same-table visuals | 2026-10-14 | Accepted |
+| D13 | Leaderboard ranked by report count (PRR breaks ties); top 10 by a `Rank` measure filter, no helper column | 2026-10-21 | Accepted |
 
 ---
 
@@ -129,3 +130,11 @@ Check: exclusive 2,872 + 106 = 2,978 (the pre-fix null-PRR count); all `haldane_
 **Effect:** ARCHITECTURE.md matches the BRD and the data model. No pipeline or Gold change.
 **Rejected:** A new Gold table at drug × dimension grain (pipeline change, re-run and re-validation of verified outputs for a feature nobody required); leaving cross-filtering on (clicking a bar blanks the other charts).
 **Check:** On Demographics and Outcomes, clicking any bar leaves every other visual populated. On the leaderboard, typing a drug name filters both the leaderboard and the exclusive panel.
+
+## D13 — Leaderboard Ranked by Report Count; Top 10 by a `Rank` Measure Filter
+
+**Problem:** The main leaderboard needs a rank column and a top-10 view. Ranked by PRR, the first Power BI render put pairs with 3 to 7 reports on top: 7 of the 10 rows had 7 reports or fewer, four had exactly 3 (the D3 minimum), and three were Haldane-corrected (D2), with PRRs of 53,000 to 77,000 (the top 10 ran from 53,000 to 149,000). FR-21 already says Haldane-corrected PRR is not an interpretable magnitude, and D3 says PRR alone is not enough. The first top-10 attempt also needed a `Pair` helper column (drug and reaction joined), because a Top N filter ranks one field and `drugname` or `pt` alone returns the top 10 drugs or reactions with all their rows (Issue 31).
+**Decision:** Rank by `case_count` descending, with `prr` breaking ties, using a `Rank` measure (`RANKX` over `ALLSELECTED ( gold_signals )`). Show it as the first column (`#`) and keep the top 10 with a visual-level filter `Rank <= 10`. PRR and ROR stay as columns beside it. The subtitle reads "Ranked by report count." No `Pair` column. The measure is in the build steps, section 4.
+**Effect:** The 2026Q1 top 10 is Dupixent, Tymlos and Paragard T 380A pairs with 2,270 to 5,080 reports, where PRR and ROR are stable. No pipeline, Gold or verified-count change. With the Drug Name slicer (D12) the rank restarts at 1 within the chosen drug. The KPI cards are not affected (interactions set to None, Issue 30). `case_count` counts reports, not patients (D9), and some top pairs reflect a drug's indication, not an adverse reaction (for example Dupixent and dermatitis atopic); both are footnoted in the report.
+**Rejected:** Ranking by PRR (puts unstable 3-report pairs on top and gives the Haldane-corrected PRR a prominence FR-21 says it should not have); a higher minimum such as `case_count >= 10` on the visual (a second threshold beyond Evans that needs its own justification, and still ranks by PRR); a Top N filter on `drugname` or `pt` (keeps top 10 drugs or reactions, not 10 rows); a `Pair` calculated column (a text column over 373,012 rows for one filter; superseded by Issue 32).
+**Check:** The table shows ranks 1 to 10 with no gaps or repeats, sorted by `#` ascending, `Reports` descending. Clicking a row leaves the six KPI cards at 397,209 / 373,012 / 49,984 / 49,878 / 106 / 7,197. Applying the `Rank <= 10` filter before anything else matters: without it `RANKX` runs across about 49,878 rows and is slow.
