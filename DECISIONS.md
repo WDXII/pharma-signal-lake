@@ -19,6 +19,8 @@ Architecture and correctness decisions, recorded as they were made. Each entry: 
 | D11 | Exclude `EU` and `COUNTRY NOT SPECIFIED` from the Top 10 reporter countries chart (report layer only) | 2026-10-14 | Accepted |
 | D12 | No drug filter on Patient Demographics; optional Drug Name slicer on the leaderboard only; no cross-filtering between same-table visuals | 2026-10-14 | Accepted |
 | D13 | Leaderboard ranked by report count (PRR breaks ties); top 10 by a `Rank` measure filter, no helper column | 2026-10-21 | Accepted |
+| D14 | Power BI measures that feed a card, measure, MIN or filter stay numeric; card Display units set per field; `FORMAT` only in text label measures | 2026-10-21 | Accepted |
+| D15 | Leaderboard shows the Haldane flag as an `H` column, not a tooltip (deviation from FR-21) | 2026-10-21 | Accepted |
 
 ---
 
@@ -138,3 +140,19 @@ Check: exclusive 2,872 + 106 = 2,978 (the pre-fix null-PRR count); all `haldane_
 **Effect:** The 2026Q1 top 10 is Dupixent, Tymlos and Paragard T 380A pairs with 2,270 to 5,080 reports, where PRR and ROR are stable. No pipeline, Gold or verified-count change. With the Drug Name slicer (D12) the rank restarts at 1 within the chosen drug. The KPI cards are not affected (interactions set to None, Issue 30). `case_count` counts reports, not patients (D9), and some top pairs reflect a drug's indication, not an adverse reaction (for example Dupixent and dermatitis atopic); both are footnoted in the report.
 **Rejected:** Ranking by PRR (puts unstable 3-report pairs on top and gives the Haldane-corrected PRR a prominence FR-21 says it should not have); a higher minimum such as `case_count >= 10` on the visual (a second threshold beyond Evans that needs its own justification, and still ranks by PRR); a Top N filter on `drugname` or `pt` (keeps top 10 drugs or reactions, not 10 rows); a `Pair` calculated column (a text column over 373,012 rows for one filter; superseded by Issue 32).
 **Check:** The table shows ranks 1 to 10 with no gaps or repeats, sorted by `#` ascending, `Reports` descending. Clicking a row leaves the six KPI cards at 397,209 / 373,012 / 49,984 / 49,878 / 106 / 7,197. Applying the `Rank <= 10` filter before anything else matters: without it `RANKX` runs across about 49,878 rows and is slow.
+
+## D14 — Measures Stay Numeric; Card Display Units Set Per Field; FORMAT Only in Text Label Measures
+
+**Problem:** `Cases` was a `FORMAT` text measure (Issue 26) while the other KPI cards used numeric measures with Display units set per field (Issue 34). That left two patterns. A text measure cannot feed `MIN`, `DIVIDE` or a filter: `Total Pairs` and `Haldane Pairs` were text, so `Haldane %` divided two text values, and the `FORMAT` wrapper on `Haldane %` caused the "Cannot convert value '' of type Text to type Number" error (Issue 29).
+**Decision:** Every measure that feeds a card, another measure, `MIN` or a filter stays numeric, `Cases` included. Set the number format in Measure tools (Whole number, or Percentage with 2 decimals for `Haldane %`) and set each card's Display units per field (Custom, Format code `#,0`) so counts are not abbreviated. `FORMAT` is allowed only in text label measures that nothing else consumes (`Preview Note Measure`, `Subtitle Haldane Pairs`); label measures live in table `_TEXT`.
+**Effect:** No pipeline, Gold or verified-count change. Supersedes the `FORMAT` fix for `Cases` in Issue 26 (addendum added there). The six KPI cards read 397,209 / 373,012 / 49,984 / 49,878 / 106 / 7,197 in full, and the Haldane label reads "1.93% of pairs".
+**Rejected:** `FORMAT` on `Cases` only (a second pattern, and a text measure that cannot be reused as N in a calculation); `FORMAT` on every card measure (text breaks `MIN`, `DIVIDE` and filters); leaving Display units on Auto (shows "50K" and "373K").
+**Check:** Each card shows its full count. The `Haldane %` card shows 1.93% with no error. Searching the `.tmdl` files for `FORMAT` finds only label measures.
+
+## D15 — Haldane Flag Shown as an `H` Column on the Leaderboard, Not a Tooltip
+
+**Problem:** BRD v2.5 FR-21 says `haldane_applied` appears on the main leaderboard as a tooltip flag. The build steps (section 6) give a fallback if the tooltip does not work on the table visual.
+**Decision:** Add a calculated column `Haldane flag = IF ( gold_signals[haldane_applied], "H", "" )` to `gold_signals`, shown in a narrow column with a blank header between Drug and Reaction. The visual subtitle says H marks a pair where the Haldane correction was applied.
+**Effect:** No pipeline or Gold change. Verified counts are unchanged. On 2026Q1 no top-10 row is Haldane-corrected under D13 (the corrected pairs are the exclusive ones, which the leaderboard filters out), so the column is blank there. The flag still shows for any corrected pair a drug slicer or a new quarter brings in. This deviates from FR-21 (tooltip); BRD wording is unchanged.
+**Rejected:** Leaving the flag out (hides which PRRs are Haldane-corrected, FR-21); a report-page tooltip (a second page to maintain for one flag).
+**Check:** With a temporary visual filter `haldane_applied = TRUE`, the top 10 rows each show H. Remove the filter and the table returns to the D13 top 10 with a blank column.
