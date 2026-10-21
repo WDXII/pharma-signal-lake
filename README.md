@@ -184,7 +184,7 @@ pharma-signal-lake/
 │   └── README.md              ← Instructions for placing FAERS data files here
 │
 └── powerbi/
-    └── pharma_signal_lake.pbix  ← Power BI report file (planned; not yet created)
+    └── PharmaSignals.pbip  ← Power BI project (text files; see powerbi/README.md)
 ```
 
 ---
@@ -253,11 +253,11 @@ Verified on 2026Q1 only. The notebooks write with `mode("overwrite")` partitione
 
 ## Power BI Dashboard
 
-**Status: in progress; target 2026-10-16.** The dashboard has three pages, each reading from a Gold export CSV:
+**Status: in progress. The Signal Leaderboard page is built; Patient Demographics and Case Outcomes are next.** The dashboard has three pages, each reading from a Gold export CSV:
 
 | Page | Source Table | Key Visuals |
 |------|-------------|-------------|
-| **Signal Leaderboard** | `gold_signals.csv` | Main leaderboard = non-exclusive `SIGNAL` pairs ranked by PRR, with case count and ROR columns and the Haldane flag in the tooltip. The main leaderboard filter is `SIGNAL` AND NOT `is_exclusive` (49,878 pairs on 2026Q1); a separate "Exclusive reports" panel shows the 106 `SIGNAL` pairs where the drug is the only reporter of the event (D8, amended). `is_exclusive` is derived in Power BI as `case_count = event_total` |
+| **Signal Leaderboard** | `gold_signals.csv` | Main leaderboard = non-exclusive `SIGNAL` pairs, top 10 ranked by report count (PRR breaks ties, D13), with report count, PRR and ROR columns and an `H` column that flags Haldane-corrected rows (D15). The main leaderboard filter is `SIGNAL` AND NOT `is_exclusive` (49,878 pairs on 2026Q1); a separate "Exclusive reports" panel shows the 106 `SIGNAL` pairs where the drug is the only reporter of the event (D8, amended). `is_exclusive` is derived in Power BI as `case_count = event_total` |
 | **Patient Demographics** | `gold_demographics.csv` | Age group bar chart; sex donut chart; top 10 reporter countries bar chart (`EU` and unspecified excluded, D11) |
 | **Case Outcomes** | `gold_outcomes.csv` | Outcome distribution (death, hospitalization, etc.); reporter type distribution |
 
@@ -281,7 +281,7 @@ Verified on 2026Q1 only. The notebooks write with `mode("overwrite")` partitione
 | D5 — ANSI mode stays on | Division safety comes from the math, not from disabling engine checks. |
 | D6 — Independent verifier | `sql/verify_signal_fix.sql` is written by a human, outside the coding session, and is read-only for the assistant. |
 | D7 — One row per case in Silver | OUTC/RPSR are aggregated per `primaryid` before joining, so `silver_cases` does not fan out. |
-| D8 — Exclusive pairs in a separate panel | Pairs where every report of the event names this drug can rank high on few reports. They go in their own Power BI panel (`is_exclusive`), not the main leaderboard. |
+| D8 — Exclusive pairs in a separate panel | Pairs where every report of the event names this drug have an uninterpretable PRR. Most rest on few reports (median 4), a handful on many. They go in their own Power BI panel (`is_exclusive`), shown without PRR or ROR, not in the main leaderboard. |
 | D9 — Report-level dedup deferred | `case_count` counts reports, not patients. Patient-level duplicate detection is deferred (see Limitations). |
 | D10 — Per-stage timing log | `99_run_pipeline.py` logs stage times in UTC, in memory only. |
 | Power BI via CSV export | No Databricks connector license required. Works entirely within the Free Edition and Power BI Desktop constraints. |
