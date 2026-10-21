@@ -251,6 +251,7 @@ Edit notebooks locally and sync them to Databricks. No local Python environment 
 - **Fix:** `Cases = FORMAT( MAX ( gold_signals[total_reports] ), "#,0")`. `FORMAT` returns text, so the card shows the full number with a thousands separator. Setting the card's Display units to None is the alternative that keeps the measure numeric.
 - **Rule:** Use a `FORMAT` measure only for a display-only card, and never in a calculation. Check every card against the verified count (397,224) before taking a screenshot.
 - **Addendum (2026-10-21):** The numeric cards need the Display units alternative named above, set per field; the exact steps are in Issue 34. The verified count for the `Cases` card is now 397,209 (N, cases with a primary-suspect drug), not 397,224; see the build steps, section 4.
+- **Addendum (2026-10-21, later):** The `FORMAT` fix above is superseded. `Cases` is now numeric: `Cases = MAX ( gold_signals[total_reports] )`, format Whole number, with the card's Display units set per field (Custom, `#,0`; Issue 34). The card reads 397,209 in full, so no `FORMAT` is needed. The Rule above now applies only to text label measures; see DECISIONS D14.
 
 ### Issue 29 — Power BI Error: "Cannot convert value '' of type Text to type Number" on `Haldane %`
 *Logged · 2026-10-20 · Power BI Desktop, measure `Haldane %` (not a pipeline change)*
@@ -294,6 +295,13 @@ Edit notebooks locally and sync them to Databricks. No local Python environment 
 - **Cause:** The card's Display units default to Auto, and the measure's own format (Whole number, thousands separator) does not override it. Wrapping the measure in `FORMAT` hides the problem but turns the measure into text. A measure that took `MIN` over a text `[Signal Pairs]` then failed and the visual would not accept it.
 - **Fix:** Keep the measure numeric (build steps, section 4). Select the card > Format visual > Visual > Callout value. Set "Apply settings to" to the specific field (for example `Signal Pairs`), not All; Display units is not offered under All. Set Display units to Custom, then Format code `#,0`. Repeat per card. Build steps, section 6 (card styling step 4) and section 11, updated.
 - **Rule:** A measure that feeds a card, another measure or a filter stays numeric; set how a card shows it with that field's Display units, not with `FORMAT`. `FORMAT` stays only for `Cases` (Issue 26) and for text label measures, which are never used in `MIN` or other arithmetic (Issue 29).
+
+### Issue 35 — Leaderboard Note Text: Built as a Measure and Placed in a Text Box, Not the Visual Title
+*Logged · 2026-10-21 · Power BI Desktop, Signal Leaderboard note (not a pipeline change)*
+- **Symptom:** The note under the leaderboard ("Top 10 of 49,878 leaderboard pairs...") first existed as a calculated column in a one-row table. Then the visual Title's Field value picker would not offer the text measure, and a Card truncated the long text with "...".
+- **Cause:** A calculated column is computed at refresh, so it cannot follow filters. A visual Title is a single line and truncates long text. A Card cuts text at its height.
+- **Fix:** A measure, `Preview Note Measure`, in table `_TEXT`, shown in a text box (Add a value > Preview Note Measure). `Top N` is `MIN ( 10, [Leaderboard Pairs] )`, so the note follows the data. The calculated column was deleted.
+- **Rule:** Long dynamic text is a measure shown in a text box, sized tall enough. Use `FORMAT` only inside such label measures (Issues 26, 29, 34). Test a measure in a Card on the canvas, because measure values do not show in Data view. Check that the Title or Subtitle picker offers the measure before planning around it.
 
 ---
 
