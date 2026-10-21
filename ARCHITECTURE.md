@@ -216,7 +216,7 @@ pharma-signal-lake/
 │   ├── data_dictionary.md
 │   └── validation-results.md
 └── powerbi/
-    └── pharma_signal_lake.pbix   ← planned; not yet created
+    └── PharmaSignals.pbip        ← Power BI project (text files; see powerbi/README.md)
 ```
 
 ---
@@ -411,8 +411,8 @@ Power BI Desktop reads from exported CSV/Parquet files from the Gold layer.
 ### Dashboard Pages
 
 **Page 1 — Signal Leaderboard**
-- Main leaderboard: `SIGNAL` pairs where NOT `is_exclusive`, ranked by PRR descending (49,878 on 2026Q1). `is_exclusive` is derived in Power BI as `case_count = event_total`
-- Columns: Drug Name, Reaction (PT), Case Count, PRR, ROR; `haldane_applied` as a tooltip flag
+- Main leaderboard: `SIGNAL` pairs where NOT `is_exclusive`, top 10 ranked by report count, PRR breaks ties (D13; 49,878 pairs on 2026Q1). `is_exclusive` is derived in Power BI as `case_count = event_total`
+- Columns: Rank, Drug Name, Reaction (PT), Case Count, PRR, ROR, and an `H` column that flags Haldane-corrected rows (D15; this deviates from BRD FR-21, which says tooltip)
 - Separate "Exclusive reports" panel: `SIGNAL` AND `is_exclusive` (106 on 2026Q1), without PRR, because Haldane-corrected magnitudes are not interpretable (D8, amended)
 - Filter: Drug Name slicer (optional). No Signal Flag filter, because the main leaderboard is fixed to `SIGNAL` (BRD FR-21)
 - KPI cards: reports analysed (N = 397,209 on 2026Q1: cases with a primary-suspect drug; `silver_cases` holds 397,224), drug–event pairs, `SIGNAL` pairs, leaderboard pairs, exclusive reports, Haldane applied
@@ -423,7 +423,8 @@ Power BI Desktop reads from exported CSV/Parquet files from the Gold layer.
 
 **Page 3 — Case Outcomes**
 - Chart: Outcome code distribution (bar: DE=Death, HO=Hospitalized, LT=Life-threatening, etc.)
-- Chart: Reporter type distribution (HP=Healthcare Professional, CSM=Consumer, FGN=Foreign)
+- Chart: Reporter type distribution (HP=Healthcare Professional, CSM=Consumer, FGN=Foreign). Reporter source is recorded for only 11,426 of 397,224 reports on 2026Q1 (RPSR is sparse), so the page says so in a caption
+- A case can carry more than one outcome code, so the outcome bars can add up to more than the case count; the page says so in a text box
 
 ### Connection Method
 
