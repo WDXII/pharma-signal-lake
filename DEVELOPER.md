@@ -303,6 +303,20 @@ Edit notebooks locally and sync them to Databricks. No local Python environment 
 - **Fix:** A measure, `Preview Note Measure`, in table `_TEXT`, shown in a text box (Add a value > Preview Note Measure). `Top N` is `MIN ( 10, [Leaderboard Pairs] )`, so the note follows the data. The calculated column was deleted.
 - **Rule:** Long dynamic text is a measure shown in a text box, sized tall enough. Use `FORMAT` only inside such label measures (Issues 26, 29, 34). Test a measure in a Card on the canvas, because measure values do not show in Data view. Check that the Title or Subtitle picker offers the measure before planning around it.
 
+### Issue 36 — Leaderboard Note Followed the Row Selection ("Top 0 of 0")
+*Logged · 2026-10-22 · Power BI Desktop, Signal Leaderboard page (not a pipeline change)*
+- **Symptom:** Clicking a row in the Exclusive reports panel changed the note under the leaderboard to "Top 0 of 0 leaderboard pairs". Earlier the note had shown blank once ("Top of leaderboard pairs"); that was first treated as a render glitch that did not reproduce.
+- **Cause:** The note is a measure in a text box, and a text box follows cross-filtering like any other visual. Selecting an exclusive row filters `gold_signals` to one drug and reaction. `[Leaderboard Pairs]` counts SIGNAL pairs that are not exclusive, so for that pair it returns blank. The blank was the same cause; the `COALESCE ( [Leaderboard Pairs], 0 )` added later as hardening turned it into 0.
+- **Fix:** Two layers. (1) Edit interactions on the Signal Leaderboard page set both tables to None for the six cards, the note text box and each other (six `NoFilter` entries in `page.json`). (2) `Preview Note Measure` computes `_total` as `COALESCE ( CALCULATE ( [Leaderboard Pairs], REMOVEFILTERS ( gold_signals ) ), 0 )`: `REMOVEFILTERS` drops the click selection, `[Leaderboard Pairs]` re-applies its own conditions (SIGNAL, not exclusive), and the `COALESCE` stays as a fallback. The numeric measure is unchanged (D14). Re-tested by selecting a leaderboard row and an exclusive row: the note stays "Top 10 of 49,878" and the six cards do not change.
+- **Rule:** A text box showing a measure follows cross-filtering like any visual. Click-test every dynamic text box, not only the charts, and set Edit interactions to None wherever a selection must not change a figure. `COALESCE` hides a blank without fixing why it is blank. If a Drug Name slicer is added (D12), decide on purpose whether the note should follow it, because `REMOVEFILTERS ( gold_signals )` also ignores the slicer.
+
+### Issue 37 — Exclusive Panel Said "Few Reports" While Its Top Rows Had 277 and 253
+*Logged · 2026-10-22 · Power BI Signal Leaderboard page, HTML dashboard mock (not a pipeline change)*
+- **Symptom:** The panel text and the card subtitle said the exclusive pairs "rest on few reports" or are a "few-report screening flag". The top four rows have 277, 253, 58 and 39 reports.
+- **Cause:** The wording was written from the typical pair without checking the whole distribution. Of the 106 pairs, 83 have 5 or fewer reports and the median is 4, but four pairs are far larger. The two ParaGard pairs are reported 94.2% and 98.4% by consumers or lawyers (docs/validation-results.md), consistent with stimulated reporting, so a high count does not mean many patients (D9, Issue 21).
+- **Fix:** The panel text now says reports are not patients, that duplicates and consumer or legal reporting can inflate the count, and that these are screening flags, not confirmed signals. The card subtitle is "screening flag, not confirmed". The HTML dashboard mock now uses the real 106 exclusive pairs and the real top 10 leaderboard rows from `gold_signals.csv`.
+- **Rule:** Check a sentence about a set against its distribution, not only its typical value, before it goes on a visual. A count of reports is not a count of patients, so wording near it should say so.
+
 ---
 
 ## 4. Running Unit Tests
