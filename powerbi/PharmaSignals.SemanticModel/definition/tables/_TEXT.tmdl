@@ -4,7 +4,7 @@ table _TEXT
 	measure 'Preview Note Measure' =
 			
 			VAR _topN  = 10
-			VAR _total = COALESCE ( [Leaderboard Pairs], 0 )
+			VAR _total = COALESCE ( CALCULATE ( [Leaderboard Pairs], REMOVEFILTERS ( gold_signals ) ), 0 )
 			VAR _shown = MIN ( _topN, _total )
 			RETURN
 			    "Top " & _shown & " of " & FORMAT ( _total, "#,0" )
@@ -37,7 +37,7 @@ table _TEXT
 	measure 'Subtitle Total Pairs' = "scored in gold signals"
 		lineageTag: 0023a377-7be1-40a8-8125-41d5c8441179
 
-	measure 'Subtitle Exclusive Signal Pairs' = "few-report screening flag"
+	measure 'Subtitle Exclusive Signal Pairs' = "screening flag, not confirmed"
 		lineageTag: 142f64d3-e286-481a-b86d-2cdc4863aa8b
 
 	column Column1

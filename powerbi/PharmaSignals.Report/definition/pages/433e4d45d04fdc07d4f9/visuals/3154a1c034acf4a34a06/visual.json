@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "3154a1c034acf4a34a06",
   "position": {
-    "x": 48.75,
-    "y": 441.25,
+    "x": 48.6284289276808,
+    "y": 440.89775561097258,
     "z": 6000,
-    "height": 610,
-    "width": 1020,
+    "height": 609.4763092269327,
+    "width": 935.28678304239406,
     "tabOrder": 6000
   },
   "visual": {
@@ -167,7 +167,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "59.090909090909086D"
+                  "Value": "20.570476063331988D"
                 }
               }
             }
@@ -264,7 +264,7 @@
             "bold": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -489,6 +489,18 @@
                   "Value": "10D"
                 }
               }
+            },
+            "outlineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -576,7 +588,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Signal leaderboard (SIGNAL, not exclusive)'"
+                  "Value": "'Signal leaderboard'"
                 }
               }
             }
@@ -629,7 +641,27 @@
             "spaceAbovePlotArea": {
               "expr": {
                 "Literal": {
+                  "Value": "20D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
                   "Value": "14D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "16D"
                 }
               }
             }
@@ -798,7 +830,7 @@
         }
       },
       {
-        "name": "ff058560ec6f0aec0150",
+        "name": "9f08a160e5eae15959ea",
         "field": {
           "Column": {
             "Expression": {
@@ -806,13 +838,13 @@
                 "Entity": "gold_signals"
               }
             },
-            "Property": "drugname"
+            "Property": "Haldane flag"
           }
         },
         "type": "Categorical"
       },
       {
-        "name": "749d5052a2242521c4cd",
+        "name": "ddfafae37f3b12e34a12",
         "field": {
           "Column": {
             "Expression": {
@@ -826,7 +858,7 @@
         "type": "Categorical"
       },
       {
-        "name": "4d93da90b4d43abb97e2",
+        "name": "93d8b66710906309edc3",
         "field": {
           "Column": {
             "Expression": {
@@ -840,7 +872,7 @@
         "type": "Advanced"
       },
       {
-        "name": "e63bca3dca4412ae1545",
+        "name": "2ca1a9abee704c8dc905",
         "field": {
           "Column": {
             "Expression": {
@@ -854,7 +886,7 @@
         "type": "Advanced"
       },
       {
-        "name": "d1014ba333121bb0ab32",
+        "name": "bc52ac37aa401ef6ca4a",
         "field": {
           "Aggregation": {
             "Expression": {
@@ -873,7 +905,7 @@
         "type": "Advanced"
       },
       {
-        "name": "5251fa54a434cb030852",
+        "name": "fa9bd9e56d6a325364f5",
         "field": {
           "Column": {
             "Expression": {
@@ -881,17 +913,10 @@
                 "Entity": "gold_signals"
               }
             },
-            "Property": "Haldane flag"
+            "Property": "drugname"
           }
         },
-        "type": "Categorical",
-        "objects": {
-          "general": [
-            {
-              "properties": {}
-            }
-          ]
-        }
+        "type": "Categorical"
       }
     ]
   }
