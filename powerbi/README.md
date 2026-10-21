@@ -48,7 +48,7 @@ is_exclusive = gold_signals[case_count] = gold_signals[event_total]
 True when every report of the event names this drug. Most of these pairs rest on few reports (2026Q1: median 4, 83 of 106 at 5 or fewer), but a handful rest on many (the largest has 277). Their PRR is not interpretable, so they get their own panel instead of the main leaderboard. They are a screening flag, not a confirmed signal.
 
 ```dax
-'Haldane flag' = IF ( gold_signals[haldane_applied], "H", "" )
+haldane_flag = IF ( gold_signals[haldane_applied], "H", "" )
 ```
 
 On `gold_signals`, shown as the `H` column in the leaderboard (D15).

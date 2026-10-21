@@ -179,7 +179,7 @@ table gold_signals
 
 		annotation SummarizationSetBy = Automatic
 
-	column 'Haldane flag' = IF ( gold_signals[haldane_applied], "H", "" )
+	column haldane_flag = IF ( gold_signals[haldane_applied], "H", "" )
 		lineageTag: 414519b5-dd78-4773-be3f-e3599e4c1027
 		summarizeBy: none
 

@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "3154a1c034acf4a34a06",
   "position": {
-    "x": 48.6284289276808,
-    "y": 440.89775561097258,
+    "x": 48.333333333333336,
+    "y": 441.66666666666669,
     "z": 6000,
-    "height": 609.4763092269327,
-    "width": 935.28678304239406,
+    "height": 641.66666666666674,
+    "width": 935,
     "tabOrder": 6000
   },
   "visual": {
@@ -53,7 +53,7 @@
                       "Entity": "gold_signals"
                     }
                   },
-                  "Property": "Haldane flag"
+                  "Property": "haldane_flag"
                 }
               },
               "queryRef": "gold_signals.Haldane flag",
@@ -153,7 +153,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "241.99999272462998D"
+                  "Value": "186.99999272462998D"
                 }
               }
             }
@@ -167,7 +167,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "20.570476063331988D"
+                  "Value": "62.67112498633056D"
                 }
               }
             }
@@ -601,7 +601,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Ranked by report count. PRR and ROR sit beside it. H marks a pair where the Haldane correction was applied.'"
+                  "Value": "'Ranked by report count. PRR and ROR sit beside it. H marks a pair where the Haldane correction was applied. None of the top 10 on 2026Q1 is marked; the 53 non-exclusive corrected pairs rank lower.'"
                 }
               }
             },
@@ -609,6 +609,13 @@
               "expr": {
                 "Literal": {
                   "Value": "11D"
+                }
+              }
+            },
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }
@@ -838,10 +845,25 @@
                 "Entity": "gold_signals"
               }
             },
-            "Property": "Haldane flag"
+            "Property": "haldane_flag"
           }
         },
-        "type": "Categorical"
+        "type": "Categorical",
+        "objects": {
+          "general": [
+            {
+              "properties": {
+                "isInvertedSelectionMode": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
       },
       {
         "name": "ddfafae37f3b12e34a12",

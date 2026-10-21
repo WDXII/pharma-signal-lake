@@ -182,6 +182,16 @@ cultureInfo en-PH
 			            },
 			            "Weight": 0.9
 			          }
+			        },
+			        {
+			          "REACTION": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
 			        }
 			      ]
 			    },
@@ -3015,7 +3025,7 @@ cultureInfo en-PH
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "gold_signals",
-			          "ConceptualProperty": "Haldane flag"
+			          "ConceptualProperty": "haldane_flag"
 			        }
 			      },
 			      "State": "Generated",
