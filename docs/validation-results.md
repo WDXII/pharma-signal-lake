@@ -363,4 +363,4 @@ Labels read on DailyMed on 2026-10-04. Keyword search by Ctrl+F on the full labe
 | XIAFLEX | per DailyMed | 2026-04-22 | Boxed Warning: corporal rupture (penile fracture), 5 of 1044 (0.5%); W&P 5.2. Boxed warning is for Peyronie's disease | not run |
 | ZOLGENSMA | Novartis | 2026-06-16 | W&P 5.4 Thrombotic Microangiopathy (also 5.3); matched by meaning | "schistocyte": not found |
 | SIMVASTATIN | Zocor (Organon) | 2025-03-28 | not found | "glycogen": not found |
-| DUPIXENT (date read not recorded; after the 2026-10-04 batch) | Sanofi-Aventis U.S. LLC, NDC 0024-5914-00 | 2026-04-22 | not found. Nearest text is 6.2 facial skin reactions (on treatment, a different concept) | "rebound": 0 hits; "post-discontinuation": 0 hits |
+| DUPIXENT (read 2026-10-21) | Sanofi-Aventis U.S. LLC, NDC 0024-5914-00 | 2026-04-22 | not found. Nearest text is 6.2 facial skin reactions (on treatment, a different concept) | "rebound": 0 hits; "post-discontinuation": 0 hits |
