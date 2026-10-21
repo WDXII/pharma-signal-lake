@@ -1,0 +1,61 @@
+table _TEXT
+	lineageTag: 02790139-09c9-46b7-82c3-0d98c1ea2da5
+
+	measure 'Preview Note Measure' =
+			
+			VAR _topN  = 10
+			VAR _total = COALESCE ( [Leaderboard Pairs], 0 )
+			VAR _shown = MIN ( _topN, _total )
+			RETURN
+			    "Top " & _shown & " of " & FORMAT ( _total, "#,0" )
+			        & " leaderboard pairs, ranked by report count (D13). "
+			        & "Reports are case reports, not patients. "
+			        & "PRR on few reports is unstable (Haldane-corrected), so it only breaks ties. "
+			        & "A high PRR is a lead to review, not evidence of cause. "
+			        & "Some pairs reflect the drug's indication, not an adverse event."
+		lineageTag: 2688ef7b-0ca2-4686-a0ef-50d97e82487a
+
+	measure 'Subtitle Cases' = ```
+			
+			    "N for PRR/ROR: cases with a"
+			    & UNICHAR(10)
+			    & "primary-suspect drug"
+			```
+		lineageTag: 1f73fe82-8ae0-49ab-97cb-83a4cf99aefa
+
+	measure 'Subtitle Haldane Pairs' =
+			
+			FORMAT ( [Haldane %], "0.00%" ) & " of pairs"
+		lineageTag: baeab5df-2c0d-40c6-9304-ff863dbaab1b
+
+	measure 'Subtitle Leaderboard' = "SIGNAL, not exclusive"
+		lineageTag: aed4216e-0f97-44dc-a4c4-6665c4068ba8
+
+	measure 'Subtitle Signal Pairs' = "full Evans criteria"
+		lineageTag: e6bbb5e5-8009-4894-b7c9-628288691bfb
+
+	measure 'Subtitle Total Pairs' = "scored in gold signals"
+		lineageTag: 0023a377-7be1-40a8-8125-41d5c8441179
+
+	measure 'Subtitle Exclusive Signal Pairs' = "few-report screening flag"
+		lineageTag: 142f64d3-e286-481a-b86d-2cdc4863aa8b
+
+	column Column1
+		dataType: string
+		lineageTag: ded07b63-dba8-43c5-93cc-72d56eabc658
+		summarizeBy: none
+		sourceColumn: Column1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _TEXT = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WKkktLlGKjQUA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

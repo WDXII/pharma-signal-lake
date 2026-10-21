@@ -2338,7 +2338,7 @@ cultureInfo en-PH
 			    "gold_signal.subtitle_cases": {
 			      "Definition": {
 			        "Binding": {
-			          "ConceptualEntity": "gold_signals",
+			          "ConceptualEntity": "_TEXT",
 			          "ConceptualProperty": "Subtitle Cases"
 			        }
 			      },
@@ -2454,7 +2454,7 @@ cultureInfo en-PH
 			    "gold_signal.subtitle_haldane_pairs": {
 			      "Definition": {
 			        "Binding": {
-			          "ConceptualEntity": "gold_signals",
+			          "ConceptualEntity": "_TEXT",
 			          "ConceptualProperty": "Subtitle Haldane Pairs"
 			        }
 			      },
@@ -2576,7 +2576,7 @@ cultureInfo en-PH
 			    "gold_signal.subtitle_leaderboard": {
 			      "Definition": {
 			        "Binding": {
-			          "ConceptualEntity": "gold_signals",
+			          "ConceptualEntity": "_TEXT",
 			          "ConceptualProperty": "Subtitle Leaderboard"
 			        }
 			      },
@@ -2592,7 +2592,7 @@ cultureInfo en-PH
 			    "gold_signal.subtitle_total_pairs": {
 			      "Definition": {
 			        "Binding": {
-			          "ConceptualEntity": "gold_signals",
+			          "ConceptualEntity": "_TEXT",
 			          "ConceptualProperty": "Subtitle Total Pairs"
 			        }
 			      },
@@ -2714,7 +2714,7 @@ cultureInfo en-PH
 			    "gold_signal.subtitle_signal_pairs": {
 			      "Definition": {
 			        "Binding": {
-			          "ConceptualEntity": "gold_signals",
+			          "ConceptualEntity": "_TEXT",
 			          "ConceptualProperty": "Subtitle Signal Pairs"
 			        }
 			      },
@@ -2836,8 +2836,8 @@ cultureInfo en-PH
 			    "gold_signal.subtle_exclusive_signal_pairs": {
 			      "Definition": {
 			        "Binding": {
-			          "ConceptualEntity": "gold_signals",
-			          "ConceptualProperty": "Subtle Exclusive Signal Pairs"
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "Subtitle Exclusive Signal Pairs"
 			        }
 			      },
 			      "State": "Generated",
@@ -2901,72 +2901,6 @@ cultureInfo en-PH
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.499
-			          }
-			        },
-			        {
-			          "duo": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.491
-			          }
-			        },
-			        {
-			          "twosome": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.491
-			          }
-			        },
-			        {
-			          "couple": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.476
-			          }
-			        },
-			        {
-			          "brace": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.476
-			          }
-			        },
-			        {
-			          "set": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.476
-			          }
-			        }
-			      ]
-			    },
-			    "gold_signal.pair": {
-			      "Definition": {
-			        "Binding": {
-			          "ConceptualEntity": "gold_signals",
-			          "ConceptualProperty": "Pair"
-			        }
-			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "pair": {
-			            "State": "Generated"
 			          }
 			        },
 			        {

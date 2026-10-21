@@ -58,7 +58,8 @@
               },
               "queryRef": "gold_signals.Signal Pairs",
               "nativeQueryRef": "SIGNAL PAIRS",
-              "displayName": "SIGNAL PAIRS"
+              "displayName": "SIGNAL PAIRS",
+              "format": "0"
             },
             {
               "field": {
@@ -151,7 +152,7 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_signals"
+                      "Entity": "_TEXT"
                     }
                   },
                   "Property": "Subtitle Haldane Pairs"
@@ -179,7 +180,7 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_signals"
+                      "Entity": "_TEXT"
                     }
                   },
                   "Property": "Subtitle Cases"
@@ -207,7 +208,7 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_signals"
+                      "Entity": "_TEXT"
                     }
                   },
                   "Property": "Subtitle Leaderboard"
@@ -250,7 +251,7 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_signals"
+                      "Entity": "_TEXT"
                     }
                   },
                   "Property": "Subtitle Total Pairs"
@@ -278,7 +279,7 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_signals"
+                      "Entity": "_TEXT"
                     }
                   },
                   "Property": "Subtitle Signal Pairs"
@@ -306,10 +307,10 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_signals"
+                      "Entity": "_TEXT"
                     }
                   },
-                  "Property": "Subtle Exclusive Signal Pairs"
+                  "Property": "Subtitle Exclusive Signal Pairs"
                 }
               }
             }
@@ -712,6 +713,13 @@
                   }
                 }
               }
+            },
+            "horizontalAlignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'left'"
+                }
+              }
             }
           },
           "selector": {
@@ -728,6 +736,20 @@
                       "Value": "'#1E7F6F'"
                     }
                   }
+                }
+              }
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "-1D"
+                }
+              }
+            },
+            "customFormatString": {
+              "expr": {
+                "Literal": {
+                  "Value": "'#,0'"
                 }
               }
             }
@@ -748,10 +770,108 @@
                   }
                 }
               }
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "-1D"
+                }
+              }
+            },
+            "customFormatString": {
+              "expr": {
+                "Literal": {
+                  "Value": "'#,0'"
+                }
+              }
             }
           },
           "selector": {
             "metadata": "gold_signals.Exclusive Signal Pairs"
+          }
+        },
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "-1D"
+                }
+              }
+            },
+            "customFormatString": {
+              "expr": {
+                "Literal": {
+                  "Value": "'#,0'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_signals.Signal Pairs"
+          }
+        },
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "-1D"
+                }
+              }
+            },
+            "customFormatString": {
+              "expr": {
+                "Literal": {
+                  "Value": "'#,0'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_signals.Cases"
+          }
+        },
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "-1D"
+                }
+              }
+            },
+            "customFormatString": {
+              "expr": {
+                "Literal": {
+                  "Value": "'#,0'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_signals.Total Pairs"
+          }
+        },
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "-1D"
+                }
+              }
+            },
+            "customFormatString": {
+              "expr": {
+                "Literal": {
+                  "Value": "'#,0'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "gold_signals.Haldane Pairs"
           }
         }
       ],
