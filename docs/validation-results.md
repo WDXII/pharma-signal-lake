@@ -189,6 +189,17 @@ CN consumer · LW lawyer · HP other health professional · MD physician · PH p
 
 **Reconciliation (D8, amended 2026-09-30):** exclusive pairs number 2,978, equal to the pre-fix null-PRR count. `haldane_applied` pairs number 7,197 = 4,166 + 2,872 + 53 + 106. Of the 159 `SIGNAL` pairs with `haldane_applied`, 106 are exclusive; the other 53 stay in the main leaderboard (full table in DECISIONS.md D8).
 
+### Additional pairs reviewed (Dupixent)
+
+Two exclusive pairs outside the top ten by χ² were checked at case level with the same method: P1 (fingerprint) and P2 (case listing, run 2026-10-21; query P2b in [`sql/case_review_rescued_signals.sql`](../sql/case_review_rescued_signals.sql)). They are not part of the "7 known/labeled, 1 confounding by indication, 2 likely artifacts" grouping or of the patient-level counts above.
+
+| Drug | Reaction (PT) | n | χ² | Fingerprints | Senders | Lit. | Case-level evidence (data facts only) | Final group (Will) |
+|------|---------------|---|----|--------------|---------|------|---------------------------------------|--------------------|
+| DUPIXENT | REBOUND ECZEMA | 58 | 641.7006 | 52 | 2 | 0 | See combined listing below | TODO (Will) |
+| DUPIXENT | REBOUND ATOPIC DERMATITIS | 39 | 427.4938 | 35 | 1 | 0 | See combined listing below | TODO (Will) |
+
+**Combined P2 listing (97 reports):** 97 distinct `primaryid`; no `caseid` is shared between the two pairs. 54 of the 97 `event_dt` values end in 0101 (year-only dates), and every fingerprint collapse is explained by missing fields or year-only event dates, so no duplicates are evident. 96 reports are from SANOFI AVENTIS and 1 from SANOFI PASTEUR. Reporters are mostly HP and MD, with 3 consumers and no lawyers. Label search: see A.10.
+
 ### Clinical plausibility — my assessment
 
 *Screening-level review, not a medical or causality assessment*
@@ -334,6 +345,7 @@ SQL for all three is in [`sql/case_review_rescued_signals.sql`](../sql/case_revi
 
 - **A.7 P1, duplicate fingerprint per rescued pair:** 10 rows, one per pair; `cases` equals query I's n for every pair. Fingerprints, senders and literature counts are in the §6 evidence table.
 - **A.8 P2, case listing for low-fingerprint pairs:** 17 rows (Cariprazine 3, Simvastatin 5, Zolgensma 5, Rhophylac 4). The facts read from them are in the §6 evidence table.
+- **A.8b P2b, case listing for the two Dupixent exclusive pairs (run 2026-10-21):** 97 rows (REBOUND ECZEMA 58, REBOUND ATOPIC DERMATITIS 39). The facts read from them are in the "Additional pairs reviewed" table in §6.
 - **A.9 P3, reporter occupation for the ParaGard pairs:** counts for both pairs (277 and 253 cases) are in the §6 reporter-mix table.
 
 ### A.10 Label review (summary of the tracker)
@@ -351,3 +363,4 @@ Labels read on DailyMed on 2026-10-04. Keyword search by Ctrl+F on the full labe
 | XIAFLEX | per DailyMed | 2026-04-22 | Boxed Warning: corporal rupture (penile fracture), 5 of 1044 (0.5%); W&P 5.2. Boxed warning is for Peyronie's disease | not run |
 | ZOLGENSMA | Novartis | 2026-06-16 | W&P 5.4 Thrombotic Microangiopathy (also 5.3); matched by meaning | "schistocyte": not found |
 | SIMVASTATIN | Zocor (Organon) | 2025-03-28 | not found | "glycogen": not found |
+| DUPIXENT (date read not recorded; after the 2026-10-04 batch) | Sanofi-Aventis U.S. LLC, NDC 0024-5914-00 | 2026-04-22 | not found. Nearest text is 6.2 facial skin reactions (on treatment, a different concept) | "rebound": 0 hits; "post-discontinuation": 0 hits |

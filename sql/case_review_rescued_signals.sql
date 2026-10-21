@@ -100,3 +100,16 @@ SELECT signal_flag,
 FROM delta.`/Volumes/workspace/default/pharma_raw/gold/gold_signals`
 GROUP BY 1, 2, 3
 ORDER BY 1, 2, 3;
+
+
+-- ------------------------------------------------------------
+-- P2b. Case listing for the two Dupixent exclusive pairs (run 2026-10-21)
+--      Same read as P2: same event date / age / country / literature reference
+--      across reports -> likely the same patient or exposure.
+-- ------------------------------------------------------------
+SELECT dr.drugname, dr.pt, d.primaryid, d.caseid, d.event_dt, d.fda_dt, d.rept_cod,
+       d.mfr_sndr, d.lit_ref, d.age, d.age_cod, d.sex, d.occp_cod, d.reporter_country
+FROM delta.`/Volumes/workspace/default/pharma_raw/silver/silver_drug_reactions` dr
+JOIN delta.`/Volumes/workspace/default/pharma_raw/bronze/bronze_demo` d ON dr.primaryid = d.primaryid
+WHERE dr.drugname = 'DUPIXENT' AND dr.pt IN ('REBOUND ECZEMA','REBOUND ATOPIC DERMATITIS')
+ORDER BY dr.pt, d.age, d.sex, d.event_dt, d.reporter_country, d.fda_dt;
