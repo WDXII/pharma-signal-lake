@@ -250,6 +250,7 @@ Edit notebooks locally and sync them to Databricks. No local Python environment 
 - **Cause:** A card visual applies automatic display units to a numeric measure, so large values are abbreviated.
 - **Fix:** `Cases = FORMAT( MAX ( gold_signals[total_reports] ), "#,0")`. `FORMAT` returns text, so the card shows the full number with a thousands separator. Setting the card's Display units to None is the alternative that keeps the measure numeric.
 - **Rule:** Use a `FORMAT` measure only for a display-only card, and never in a calculation. Check every card against the verified count (397,224) before taking a screenshot.
+- **Addendum (2026-10-21):** The numeric cards need the Display units alternative named above, set per field; the exact steps are in Issue 34. The verified count for the `Cases` card is now 397,209 (N, cases with a primary-suspect drug), not 397,224; see the build steps, section 4.
 
 ### Issue 29 — Power BI Error: "Cannot convert value '' of type Text to type Number" on `Haldane %`
 *Logged · 2026-10-20 · Power BI Desktop, measure `Haldane %` (not a pipeline change)*
@@ -286,6 +287,13 @@ Edit notebooks locally and sync them to Databricks. No local Python environment 
 - **Cause:** PRR is unstable on very few reports, and the Evans floor is only 3 (D3). FR-21 says Haldane-corrected PRR is not an interpretable magnitude. Ranking by PRR put these pairs first.
 - **Fix:** Swap the two terms: `CALCULATE ( MAX ( gold_signals[case_count] ) ) * 1000000 + CALCULATE ( MAX ( gold_signals[prr] ) )`. The subtitle reads "Ranked by report count." The top 10 is now Dupixent, Tymlos and Paragard pairs with 2,270 to 5,080 reports. Build steps and the HTML mockup updated; decision recorded as D13.
 - **Rule:** Do not rank a leaderboard by a ratio measure alone when its minimum count is low. Rank by volume and show the ratio beside it. The `Rank <= 10` filter must be applied first, or `RANKX` runs over about 49,878 rows.
+
+### Issue 34 — Numeric KPI Cards Abbreviated Their Counts; Display Units Set Per Field
+*Logged · 2026-10-21 · Power BI Desktop, KPI cards on Signal Leaderboard (not a pipeline change; extends Issue 26)*
+- **Symptom:** The `Signal Pairs` card showed "50K" instead of 49,984. The `Cases` card did not, because Issue 26 made it a `FORMAT` text measure. Check the other numeric cards (`Total Pairs`, `Leaderboard Pairs`, `Exclusive Signal Pairs`, `Haldane Pairs`) the same way.
+- **Cause:** The card's Display units default to Auto, and the measure's own format (Whole number, thousands separator) does not override it. Wrapping the measure in `FORMAT` hides the problem but turns the measure into text. A measure that took `MIN` over a text `[Signal Pairs]` then failed and the visual would not accept it.
+- **Fix:** Keep the measure numeric (build steps, section 4). Select the card > Format visual > Visual > Callout value. Set "Apply settings to" to the specific field (for example `Signal Pairs`), not All; Display units is not offered under All. Set Display units to Custom, then Format code `#,0`. Repeat per card. Build steps, section 6 (card styling step 4) and section 11, updated.
+- **Rule:** A measure that feeds a card, another measure or a filter stays numeric; set how a card shows it with that field's Display units, not with `FORMAT`. `FORMAT` stays only for `Cases` (Issue 26) and for text label measures, which are never used in `MIN` or other arithmetic (Issue 29).
 
 ---
 
