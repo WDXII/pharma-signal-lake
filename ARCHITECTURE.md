@@ -423,7 +423,7 @@ Power BI Desktop reads from exported CSV/Parquet files from the Gold layer.
 
 **Page 3 — Case Outcomes**
 - Chart: Outcome code distribution (bar: DE=Death, HO=Hospitalized, LT=Life-threatening, etc.)
-- Chart: Reporter type distribution (HP=Healthcare Professional, CSM=Consumer, FGN=Foreign). Reporter source is recorded for only 11,426 of 397,224 reports on 2026Q1 (RPSR is sparse), so the page says so in a caption
+- Chart: Report source distribution (HP=Healthcare Professional, CSM=Consumer, FGN=Foreign). Report source is recorded for only 11,426 of 397,224 reports on 2026Q1 (RPSR is sparse), so the page says so in a caption
 - A case can carry more than one outcome code, so the outcome bars can add up to more than the case count; the page says so in a text box
 
 ### Connection Method
