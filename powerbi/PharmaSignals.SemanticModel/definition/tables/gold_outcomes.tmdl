@@ -1,6 +1,39 @@
 table gold_outcomes
 	lineageTag: d8c04675-dcfb-48c2-95d1-19530cc12644
 
+	measure 'Outcome Share Of All' =
+			
+			DIVIDE (
+			    SUM ( gold_outcomes[case_count] ),
+			    [Age Reports Total]      -- all reports, 397,224 (equals the SEX total, check 13)
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: c484a03f-58d8-4fc5-8110-53e2451189da
+
+	measure 'Source Reports Known' = ```
+			
+			CALCULATE (
+			    SUM ( gold_outcomes[case_count] ),
+			    REMOVEFILTERS ( gold_outcomes ),
+			    gold_outcomes[dimension] = "REPORTER_SOURCE"
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 23cc61f8-6d98-4040-aa88-0c9b07fe029a
+
+	measure 'Source Share Of Known' = ```
+			
+			DIVIDE (
+			    SUM ( gold_outcomes[case_count] ),
+			    [Source Reports Known]
+			)
+			
+			```
+		lineageTag: f401cb86-22a9-4954-964b-bf5a49e1d93f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	column dimension
 		dataType: string
 		lineageTag: c98c0371-a38f-4aba-8240-fdc5114293e4

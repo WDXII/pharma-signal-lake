@@ -7,7 +7,7 @@
     "z": 8000,
     "height": 641.66666666666674,
     "width": 890,
-    "tabOrder": 8001
+    "tabOrder": 9000
   },
   "visual": {
     "visualType": "tableEx",
@@ -355,39 +355,6 @@
   },
   "filterConfig": {
     "filters": [
-      {
-        "name": "f4ed7bb625419420be28",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "gold_signals"
-              }
-            },
-            "Property": "pt"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "163dbfb40737893e5e39",
-        "field": {
-          "Aggregation": {
-            "Expression": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "gold_signals"
-                  }
-                },
-                "Property": "case_count"
-              }
-            },
-            "Function": 0
-          }
-        },
-        "type": "Advanced"
-      },
       {
         "name": "729eb9edcf0908099164",
         "field": {

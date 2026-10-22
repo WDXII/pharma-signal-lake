@@ -2276,6 +2276,16 @@ cultureInfo en-PH
 			            },
 			            "Weight": 0.476
 			          }
+			        },
+			        {
+			          "COUNTRIES": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
 			        }
 			      ]
 			    },
@@ -2345,7 +2355,7 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
-			    "gold_signal.subtitle_cases": {
+			    "entity__text.subtitle_cases": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "_TEXT",
@@ -2461,7 +2471,7 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
-			    "gold_signal.subtitle_haldane_pairs": {
+			    "entity__text.subtitle_haldane_pairs": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "_TEXT",
@@ -2583,7 +2593,7 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
-			    "gold_signal.subtitle_leaderboard": {
+			    "entity__text.subtitle_leaderboard": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "_TEXT",
@@ -2599,7 +2609,7 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
-			    "gold_signal.subtitle_total_pairs": {
+			    "entity__text.subtitle_total_pairs": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "_TEXT",
@@ -2721,7 +2731,7 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
-			    "gold_signal.subtitle_signal_pairs": {
+			    "entity__text.subtitle_signal_pairs": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "_TEXT",
@@ -2843,7 +2853,7 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
-			    "gold_signal.subtle_exclusive_signal_pairs": {
+			    "entity__text.subtitle_exclusive_signal_pairs": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "_TEXT",
@@ -2853,7 +2863,7 @@ cultureInfo en-PH
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "subtle exclusive signal pairs": {
+			          "subtitle exclusive signal pairs": {
 			            "State": "Generated"
 			          }
 			        },
@@ -2864,7 +2874,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "subtle exclusive signal duo": {
+			          "subtitle exclusive signal duo": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -2874,7 +2884,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "subtle exclusive signal twosome": {
+			          "subtitle exclusive signal twosome": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -2884,7 +2894,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "subtle exclusive signal couple": {
+			          "subtitle exclusive signal couple": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -2894,7 +2904,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "subtle exclusive signal brace": {
+			          "subtitle exclusive signal brace": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -2904,7 +2914,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "subtle exclusive signal set": {
+			          "subtitle exclusive signal set": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -3036,6 +3046,13 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
+			          "haldane_flag": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
 			          "flag": {
 			            "State": "Generated",
 			            "Weight": 0.97
@@ -3142,9 +3159,4666 @@ cultureInfo en-PH
 			          }
 			        }
 			      ]
+			    },
+			    "gold_demographics.label_order": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "label_order"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "label order": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "label_order": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "order": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "sticker order": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "tag order": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "decal order": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "label instruction": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "label direction": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "label edict": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "instruction": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "direction": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "edict": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "label command": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.is_country": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "is_country"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "is country": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "is_country": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "country": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "is nation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "is location": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "nation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "location": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.max_case_count": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Max Case Count"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "max case count": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "max case amount": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.739
+			          }
+			        },
+			        {
+			          "maximum case count": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.remaining_track": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Remaining Track"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "remaining track": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "track": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "remaining path": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "remaining pathway": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "remaining road": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "remaining roadway": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "remaining footpath": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "remaining trajectory": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "path": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "pathway": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "road": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "roadway": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.report_share": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Report Share"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "report share": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "share": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "information share": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "commentary share": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "description share": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "presentation share": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "statement share": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "forecast share": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "account share": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "article share": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "narrative share": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "paper share": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        }
+			      ]
+			    },
+			    "entity__text": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "_text": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "_ manuscript": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "_ transcript": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "_ typescript": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "_ edition": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "_ version": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "_ writing": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "_ script": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "_ copy": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "_ schoolbook": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.475
+			          }
+			        },
+			        {
+			          "_ reader": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.475
+			          }
+			        }
+			      ]
+			    },
+			    "entity__text.column_1": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "Column1"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "column 1": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "Column1": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    },
+			    "entity__text.preview_note_measure": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "Preview Note Measure"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "preview note measure": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "measure": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "note measure": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "preview note degree": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "preview note quantity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "preview note quota": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "preview note extent": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "note degree": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "note quantity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "note quota": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "note extent": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "preview note amount": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "preview note portion": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.age_reports_total": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Age Reports Total"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "age reports total": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "reports total": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "age report aggregate": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.739
+			          }
+			        },
+			        {
+			          "age report overall": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.739
+			          }
+			        },
+			        {
+			          "report aggregate": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "report overall": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.age_reports_unknown": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Age Reports Unknown"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "age reports unknown": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "unknown": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "reports unknown": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "indefinite": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "age report nonentity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.458
+			          }
+			        },
+			        {
+			          "age report newcomer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.458
+			          }
+			        },
+			        {
+			          "age report beginner": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.458
+			          }
+			        },
+			        {
+			          "alien": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "virgin": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "report nonentity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.451
+			          }
+			        },
+			        {
+			          "report newcomer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.451
+			          }
+			        },
+			        {
+			          "report beginner": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.451
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.age_reports_known": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Age Reports Known"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "age reports known": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "age intelligence known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "age gossip known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "age rumor known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "age hearsay known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "age tales known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "age statement known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "age description known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "age testimony known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "age commentary known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "age version known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.age_adult_share_of_known": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Age Adult Share Of Known"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "age adult share of known": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "age adult part of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "age adult portion of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "age adult segment of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "age adult cut of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "age adult stake of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "age adult bit of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "age adult piece of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.age_elderly_share_of_known": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Age Elderly Share Of Known"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "age elderly share of known": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "age elderly part of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "age elderly portion of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "age elderly segment of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "age elderly cut of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "age elderly stake of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "age elderly bit of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "age elderly piece of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.age_share_of_all": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Age Share Of All"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "age share of all": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "age part of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "age portion of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "age segment of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "age cut of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "age stake of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "age bit of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "age piece of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "percent": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "entity__text.age_caption": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "Age Caption"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "age caption": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "caption": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "age slogan": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "age description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "age legend": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "age header": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "age footer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "slogan": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "legend": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "header": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "footer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.age_label": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "age_label"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "age label": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "age_label": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "age sticker": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "age tag": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "age decal": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "age name tag": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.589
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.dimension_label": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "dimension_label"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "dimension label": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "dimension_label": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "dimension sticker": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "dimension tag": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "dimension decal": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "dimension name tag": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.589
+			          }
+			        },
+			        {
+			          "GENDER": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "AGE GROUP": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.sex_reports_total": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Gender Reports Total"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "sex reports total": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "reports total": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "sex report aggregate": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.739
+			          }
+			        },
+			        {
+			          "sex report overall": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.739
+			          }
+			        },
+			        {
+			          "report aggregate": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "report overall": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.sex_reports_unknown": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Gender Reports Unknown"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "sex reports unknown": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "unknown": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "reports unknown": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "indefinite": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "sex report nonentity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.458
+			          }
+			        },
+			        {
+			          "sex report newcomer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.458
+			          }
+			        },
+			        {
+			          "sex report beginner": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.458
+			          }
+			        },
+			        {
+			          "alien": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "virgin": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.452
+			          }
+			        },
+			        {
+			          "report nonentity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.451
+			          }
+			        },
+			        {
+			          "report newcomer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.451
+			          }
+			        },
+			        {
+			          "report beginner": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.451
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.sex_reports_known": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Gender Reports Known"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "sex reports known": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "sex intelligence known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "sex gossip known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "sex rumor known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "sex hearsay known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "sex tales known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "sex statement known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "sex description known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "sex testimony known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "sex commentary known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "sex version known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.sex_female_share_of_known": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Female Share Of Known"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "sex female share of known": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "sex female part of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "sex female portion of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "sex female segment of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "sex female cut of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "sex female stake of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "sex female bit of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "sex female piece of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        }
+			      ]
+			    },
+			    "entity__text.gender_caption": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "Gender Caption"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "gender caption": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "caption": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "sexuality caption": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "sex caption": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "gender slogan": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "gender description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "gender legend": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "gender header": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "gender footer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "slogan": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "legend": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.country_rank": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Country Rank"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "country rank": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "nation rank": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "location rank": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        }
+			      ]
+			    },
+			    "gold_outcome.outcome_share_of_all": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_outcomes",
+			          "ConceptualProperty": "Outcome Share Of All"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "outcome share of all": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "outcome part of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "outcome portion of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "outcome segment of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "outcome cut of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "outcome stake of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "outcome bit of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "outcome piece of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        }
+			      ]
+			    },
+			    "gold_outcome.source_reports_known": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_outcomes",
+			          "ConceptualProperty": "Source Reports Known"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "source reports known": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "source intelligence known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "source gossip known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "source rumor known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "source hearsay known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "source tales known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "source statement known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "source description known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "source testimony known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "source commentary known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "source version known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        }
+			      ]
+			    },
+			    "gold_outcome.source_share_of_known": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_outcomes",
+			          "ConceptualProperty": "Source Share Of Known"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "source share of known": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "source part of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "source portion of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "source segment of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "source cut of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "source stake of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "source bit of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "source piece of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.country_top_10_reports": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Country Top 10 Reports"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "country top 10 reports": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "reports": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "10 reports": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "top 10 reports": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "nation top 10 report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.617
+			          }
+			        },
+			        {
+			          "location top 10 report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.617
+			          }
+			        },
+			        {
+			          "country best 10 report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "country first 10 report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "country leading 10 report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "country maximum 10 report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "country peak 10 report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "country upper 10 report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "best 10 report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        },
+			        {
+			          "first 10 report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.country_EU_reports": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Country EU Reports"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "country EU reports": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "reports": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "EU reports": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "nation eu report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.609
+			          }
+			        },
+			        {
+			          "location eu report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.609
+			          }
+			        },
+			        {
+			          "country eu intelligence": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "eu intelligence": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "country eu gossip": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "country eu rumor": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "country eu hearsay": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "intelligence": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "eu gossip": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        },
+			        {
+			          "eu rumor": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.485
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.country_unspecified_reports": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Country Unspecified Reports"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "country unspecified reports": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "nation unspecified report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.609
+			          }
+			        },
+			        {
+			          "location unspecified report": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.609
+			          }
+			        },
+			        {
+			          "country unspecified intelligence": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "country unspecified gossip": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "country unspecified rumor": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "country unspecified hearsay": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "country unspecified tales": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "country unspecified statement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "country unspecified description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "country unspecified testimony": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        }
+			      ]
+			    },
+			    "gold_demographics.country_share_of_all": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "gold_demographics",
+			          "ConceptualProperty": "Country Share Of All"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "country share of all": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "nation share of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.617
+			          }
+			        },
+			        {
+			          "location share of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.617
+			          }
+			        },
+			        {
+			          "country part of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "country portion of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "country segment of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "country cut of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "country stake of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "country bit of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "country piece of all": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "percent": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "entity__text.country_caption": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "Country Caption"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "country caption": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "caption": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "nation caption": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "location caption": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "country slogan": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "country description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "country legend": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "country header": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "country footer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "slogan": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "legend": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        }
+			      ]
+			    },
+			    "entity__text.outcome_caption": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "Outcome Caption"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "outcome caption": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "caption": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "outcome slogan": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "outcome description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "outcome legend": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "outcome header": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "outcome footer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "slogan": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "legend": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "header": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "footer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        }
+			      ]
+			    },
+			    "entity__text.source_caption": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "Source Caption"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "source caption": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "caption": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "source slogan": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "source description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "source legend": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "source header": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "source footer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "slogan": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "legend": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "header": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "footer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        }
+			      ]
+			    },
+			    "entity__text.source_consumer_share_of_known": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "Source Consumer Share Of Known"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "source consumer share of known": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "source consumer part of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "source consumer portion of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "source consumer segment of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "source consumer cut of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "source consumer stake of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "source consumer bit of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "source consumer piece of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        }
+			      ]
+			    },
+			    "entity__text.source_hcp_share_of_known": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "Source Hcp Share Of Known"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "source hcp share of known": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "source hcp part of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "source hcp portion of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "source hcp segment of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "source hcp cut of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "source hcp stake of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "source hcp bit of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        },
+			        {
+			          "source hcp piece of known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.504
+			          }
+			        }
+			      ]
 			    }
 			  },
 			  "Relationships": {
+			    "gold_outcome_has_entity__text_source_hcp_share_of_known": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_outcomes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_outcome": {
+			          "Target": {
+			            "Entity": "gold_outcome"
+			          }
+			        },
+			        "entity__text.source_hcp_share_of_known": {
+			          "Target": {
+			            "Entity": "entity__text.source_hcp_share_of_known"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_outcome"
+			            },
+			            "Object": {
+			              "Role": "entity__text.source_hcp_share_of_known"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_outcomes_have_source_hcp_share_of_known"
+			        }
+			      ]
+			    },
+			    "gold_outcome_has_entity__text_source_consumer_share_of_known": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_outcomes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_outcome": {
+			          "Target": {
+			            "Entity": "gold_outcome"
+			          }
+			        },
+			        "entity__text.source_consumer_share_of_known": {
+			          "Target": {
+			            "Entity": "entity__text.source_consumer_share_of_known"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_outcome"
+			            },
+			            "Object": {
+			              "Role": "entity__text.source_consumer_share_of_known"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_outcomes_have_source_consumer_share_of_known"
+			        }
+			      ]
+			    },
+			    "gold_outcome_has_entity__text_source_caption": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_outcomes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_outcome": {
+			          "Target": {
+			            "Entity": "gold_outcome"
+			          }
+			        },
+			        "entity__text.source_caption": {
+			          "Target": {
+			            "Entity": "entity__text.source_caption"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_outcome"
+			            },
+			            "Object": {
+			              "Role": "entity__text.source_caption"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_outcomes_have_source_caption"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_entity__text_source_caption": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "entity__text.source_caption": {
+			          "Target": {
+			            "Entity": "entity__text.source_caption"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "entity__text.source_caption"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_source_caption"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_entity__text_outcome_caption": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "entity__text.outcome_caption": {
+			          "Target": {
+			            "Entity": "entity__text.outcome_caption"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "entity__text.outcome_caption"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_outcome_caption"
+			        }
+			      ]
+			    },
+			    "entity__text_has_country_caption": {
+			      "Binding": {
+			        "ConceptualEntity": "_TEXT"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "entity__text": {
+			          "Target": {
+			            "Entity": "entity__text"
+			          }
+			        },
+			        "entity__text.country_caption": {
+			          "Target": {
+			            "Entity": "entity__text.country_caption"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "entity__text"
+			            },
+			            "Object": {
+			              "Role": "entity__text.country_caption"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "Phrasing_texts_have_country_caption"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_country_share_of_all": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.country_share_of_all": {
+			          "Target": {
+			            "Entity": "gold_demographics.country_share_of_all"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.country_share_of_all"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_country_share_of_all"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_country_unspecified_reports": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.country_unspecified_reports": {
+			          "Target": {
+			            "Entity": "gold_demographics.country_unspecified_reports"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.country_unspecified_reports"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_country_unspecified_reports"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_country_EU_reports": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.country_EU_reports": {
+			          "Target": {
+			            "Entity": "gold_demographics.country_EU_reports"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.country_EU_reports"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_country_EU_reports"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_country_top_10_reports": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.country_top_10_reports": {
+			          "Target": {
+			            "Entity": "gold_demographics.country_top_10_reports"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.country_top_10_reports"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_country_top_10_reports"
+			        }
+			      ]
+			    },
+			    "gold_outcome_has_source_share_of_known": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_outcomes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_outcome": {
+			          "Target": {
+			            "Entity": "gold_outcome"
+			          }
+			        },
+			        "gold_outcome.source_share_of_known": {
+			          "Target": {
+			            "Entity": "gold_outcome.source_share_of_known"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_outcome"
+			            },
+			            "Object": {
+			              "Role": "gold_outcome.source_share_of_known"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_outcomes_have_source_share_of_known"
+			        }
+			      ]
+			    },
+			    "gold_outcome_has_source_reports_known": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_outcomes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_outcome": {
+			          "Target": {
+			            "Entity": "gold_outcome"
+			          }
+			        },
+			        "gold_outcome.source_reports_known": {
+			          "Target": {
+			            "Entity": "gold_outcome.source_reports_known"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_outcome"
+			            },
+			            "Object": {
+			              "Role": "gold_outcome.source_reports_known"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_outcomes_have_source_reports_known"
+			        }
+			      ]
+			    },
+			    "gold_outcome_has_outcome_share_of_all": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_outcomes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_outcome": {
+			          "Target": {
+			            "Entity": "gold_outcome"
+			          }
+			        },
+			        "gold_outcome.outcome_share_of_all": {
+			          "Target": {
+			            "Entity": "gold_outcome.outcome_share_of_all"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_outcome"
+			            },
+			            "Object": {
+			              "Role": "gold_outcome.outcome_share_of_all"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_outcomes_have_outcome_share_of_all"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_gold_outcome_outcome_share_of_all": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_outcome.outcome_share_of_all": {
+			          "Target": {
+			            "Entity": "gold_outcome.outcome_share_of_all"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_outcome.outcome_share_of_all"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_outcome_share_of_all"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_country_rank": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.country_rank": {
+			          "Target": {
+			            "Entity": "gold_demographics.country_rank"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.country_rank"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_country_rank"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_entity__text_gender_caption": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "entity__text.gender_caption": {
+			          "Target": {
+			            "Entity": "entity__text.gender_caption"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "entity__text.gender_caption"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_gender_caption"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_sex_female_share_of_known": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.sex_female_share_of_known": {
+			          "Target": {
+			            "Entity": "gold_demographics.sex_female_share_of_known"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.sex_female_share_of_known"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_sex_female_share_of_known"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_sex_reports_known": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.sex_reports_known": {
+			          "Target": {
+			            "Entity": "gold_demographics.sex_reports_known"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.sex_reports_known"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_sex_reports_known"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_sex_reports_unknown": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.sex_reports_unknown": {
+			          "Target": {
+			            "Entity": "gold_demographics.sex_reports_unknown"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.sex_reports_unknown"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_sex_reports_unknown"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_sex_reports_total": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.sex_reports_total": {
+			          "Target": {
+			            "Entity": "gold_demographics.sex_reports_total"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.sex_reports_total"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_sex_reports_total"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_dimension_label": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.dimension_label": {
+			          "Target": {
+			            "Entity": "gold_demographics.dimension_label"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.dimension_label"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_dimension_labels"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_age_label": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.age_label": {
+			          "Target": {
+			            "Entity": "gold_demographics.age_label"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.age_label"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_age_labels"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_entity__text_age_caption": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "entity__text.age_caption": {
+			          "Target": {
+			            "Entity": "entity__text.age_caption"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "entity__text.age_caption"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_age_caption"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_age_share_of_all": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.age_share_of_all": {
+			          "Target": {
+			            "Entity": "gold_demographics.age_share_of_all"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.age_share_of_all"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_age_share_of_all"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_age_elderly_share_of_known": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.age_elderly_share_of_known": {
+			          "Target": {
+			            "Entity": "gold_demographics.age_elderly_share_of_known"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.age_elderly_share_of_known"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_age_elderly_share_of_known"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_age_adult_share_of_known": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.age_adult_share_of_known": {
+			          "Target": {
+			            "Entity": "gold_demographics.age_adult_share_of_known"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.age_adult_share_of_known"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_age_adult_share_of_known"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_age_reports_known": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.age_reports_known": {
+			          "Target": {
+			            "Entity": "gold_demographics.age_reports_known"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.age_reports_known"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_age_reports_known"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_age_reports_unknown": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.age_reports_unknown": {
+			          "Target": {
+			            "Entity": "gold_demographics.age_reports_unknown"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.age_reports_unknown"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_age_reports_unknown"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_age_reports_total": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.age_reports_total": {
+			          "Target": {
+			            "Entity": "gold_demographics.age_reports_total"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.age_reports_total"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_age_reports_total"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_entity__text_preview_note_measure": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "entity__text.preview_note_measure": {
+			          "Target": {
+			            "Entity": "entity__text.preview_note_measure"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "entity__text.preview_note_measure"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_preview_note_measure"
+			        }
+			      ]
+			    },
+			    "entity__text_has_column_1": {
+			      "Binding": {
+			        "ConceptualEntity": "_TEXT"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "entity__text": {
+			          "Target": {
+			            "Entity": "entity__text"
+			          }
+			        },
+			        "entity__text.column_1": {
+			          "Target": {
+			            "Entity": "entity__text.column_1"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "entity__text"
+			            },
+			            "Object": {
+			              "Role": "entity__text.column_1"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "Phrasing_texts_have_column_1"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_report_share": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.report_share": {
+			          "Target": {
+			            "Entity": "gold_demographics.report_share"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.report_share"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_report_share"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_remaining_track": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.remaining_track": {
+			          "Target": {
+			            "Entity": "gold_demographics.remaining_track"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.remaining_track"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_remaining_track"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_max_case_count": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.max_case_count": {
+			          "Target": {
+			            "Entity": "gold_demographics.max_case_count"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.max_case_count"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_max_case_count"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_is_country": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.is_country": {
+			          "Target": {
+			            "Entity": "gold_demographics.is_country"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.is_country"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_is_countries"
+			        }
+			      ]
+			    },
+			    "gold_demographics_has_label_order": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.label_order": {
+			          "Target": {
+			            "Entity": "gold_demographics.label_order"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Object": {
+			              "Role": "gold_demographics.label_order"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_have_label_orders"
+			        }
+			      ]
+			    },
+			    "gold_signal_has_haldane_flag": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_signals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_signal": {
+			          "Target": {
+			            "Entity": "gold_signal"
+			          }
+			        },
+			        "gold_signal.haldane_flag": {
+			          "Target": {
+			            "Entity": "gold_signal.haldane_flag"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "gold_signal"
+			            },
+			            "Object": {
+			              "Role": "gold_signal.haldane_flag"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_signals_have_haldane_flags"
+			        }
+			      ]
+			    },
 			    "gold_signal_has_rank": {
 			      "Binding": {
 			        "ConceptualEntity": "gold_signals"
@@ -3178,20 +7852,20 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
-			    "gold_signal_has_pair": {
+			    "entity__text_has_subtitle_exclusive_signal_pairs": {
 			      "Binding": {
-			        "ConceptualEntity": "gold_signals"
+			        "ConceptualEntity": "_TEXT"
 			      },
 			      "State": "Generated",
 			      "Roles": {
-			        "gold_signal": {
+			        "entity__text": {
 			          "Target": {
-			            "Entity": "gold_signal"
+			            "Entity": "entity__text"
 			          }
 			        },
-			        "gold_signal.pair": {
+			        "entity__text.subtitle_exclusive_signal_pairs": {
 			          "Target": {
-			            "Entity": "gold_signal.pair"
+			            "Entity": "entity__text.subtitle_exclusive_signal_pairs"
 			          }
 			        }
 			      },
@@ -3199,32 +7873,32 @@ cultureInfo en-PH
 			        {
 			          "Attribute": {
 			            "Subject": {
-			              "Role": "gold_signal"
+			              "Role": "entity__text"
 			            },
 			            "Object": {
-			              "Role": "gold_signal.pair"
+			              "Role": "entity__text.subtitle_exclusive_signal_pairs"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "gold_signals_have_pair"
+			          "ID": "Phrasing_texts_have_subtitle_exclusive_signal_pairs"
 			        }
 			      ]
 			    },
-			    "gold_signal_has_subtle_exclusive_signal_pairs": {
+			    "entity__text_has_subtitle_signal_pairs": {
 			      "Binding": {
-			        "ConceptualEntity": "gold_signals"
+			        "ConceptualEntity": "_TEXT"
 			      },
 			      "State": "Generated",
 			      "Roles": {
-			        "gold_signal": {
+			        "entity__text": {
 			          "Target": {
-			            "Entity": "gold_signal"
+			            "Entity": "entity__text"
 			          }
 			        },
-			        "gold_signal.subtle_exclusive_signal_pairs": {
+			        "entity__text.subtitle_signal_pairs": {
 			          "Target": {
-			            "Entity": "gold_signal.subtle_exclusive_signal_pairs"
+			            "Entity": "entity__text.subtitle_signal_pairs"
 			          }
 			        }
 			      },
@@ -3232,32 +7906,32 @@ cultureInfo en-PH
 			        {
 			          "Attribute": {
 			            "Subject": {
-			              "Role": "gold_signal"
+			              "Role": "entity__text"
 			            },
 			            "Object": {
-			              "Role": "gold_signal.subtle_exclusive_signal_pairs"
+			              "Role": "entity__text.subtitle_signal_pairs"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "gold_signals_have_subtle_exclusive_signal_pairs"
+			          "ID": "Phrasing_texts_have_subtitle_signal_pairs"
 			        }
 			      ]
 			    },
-			    "gold_signal_has_subtitle_signal_pairs": {
+			    "entity__text_has_subtitle_total_pairs": {
 			      "Binding": {
-			        "ConceptualEntity": "gold_signals"
+			        "ConceptualEntity": "_TEXT"
 			      },
 			      "State": "Generated",
 			      "Roles": {
-			        "gold_signal": {
+			        "entity__text": {
 			          "Target": {
-			            "Entity": "gold_signal"
+			            "Entity": "entity__text"
 			          }
 			        },
-			        "gold_signal.subtitle_signal_pairs": {
+			        "entity__text.subtitle_total_pairs": {
 			          "Target": {
-			            "Entity": "gold_signal.subtitle_signal_pairs"
+			            "Entity": "entity__text.subtitle_total_pairs"
 			          }
 			        }
 			      },
@@ -3265,32 +7939,32 @@ cultureInfo en-PH
 			        {
 			          "Attribute": {
 			            "Subject": {
-			              "Role": "gold_signal"
+			              "Role": "entity__text"
 			            },
 			            "Object": {
-			              "Role": "gold_signal.subtitle_signal_pairs"
+			              "Role": "entity__text.subtitle_total_pairs"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "gold_signals_have_subtitle_signal_pairs"
+			          "ID": "Phrasing_texts_have_subtitle_total_pairs"
 			        }
 			      ]
 			    },
-			    "gold_signal_has_subtitle_total_pairs": {
+			    "entity__text_has_subtitle_leaderboard": {
 			      "Binding": {
-			        "ConceptualEntity": "gold_signals"
+			        "ConceptualEntity": "_TEXT"
 			      },
 			      "State": "Generated",
 			      "Roles": {
-			        "gold_signal": {
+			        "entity__text": {
 			          "Target": {
-			            "Entity": "gold_signal"
+			            "Entity": "entity__text"
 			          }
 			        },
-			        "gold_signal.subtitle_total_pairs": {
+			        "entity__text.subtitle_leaderboard": {
 			          "Target": {
-			            "Entity": "gold_signal.subtitle_total_pairs"
+			            "Entity": "entity__text.subtitle_leaderboard"
 			          }
 			        }
 			      },
@@ -3298,19 +7972,19 @@ cultureInfo en-PH
 			        {
 			          "Attribute": {
 			            "Subject": {
-			              "Role": "gold_signal"
+			              "Role": "entity__text"
 			            },
 			            "Object": {
-			              "Role": "gold_signal.subtitle_total_pairs"
+			              "Role": "entity__text.subtitle_leaderboard"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "gold_signals_have_subtitle_total_pairs"
+			          "ID": "Phrasing_texts_have_subtitle_leaderboard"
 			        }
 			      ]
 			    },
-			    "gold_signal_has_subtitle_leaderboard": {
+			    "gold_signal_has_entity__text_subtitle_haldane_pairs": {
 			      "Binding": {
 			        "ConceptualEntity": "gold_signals"
 			      },
@@ -3321,9 +7995,9 @@ cultureInfo en-PH
 			            "Entity": "gold_signal"
 			          }
 			        },
-			        "gold_signal.subtitle_leaderboard": {
+			        "entity__text.subtitle_haldane_pairs": {
 			          "Target": {
-			            "Entity": "gold_signal.subtitle_leaderboard"
+			            "Entity": "entity__text.subtitle_haldane_pairs"
 			          }
 			        }
 			      },
@@ -3334,40 +8008,7 @@ cultureInfo en-PH
 			              "Role": "gold_signal"
 			            },
 			            "Object": {
-			              "Role": "gold_signal.subtitle_leaderboard"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "gold_signals_have_subtitle_leaderboard"
-			        }
-			      ]
-			    },
-			    "gold_signal_has_subtitle_haldane_pairs": {
-			      "Binding": {
-			        "ConceptualEntity": "gold_signals"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "gold_signal": {
-			          "Target": {
-			            "Entity": "gold_signal"
-			          }
-			        },
-			        "gold_signal.subtitle_haldane_pairs": {
-			          "Target": {
-			            "Entity": "gold_signal.subtitle_haldane_pairs"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "gold_signal"
-			            },
-			            "Object": {
-			              "Role": "gold_signal.subtitle_haldane_pairs"
+			              "Role": "entity__text.subtitle_haldane_pairs"
 			            }
 			          },
 			          "State": "Generated",
@@ -3376,20 +8017,20 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
-			    "gold_signal_has_subtitle_cases": {
+			    "entity__text_has_subtitle_cases": {
 			      "Binding": {
-			        "ConceptualEntity": "gold_signals"
+			        "ConceptualEntity": "_TEXT"
 			      },
 			      "State": "Generated",
 			      "Roles": {
-			        "gold_signal": {
+			        "entity__text": {
 			          "Target": {
-			            "Entity": "gold_signal"
+			            "Entity": "entity__text"
 			          }
 			        },
-			        "gold_signal.subtitle_cases": {
+			        "entity__text.subtitle_cases": {
 			          "Target": {
-			            "Entity": "gold_signal.subtitle_cases"
+			            "Entity": "entity__text.subtitle_cases"
 			          }
 			        }
 			      },
@@ -3397,15 +8038,15 @@ cultureInfo en-PH
 			        {
 			          "Attribute": {
 			            "Subject": {
-			              "Role": "gold_signal"
+			              "Role": "entity__text"
 			            },
 			            "Object": {
-			              "Role": "gold_signal.subtitle_cases"
+			              "Role": "entity__text.subtitle_cases"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "gold_signals_have_subtitle_cases"
+			          "ID": "Phrasing_texts_have_subtitle_cases"
 			        }
 			      ]
 			    },
@@ -4366,6 +9007,146 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
+			    "entity__text_in_country_caption": {
+			      "Binding": {
+			        "ConceptualEntity": "_TEXT"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "entity__text": {
+			          "Target": {
+			            "Entity": "entity__text"
+			          }
+			        },
+			        "entity__text.country_caption": {
+			          "Target": {
+			            "Entity": "entity__text.country_caption"
+			          }
+			        }
+			      },
+			      "SemanticSlots": {
+			        "Where": {
+			          "Role": "entity__text.country_caption"
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "entity__text"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "entity__text.country_caption"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "Phrasing_texts_are_in_country_caption"
+			        }
+			      ]
+			    },
+			    "gold_demographics_in_dimension_value": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.dimension_value": {
+			          "Target": {
+			            "Entity": "gold_demographics.dimension_value"
+			          }
+			        }
+			      },
+			      "SemanticSlots": {
+			        "Where": {
+			          "Role": "gold_demographics.dimension_value"
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "gold_demographics.dimension_value"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "gold_demographics_are_in_dimension_values"
+			        }
+			      ]
+			    },
+			    "gold_demographics_is_country": {
+			      "Binding": {
+			        "ConceptualEntity": "gold_demographics"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "gold_demographics": {
+			          "Target": {
+			            "Entity": "gold_demographics"
+			          }
+			        },
+			        "gold_demographics.is_country": {
+			          "Target": {
+			            "Entity": "gold_demographics.is_country"
+			          }
+			        }
+			      },
+			      "Conditions": [
+			        {
+			          "Target": {
+			            "Role": "gold_demographics.is_country"
+			          },
+			          "Operator": "Equals",
+			          "Value": {
+			            "Boolean": [
+			              true
+			            ]
+			          }
+			        }
+			      ],
+			      "Phrasings": [
+			        {
+			          "Adjective": {
+			            "Subject": {
+			              "Role": "gold_demographics"
+			            },
+			            "Adjectives": [
+			              {
+			                "country": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ]
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "some_gold_demographics_are_country_gold_demographics"
+			        }
+			      ]
+			    },
 			    "gold_signal_is_exclusive": {
 			      "Binding": {
 			        "ConceptualEntity": "gold_signals"
@@ -4468,39 +9249,6 @@ cultureInfo en-PH
 			          "State": "Generated",
 			          "Weight": 0.99,
 			          "ID": "some_gold_signals_are_haldane_applied_gold_signals"
-			        }
-			      ]
-			    },
-			    "gold_signal_has_haldane_flag": {
-			      "Binding": {
-			        "ConceptualEntity": "gold_signals"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "gold_signal": {
-			          "Target": {
-			            "Entity": "gold_signal"
-			          }
-			        },
-			        "gold_signal.haldane_flag": {
-			          "Target": {
-			            "Entity": "gold_signal.haldane_flag"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "gold_signal"
-			            },
-			            "Object": {
-			              "Role": "gold_signal.haldane_flag"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "gold_signals_have_haldane_flags"
 			        }
 			      ]
 			    }

@@ -2,8 +2,8 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
   "name": "52df62d53e55b10f810c",
   "displayName": "Patient Demographics",
-  "displayOption": "FitToPage",
-  "height": 1080,
+  "displayOption": "ActualSize",
+  "height": 1300,
   "width": 1920,
   "objects": {
     "background": [
@@ -22,6 +22,56 @@
           }
         }
       }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "width": {
+            "expr": {
+              "Literal": {
+                "Value": "413L"
+              }
+            }
+          }
+        }
+      }
     ]
-  }
+  },
+  "visualInteractions": [
+    {
+      "source": "a938d53d56a6804f256a",
+      "target": "6a65117fc25207dda2b3",
+      "type": "NoFilter"
+    },
+    {
+      "source": "6a65117fc25207dda2b3",
+      "target": "a938d53d56a6804f256a",
+      "type": "NoFilter"
+    },
+    {
+      "source": "a938d53d56a6804f256a",
+      "target": "0193c81cebdb3851d27f",
+      "type": "NoFilter"
+    },
+    {
+      "source": "646141e40c4a0b8e3e33",
+      "target": "a938d53d56a6804f256a",
+      "type": "NoFilter"
+    },
+    {
+      "source": "646141e40c4a0b8e3e33",
+      "target": "6a65117fc25207dda2b3",
+      "type": "NoFilter"
+    },
+    {
+      "source": "6a65117fc25207dda2b3",
+      "target": "646141e40c4a0b8e3e33",
+      "type": "NoFilter"
+    },
+    {
+      "source": "a938d53d56a6804f256a",
+      "target": "646141e40c4a0b8e3e33",
+      "type": "NoFilter"
+    }
+  ]
 }

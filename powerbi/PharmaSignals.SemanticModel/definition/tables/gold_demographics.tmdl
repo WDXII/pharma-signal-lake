@@ -1,6 +1,206 @@
 table gold_demographics
 	lineageTag: 0e803794-3366-41c3-b134-9ced709d1660
 
+	measure 'Max Case Count' = ```
+			
+			CALCULATE (
+			    MAX ( gold_demographics[case_count] ),
+			    ALLEXCEPT (
+			        gold_demographics,
+			        gold_demographics[dimension]
+			    )
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 873f09dc-269b-4a3c-895e-3a8df02f685d
+
+	measure 'Remaining Track' =
+			
+			MAX ( 0, [Max Case Count] - sum(gold_demographics[case_count] ))
+		formatString: 0
+		lineageTag: 4fab9cc8-ecc3-462d-bc9d-dbb2f7ce0136
+
+	measure 'Report Share' =
+			
+			DIVIDE (
+			    sum(gold_demographics[case_count]),
+			    CALCULATE (
+			       sum(gold_demographics[case_count]),
+			        REMOVEFILTERS ( gold_demographics[dimension_value])
+			    )
+			)
+		lineageTag: 78610a86-ec3d-4ee1-b6a2-a2bf74cce0ba
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Age Reports Total' =
+			
+			CALCULATE (
+			    SUM ( gold_demographics[case_count] ),
+			    REMOVEFILTERS ( gold_demographics ),
+			    gold_demographics[dimension] = "AGE_GROUP"
+			)
+		formatString: 0
+		lineageTag: 0f1ac1dd-0dde-43b1-9d36-6136f05a3558
+
+	measure 'Age Reports Unknown' =
+			
+			CALCULATE (
+			    SUM ( gold_demographics[case_count] ),
+			    gold_demographics[dimension] = "AGE_GROUP",
+			    gold_demographics[dimension_value] = "UNKNOWN"
+			)
+		formatString: 0
+		lineageTag: eea8dd69-c731-4716-b362-da6788ec1c40
+
+	measure 'Age Reports Known' = [Age Reports Total] - [Age Reports Unknown]
+		formatString: 0
+		lineageTag: c2d779f5-d220-4071-ad6e-3f9ea67812ac
+
+	measure 'Age Adult Share Of Known' =
+			
+			DIVIDE (
+			    CALCULATE (
+			        SUM ( gold_demographics[case_count] ),
+			        gold_demographics[dimension] = "AGE_GROUP",
+			        gold_demographics[dimension_value] = "ADULT"
+			    ),
+			    [Age Reports Known]
+			)
+		lineageTag: 9e296e46-e0d9-426c-bf7f-f1e61080e22f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Age Elderly Share Of Known' =
+			
+			DIVIDE (
+			    CALCULATE (
+			        SUM ( gold_demographics[case_count] ),
+			        gold_demographics[dimension] = "AGE_GROUP",
+			        gold_demographics[dimension_value] = "ELDERLY"
+			    ),
+			    [Age Reports Known]
+			)
+		lineageTag: af69cef1-04ae-415c-b0c5-7bf308a010ff
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Age Share Of All' =
+			
+			DIVIDE ( SUM ( gold_demographics[case_count] ), [Age Reports Total] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: de45e84c-4831-4735-9e5f-2f64b531b6b7
+
+	measure 'Gender Reports Total' = ```
+			
+			CALCULATE (
+			    SUM ( gold_demographics[case_count] ),
+			    REMOVEFILTERS ( gold_demographics ),
+			    gold_demographics[dimension] = "SEX"
+			)
+			
+			```
+		formatString: 0
+		lineageTag: c8bfb599-429b-4b7d-9da5-84cc54a2997e
+
+	measure 'Gender Reports Unknown' =
+			
+			CALCULATE (
+			    SUM ( gold_demographics[case_count] ),
+			    REMOVEFILTERS ( gold_demographics ),
+			    gold_demographics[dimension] = "SEX",
+			    gold_demographics[dimension_value] = "UNKNOWN"
+			)
+		formatString: 0
+		lineageTag: 229596a9-0f41-4c7f-8413-ddbc566186bc
+
+	measure 'Gender Reports Known' = ```
+			[Gender Reports Total] - [Gender Reports Unknown]
+			
+			```
+		formatString: 0
+		lineageTag: daa9fa9a-8e89-4698-82cc-f342306c898e
+
+	measure 'Female Share Of Known' =
+			
+			DIVIDE (
+			    CALCULATE (
+			        SUM ( gold_demographics[case_count] ),
+			        REMOVEFILTERS ( gold_demographics ),
+			        gold_demographics[dimension] = "SEX",
+			        gold_demographics[dimension_value] = "FEMALE"
+			    ),
+			    [Gender Reports Known]
+			)
+		lineageTag: 9a55908b-3173-49fc-867c-385d44b18451
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Country Rank' =
+			
+			RANKX (
+			    ALLSELECTED ( gold_demographics[dimension_value] ),
+			    CALCULATE ( SUM ( gold_demographics[case_count] ) ),
+			    ,
+			    DESC,
+			    DENSE
+			)
+		formatString: 0
+		lineageTag: 9ad75d0e-1e97-4e74-bdfa-9f20b9b684e1
+
+	measure 'Country Top 10 Reports' = ```
+			
+			VAR _countries =
+			    CALCULATETABLE (
+			        ADDCOLUMNS (
+			            VALUES ( gold_demographics[dimension_value] ),
+			            "r_cnt", CALCULATE ( SUM ( gold_demographics[case_count] ) )
+			        ),
+			        REMOVEFILTERS ( gold_demographics ),
+			        gold_demographics[dimension] = "REPORTER_COUNTRY",
+			        gold_demographics[is_country] = TRUE ()
+			    )
+			RETURN
+			    SUMX ( TOPN ( 10, _countries, [r_cnt], DESC ), [r_cnt] )
+			
+			```
+		formatString: 0
+		lineageTag: 53b528c1-109a-43dc-a2e3-c35c57fa09e0
+
+	measure 'Country EU Reports' =
+			
+			CALCULATE (
+			    SUM ( gold_demographics[case_count] ),
+			    REMOVEFILTERS ( gold_demographics ),
+			    gold_demographics[dimension] = "REPORTER_COUNTRY",
+			    gold_demographics[dimension_value] = "EU"
+			)
+		formatString: 0
+		lineageTag: cddcb6e4-14aa-4a20-9247-0e28caba49a1
+
+	measure 'Country Unspecified Reports' = ```
+			
+			CALCULATE (
+			    SUM ( gold_demographics[case_count] ),
+			    REMOVEFILTERS ( gold_demographics ),
+			    gold_demographics[dimension] = "REPORTER_COUNTRY",
+			    gold_demographics[dimension_value] = "COUNTRY NOT SPECIFIED"
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 123b4e4b-2518-48b9-8ea9-2bfde92562a6
+
+	measure 'Country Share Of All' =
+			
+			DIVIDE (
+			    SUM ( gold_demographics[case_count] ),
+			    [Age Reports Total]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: ba401496-49b7-457e-b1d8-fd0b34546b33
+
 	column dimension
 		dataType: string
 		lineageTag: c3dfb420-5479-4df8-98c2-edbbe97153d8
@@ -19,7 +219,7 @@ table gold_demographics
 
 	column case_count
 		dataType: int64
-		formatString: 0
+		formatString: #,0
 		lineageTag: 0bc0a238-ea76-4ae5-9f96-2d77124575dc
 		summarizeBy: sum
 		sourceColumn: case_count
@@ -31,6 +231,77 @@ table gold_demographics
 		lineageTag: 91e6c796-3df9-4345-b988-8e0254010db7
 		summarizeBy: none
 		sourceColumn: source_quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column label_order =
+			
+			SWITCH (
+			    gold_demographics[dimension_value],
+			    "NEONATE_INFANT", 1,
+			    "CHILD", 2,
+			    "ADOLESCENT", 3,
+			    "ADULT", 4,
+			    "ELDERLY", 5,
+			    "FEMALE", 11,
+			    "MALE", 12,
+			    "UNKNOWN", 90,
+			    99
+			)
+		formatString: 0
+		lineageTag: b54cc0ff-4b83-458c-aa23-22dc9d6604ce
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_country =
+			
+			NOT ( gold_demographics[dimension_value] IN { "EU", "COUNTRY NOT SPECIFIED" } )
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8deb3107-2fbf-41bc-a471-cccb722dc50c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column age_label =
+			
+			SWITCH (
+			    gold_demographics[dimension_value],
+			    "NEONATE_INFANT", "Neonate / infant",
+			    "CHILD", "Child",
+			    "ADOLESCENT", "Adolescent",
+			    "ADULT", "Adult",
+			    "ELDERLY", "Elderly",
+			    "UNKNOWN", "Unknown",
+			    gold_demographics[dimension_value]
+			)
+		lineageTag: c4cc887d-01f5-4c09-9ab5-7ac0b1987269
+		summarizeBy: none
+		sortByColumn: label_order
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column dimension_label =
+			
+			SWITCH (
+			    gold_demographics[dimension_value],
+			    "NEONATE_INFANT", "Neonate / infant",
+			    "CHILD", "Child",
+			    "ADOLESCENT", "Adolescent",
+			    "ADULT", "Adult",
+			    "ELDERLY", "Elderly",
+			    "FEMALE", "Female",
+			    "MALE", "Male",
+			    "UNKNOWN", "Unknown",
+			    gold_demographics[dimension_value]
+			)
+		lineageTag: a3231964-e0f2-4542-b258-894efe9352d2
+		summarizeBy: none
+		sortByColumn: label_order
+
+		changedProperty = SortByColumn
 
 		annotation SummarizationSetBy = Automatic
 

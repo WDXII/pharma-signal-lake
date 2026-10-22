@@ -40,6 +40,84 @@ table _TEXT
 	measure 'Subtitle Exclusive Signal Pairs' = "screening flag, not confirmed"
 		lineageTag: 142f64d3-e286-481a-b86d-2cdc4863aa8b
 
+	measure 'Age Caption' =
+			
+			"Age is missing for "
+			    & FORMAT ( DIVIDE ( [Age Reports Unknown], [Age Reports Total] ), "0.0%" )
+			    & " of reports (Unknown). Among reports with a known age, "
+			    & FORMAT ( [Age Adult Share Of Known], "0.0%" ) & " are adult and "
+			    & FORMAT ( [Age Elderly Share Of Known], "0.0%" ) & " elderly."
+		lineageTag: f519e74f-31dd-45ed-862c-ddf039ccd1b1
+
+	measure 'Gender Caption' =
+			
+			"Gender is unknown for "
+			    & FORMAT ( DIVIDE ( [Gender Reports Unknown], [Gender Reports Total] ), "0.0%" )
+			    & " of reports. Among reports with a known gender, "
+			    & FORMAT ( [Female Share Of Known], "0.0%" ) & " are female."
+		lineageTag: aec94cc9-832c-424b-aa7b-3e88c8a3b695
+
+	measure 'Country Caption' =
+			
+			"Top 10 countries cover "
+			    & FORMAT ( DIVIDE ( [Country Top 10 Reports], [Age Reports Total] ), "0.0%" )
+			    & " of reports. Excludes EU ("
+			    & FORMAT ( [Country EU Reports], "#,##0" )
+			    & ", a regional code) and country not specified ("
+			    & FORMAT ( [Country Unspecified Reports], "#,##0" )
+			    & ")."
+		lineageTag: 3e10a6d7-6483-4723-b1d5-d45a3bf0ce5c
+
+	measure 'Outcome Caption' = ```
+			
+			"Share of all " & FORMAT ( [Age Reports Total], "#,##0" )
+			    & " reports. A report can carry more than one outcome, so the shares do not add up. "
+			    & "An outcome in a report does not show the drug caused it."
+			
+			```
+		lineageTag: 8e8d6652-eac4-4086-9040-fc4a7155b66b
+
+	measure 'Source Caption' =
+			
+			"Source is recorded for only "
+			    & FORMAT ( DIVIDE ( [Source Reports Known], [Age Reports Total] ), "0.0%" )
+			    & " of reports (" & FORMAT ( [Source Reports Known], "#,##0" ) & "). Among those, "
+			    & FORMAT ( [Source Consumer Share Of Known], "0.0%" ) & " are consumer and "
+			    & FORMAT ( [Source Hcp Share Of Known], "0.0%" ) & " healthcare professional."
+		lineageTag: 3c6207e5-c422-4bc7-9bed-74bc9fb74d45
+
+	measure 'Source Consumer Share Of Known' =
+			
+			DIVIDE (
+			    CALCULATE (
+			        SUM ( gold_outcomes[case_count] ),
+			        REMOVEFILTERS ( gold_outcomes ),
+			        gold_outcomes[dimension] = "REPORTER_SOURCE",
+			        gold_outcomes[code] = "CSM"
+			    ),
+			    [Source Reports Known]
+			)
+		lineageTag: 2af95e12-8cdf-4e85-8acd-dca414d5741c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Source Hcp Share Of Known' = ```
+			
+			DIVIDE (
+			    CALCULATE (
+			        SUM ( gold_outcomes[case_count] ),
+			        REMOVEFILTERS ( gold_outcomes ),
+			        gold_outcomes[dimension] = "REPORTER_SOURCE",
+			        gold_outcomes[code] = "HP"
+			    ),
+			    [Source Reports Known]
+			)
+			
+			```
+		lineageTag: c062f0fc-3d3a-4868-b32b-4e09546ad51d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	column Column1
 		dataType: string
 		lineageTag: ded07b63-dba8-43c5-93cc-72d56eabc658
