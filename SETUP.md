@@ -283,7 +283,19 @@ After `04_export.py` has run, your Gold CSV files will be available at:
 2. **Home** → **Get Data** → **Text/CSV**
 3. Browse to your local exports folder
 4. Load `gold_signals.csv`, `gold_demographics.csv`, and `gold_outcomes.csv`
-5. In the data model, create relationships if needed (they share `source_quarter`)
+5. Leave the tables unrelated. If Power BI created a relationship, delete it in Model view. The tables share only `source_quarter`, which holds one value, so a relationship would filter nothing useful (see ARCHITECTURE.md, section 11). To stop it happening again: **File** → **Options and settings** → **Options** → **Current File** → **Data Load** → untick **Autodetect new relationships after data is loaded**
+
+### Checks after loading
+
+Open **Data view** (or a Table visual) and compare the row counts. These are the 2026Q1 values; a second quarter changes them.
+
+| Table | Expected rows |
+|---|---|
+| `gold_signals` | 373,012 |
+| `gold_demographics` | 34 |
+| `gold_outcomes` | 11 |
+
+If a count differs, check the column types first (a number loaded as text breaks the measures). The expected measure values per page are in `powerbi/README.md`.
 
 ---
 

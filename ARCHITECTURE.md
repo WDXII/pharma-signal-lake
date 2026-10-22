@@ -430,6 +430,10 @@ Power BI Desktop reads from exported CSV/Parquet files from the Gold layer.
 
 Gold layer data is exported to CSV using the `04_export.py` notebook. Power BI connects to these local CSV files using **Get Data → Text/CSV**. This approach requires no Databricks connector license and works fully within the Free Edition and Power BI Desktop constraints.
 
+### Data Model: Why No Relationships
+
+The report loads three tables with no relationships between them, by design. Each Gold table is already aggregated to the grain of its page (drug × reaction, dimension × value, dimension × code), and the only column they share is `source_quarter`, which holds a single value (2026Q1). A relationship needs a shared key, and joining on a one-value column would filter nothing useful and add ambiguous filter paths. A fourth helper table, `_TEXT`, holds only the caption and subtitle measures and has no data. Measures that must ignore a visual's axis use `REMOVEFILTERS ( table )` instead. Revisit this when a second quarter is added (T9).
+
 ---
 
 ## 12. Notebook Execution Order
