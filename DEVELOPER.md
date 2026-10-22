@@ -317,6 +317,14 @@ Edit notebooks locally and sync them to Databricks. No local Python environment 
 - **Fix:** The panel text now says reports are not patients, that duplicates and consumer or legal reporting can inflate the count, and that these are screening flags, not confirmed signals. The card subtitle is "screening flag, not confirmed". The HTML dashboard mock now uses the real 106 exclusive pairs and the real top 10 leaderboard rows from `gold_signals.csv`.
 - **Rule:** Check a sentence about a set against its distribution, not only its typical value, before it goes on a visual. A count of reports is not a count of patients, so wording near it should say so.
 
+### Issue 38 — Age Bars Could Not Be Sorted by `age_order`, and the Share Tooltip Showed 100%
+*Logged · 2026-10-22 · Power BI Patient Demographics page (not a pipeline change)*
+- **Symptom:** Setting `dimension_value` to Sort by column > `age_order` gave "A circular dependency was detected: gold_demographics[dimension_value], gold_demographics[age_order], gold_demographics[dimension_value]". After the axis was switched to a new `age_label` column, the tooltip measure `Age Share Of All` showed 100% for every bar.
+- **Cause:** `age_order` is a calculated column built from `dimension_value`, and a column cannot be sorted by a column that depends on it. The share's total (`Age Reports Total`) cleared the filter on `dimension_value` only. Once `age_label`, a different column, was on the axis, its filter stayed active, so each bar's denominator was just that bar.
+- **Fix:** Added `age_label` (a SWITCH over `dimension_value`) and set it to Sort by column > `age_order`; the age chart's axis uses `age_label`. The age measures now use `REMOVEFILTERS ( gold_demographics )` and then re-apply `dimension = "AGE_GROUP"`. Added the guard measure `Unmapped Age Groups`, expected 0 after every load, so a new age group value (the `99` default in `age_order`) cannot pass unnoticed.
+- **Rule:** Sort a column by a calculated column only when that calculated column is not derived from it; put a readable label column in between. A measure that must ignore the chart axis clears the whole table, not one named column.
+
+
 ---
 
 ## 4. Running Unit Tests
