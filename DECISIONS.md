@@ -21,6 +21,7 @@ Architecture and correctness decisions, recorded as they were made. Each entry: 
 | D13 | Leaderboard ranked by report count (PRR breaks ties); top 10 by a `Rank` measure filter, no helper column | 2026-10-21 | Accepted |
 | D14 | Power BI measures that feed a card, measure, MIN or filter stay numeric; card Display units set per field; `FORMAT` only in text label measures | 2026-10-21 | Accepted |
 | D15 | Leaderboard shows the Haldane flag as an `H` column, not a tooltip (deviation from FR-21) | 2026-10-21 | Accepted |
+| D16 | Keep the `UNKNOWN` age and sex categories visible on Patient Demographics, sorted last; state the denominator in the caption | 2026-10-22 | Accepted |
 
 ---
 
@@ -156,3 +157,11 @@ Check: exclusive 2,872 + 106 = 2,978 (the pre-fix null-PRR count); all `haldane_
 **Effect:** No pipeline or Gold change. Verified counts are unchanged. On 2026Q1 no top-10 row is Haldane-corrected under D13 (the corrected pairs are the exclusive ones, which the leaderboard filters out), so the column is blank there. The flag still shows for any corrected pair a drug slicer or a new quarter brings in. This deviates from FR-21 (tooltip); BRD wording is unchanged.
 **Rejected:** Leaving the flag out (hides which PRRs are Haldane-corrected, FR-21); a report-page tooltip (a second page to maintain for one flag).
 **Check:** With a temporary visual filter `haldane_applied = TRUE`, the top 10 rows each show H. Remove the filter and the table returns to the D13 top 10 with a blank column.
+
+## D16 — Keep "Unknown" Age and Sex Visible on Patient Demographics, Sorted Last
+
+**Problem:** `UNKNOWN` is the largest age bar (151,609 reports, 38.2% of 397,224) and about a fifth of the sex donut (75,433, 19.0%). Dropping it would make the real groups stand out, but it would also overstate them: Adult is 33.1% of all reports and 53.5% of reports with a known age. The bars would no longer sum to the Silver case count.
+**Decision:** Keep `UNKNOWN` on both charts. It sorts last (`label_order` 90 in the age chart and the sex donut, so `dimension_label` "Unknown" has one order value) and is drawn in grey so it reads as missing data, not as a group. Each chart carries a caption in its own subtitle that gives the missing share and the share among known values (age: 38.2% missing, 53.5% adult and 39.6% elderly among known ages; sex: 19.0% missing, 61.6% female among known sexes). The tooltip on the age chart shows each bar's share of all reports.
+**Effect:** No pipeline or Gold change. Age bars sum to 397,224 (397,209 analysed plus 15 reports with no primary-suspect drug), and so do the sex slices (check 13 in the build steps). `UNKNOWN` means the age or sex is missing or unusable, not that the patient is unknown. Different from D11 on purpose: `EU` and `COUNTRY NOT SPECIFIED` are left out of a ranked Top 10 countries chart because a ranking of places cannot include a missing-data bucket, and the report footnote states the excluded counts. An age or sex chart is a distribution of all reports, so its missing bucket belongs in it.
+**Rejected:** Dropping `UNKNOWN` (bars no longer reconcile; every share is inflated); showing only shares of known values (hides how much is missing); folding it into another group.
+**Check:** Age bars sum to 397,224 and so do the sex slices. The captions read 38.2% and 19.0% missing. `Unmapped Labels` is 0. See DEVELOPER.md Issue 39.
