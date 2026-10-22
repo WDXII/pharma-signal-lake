@@ -324,6 +324,14 @@ Edit notebooks locally and sync them to Databricks. No local Python environment 
 - **Fix:** Added `age_label` (a SWITCH over `dimension_value`) and set it to Sort by column > `age_order`; the age chart's axis uses `age_label`. The age measures now use `REMOVEFILTERS ( gold_demographics )` and then re-apply `dimension = "AGE_GROUP"`. Added the guard measure `Unmapped Age Groups`, expected 0 after every load, so a new age group value (the `99` default in `age_order`) cannot pass unnoticed.
 - **Rule:** Sort a column by a calculated column only when that calculated column is not derived from it; put a readable label column in between. A measure that must ignore the chart axis clears the whole table, not one named column.
 
+### Issue 39 — Whether to Show "Unknown" on the Age Chart (It Is the Largest Bar)
+*Logged · 2026-10-22 · Power BI Patient Demographics page (not a pipeline change)*
+- **Symptom:** The `UNKNOWN` bar (151,609 reports, 38.2%) is the longest bar on the age chart. The question was whether to drop it so the real age groups stand out.
+- **Cause:** In `02_silver_clean.py`, `age_group` is `UNKNOWN` whenever `age_years` is null, that is, when age is missing or cannot be converted to years. FAERS is spontaneous reporting, so this field is often blank. Dropping the bar would make the other groups look larger than they are (Adult is 33.1% of all reports, but 53.5% of reports with a known age) and the bars would no longer sum to the Silver case count.
+- **Fix:** Decision: keep `UNKNOWN`. It sorts last (`age_order` 6, `age_label` "Unknown"). The chart subtitle says age is missing for 38.2% of reports and gives the adult and elderly shares among reports with a known age (53.5% and 39.6%). The bars sum to 397,224, which equals 397,209 analysed reports plus 15 with no primary-suspect drug (build steps section 9, check 13).
+- **Rule:** Keep a missing-data category visible and say how large it is, so the totals reconcile and no statement about a group is read as covering every report. State the denominator whenever a share is shown. `UNKNOWN` means the age is missing or unusable, not that the patient is unknown.
+
+
 
 ---
 
