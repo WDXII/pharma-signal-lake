@@ -32,6 +32,30 @@
             }
           ]
         },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "gold_outcomes"
+                        }
+                      },
+                      "Property": "case_count"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(gold_outcomes.case_count)",
+              "nativeQueryRef": "report",
+              "displayName": "report"
+            }
+          ]
+        },
         "Y": {
           "projections": [
             {
@@ -46,7 +70,8 @@
                 }
               },
               "queryRef": "gold_outcomes.Source Share Of Known",
-              "nativeQueryRef": "Source Share Of Known"
+              "nativeQueryRef": "pct",
+              "displayName": "pct"
             }
           ]
         }

@@ -336,6 +336,12 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
+			          "report": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
 			          "total information": {
 			            "Type": "Noun",
 			            "State": "Suggested",
@@ -386,53 +392,53 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "total forecast": {
+			          "information": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.727
+			            "Weight": 0.736
 			          }
 			        },
 			        {
-			          "total account": {
+			          "commentary": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.727
+			            "Weight": 0.736
 			          }
 			        },
 			        {
-			          "total article": {
+			          "description": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.727
+			            "Weight": 0.736
 			          }
 			        },
 			        {
-			          "total narrative": {
+			          "presentation": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.727
+			            "Weight": 0.736
 			          }
 			        },
 			        {
-			          "total paper": {
+			          "statement": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.727
+			            "Weight": 0.736
 			          }
 			        }
 			      ]
@@ -5383,6 +5389,16 @@ cultureInfo en-PH
 			            },
 			            "Weight": 0.499
 			          }
+			        },
+			        {
+			          "pct": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
 			        }
 			      ]
 			    },
@@ -5584,6 +5600,16 @@ cultureInfo en-PH
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.499
+			          }
+			        },
+			        {
+			          "pct": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -6620,7 +6646,7 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
-			    "entity__text.report": {
+			    "entity__text.evans_min_report": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "_TEXT",
@@ -6630,113 +6656,132 @@ cultureInfo en-PH
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "report": {
+			          "evans min report": {
 			            "State": "Generated"
 			          }
 			        },
 			        {
-			          "information": {
+			          "evans_min_reports": {
 			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.736
+			            "State": "Generated",
+			            "Weight": 0.99
 			          }
 			        },
 			        {
-			          "commentary": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.736
+			          "report": {
+			            "State": "Generated",
+			            "Weight": 0.97
 			          }
 			        },
 			        {
-			          "description": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.736
+			          "min report": {
+			            "State": "Generated",
+			            "Weight": 0.97
 			          }
 			        },
 			        {
-			          "presentation": {
+			          "evans min information": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.736
+			            "Weight": 0.762
 			          }
 			        },
 			        {
-			          "statement": {
+			          "evans min commentary": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.736
+			            "Weight": 0.762
 			          }
 			        },
 			        {
-			          "forecast": {
+			          "evans min description": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.714
+			            "Weight": 0.762
 			          }
 			        },
 			        {
-			          "account": {
+			          "evans min presentation": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.714
+			            "Weight": 0.762
 			          }
 			        },
 			        {
-			          "article": {
+			          "evans min statement": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.714
+			            "Weight": 0.762
 			          }
 			        },
 			        {
-			          "narrative": {
+			          "min information": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.714
+			            "Weight": 0.75
 			          }
 			        },
 			        {
-			          "paper": {
+			          "min commentary": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.714
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "min description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "min presentation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "min statement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
 			          }
 			        }
 			      ]
 			    },
-			    "entity__text.prr": {
+			    "entity__text.evans_min_prr": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "_TEXT",
@@ -6746,13 +6791,30 @@ cultureInfo en-PH
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "prr": {
+			          "evans min prr": {
 			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "evans_min_prr": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "evans minimum prr": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
 			          }
 			        }
 			      ]
 			    },
-			    "entity__text.chisquare_yates": {
+			    "entity__text.evans_min_chi_sq": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "_TEXT",
@@ -6762,27 +6824,32 @@ cultureInfo en-PH
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "chi-square (yates)": {
+			          "evans min chi sq": {
 			            "State": "Generated"
 			          }
 			        },
 			        {
-			          "chi-square": {
+			          "evans_min_chi_sq": {
+			            "Type": "Noun",
 			            "State": "Generated",
-			            "Weight": 0.75
+			            "Weight": 0.99
 			          }
 			        },
 			        {
-			          "chi square (yates)": {
-			            "State": "Generated",
-			            "Weight": 0.97
+			          "evans minimum chi sq": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
 			          }
 			        }
 			      ]
 			    }
 			  },
 			  "Relationships": {
-			    "entity__text_has_chisquare_yates": {
+			    "entity__text_has_evans_min_chi_sq": {
 			      "Binding": {
 			        "ConceptualEntity": "_TEXT"
 			      },
@@ -6793,9 +6860,9 @@ cultureInfo en-PH
 			            "Entity": "entity__text"
 			          }
 			        },
-			        "entity__text.chisquare_yates": {
+			        "entity__text.evans_min_chi_sq": {
 			          "Target": {
-			            "Entity": "entity__text.chisquare_yates"
+			            "Entity": "entity__text.evans_min_chi_sq"
 			          }
 			        }
 			      },
@@ -6806,16 +6873,16 @@ cultureInfo en-PH
 			              "Role": "entity__text"
 			            },
 			            "Object": {
-			              "Role": "entity__text.chisquare_yates"
+			              "Role": "entity__text.evans_min_chi_sq"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "Phrasing_texts_have_chisquare_yates"
+			          "ID": "Phrasing_texts_have_evans_min_chi_sqs"
 			        }
 			      ]
 			    },
-			    "entity__text_has_prr": {
+			    "entity__text_has_evans_min_prr": {
 			      "Binding": {
 			        "ConceptualEntity": "_TEXT"
 			      },
@@ -6826,9 +6893,9 @@ cultureInfo en-PH
 			            "Entity": "entity__text"
 			          }
 			        },
-			        "entity__text.prr": {
+			        "entity__text.evans_min_prr": {
 			          "Target": {
-			            "Entity": "entity__text.prr"
+			            "Entity": "entity__text.evans_min_prr"
 			          }
 			        }
 			      },
@@ -6839,16 +6906,16 @@ cultureInfo en-PH
 			              "Role": "entity__text"
 			            },
 			            "Object": {
-			              "Role": "entity__text.prr"
+			              "Role": "entity__text.evans_min_prr"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "Phrasing_texts_have_prrs"
+			          "ID": "Phrasing_texts_have_evans_min_prrs"
 			        }
 			      ]
 			    },
-			    "entity__text_has_report": {
+			    "entity__text_has_evans_min_report": {
 			      "Binding": {
 			        "ConceptualEntity": "_TEXT"
 			      },
@@ -6859,9 +6926,9 @@ cultureInfo en-PH
 			            "Entity": "entity__text"
 			          }
 			        },
-			        "entity__text.report": {
+			        "entity__text.evans_min_report": {
 			          "Target": {
-			            "Entity": "entity__text.report"
+			            "Entity": "entity__text.evans_min_report"
 			          }
 			        }
 			      },
@@ -6872,12 +6939,12 @@ cultureInfo en-PH
 			              "Role": "entity__text"
 			            },
 			            "Object": {
-			              "Role": "entity__text.report"
+			              "Role": "entity__text.evans_min_report"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "Phrasing_texts_have_reports"
+			          "ID": "Phrasing_texts_have_evans_min_reports"
 			        }
 			      ]
 			    },
