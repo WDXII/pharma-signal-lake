@@ -336,12 +336,6 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "report": {
-			            "State": "Generated",
-			            "Weight": 0.97
-			          }
-			        },
-			        {
 			          "total information": {
 			            "Type": "Noun",
 			            "State": "Suggested",
@@ -392,53 +386,53 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "information": {
+			          "total forecast": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.736
+			            "Weight": 0.727
 			          }
 			        },
 			        {
-			          "commentary": {
+			          "total account": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.736
+			            "Weight": 0.727
 			          }
 			        },
 			        {
-			          "description": {
+			          "total article": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.736
+			            "Weight": 0.727
 			          }
 			        },
 			        {
-			          "presentation": {
+			          "total narrative": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.736
+			            "Weight": 0.727
 			          }
 			        },
 			        {
-			          "statement": {
+			          "total paper": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.736
+			            "Weight": 0.727
 			          }
 			        }
 			      ]
@@ -4736,7 +4730,7 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
-			    "gold_demographics.sex_reports_total": {
+			    "gold_demographics.gender_reports_total": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "gold_demographics",
@@ -4746,7 +4740,7 @@ cultureInfo en-PH
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "sex reports total": {
+			          "gender reports total": {
 			            "State": "Generated"
 			          }
 			        },
@@ -4757,7 +4751,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "sex report aggregate": {
+			          "gender report aggregate": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -4767,7 +4761,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "sex report overall": {
+			          "gender report overall": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -4795,10 +4789,30 @@ cultureInfo en-PH
 			            },
 			            "Weight": 0.727
 			          }
+			        },
+			        {
+			          "sexuality report total": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.609
+			          }
+			        },
+			        {
+			          "sex report total": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
 			        }
 			      ]
 			    },
-			    "gold_demographics.sex_reports_unknown": {
+			    "gold_demographics.gender_reports_unknown": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "gold_demographics",
@@ -4808,7 +4822,7 @@ cultureInfo en-PH
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "sex reports unknown": {
+			          "gender reports unknown": {
 			            "State": "Generated"
 			          }
 			        },
@@ -4825,6 +4839,26 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
+			          "sexuality report unknown": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.609
+			          }
+			        },
+			        {
+			          "sex report unknown": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        },
+			        {
 			          "indefinite": {
 			            "Type": "Noun",
 			            "State": "Suggested",
@@ -4835,7 +4869,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "sex report nonentity": {
+			          "gender report nonentity": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -4845,7 +4879,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "sex report newcomer": {
+			          "gender report newcomer": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -4855,7 +4889,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "sex report beginner": {
+			          "gender report beginner": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -4903,20 +4937,10 @@ cultureInfo en-PH
 			            },
 			            "Weight": 0.451
 			          }
-			        },
-			        {
-			          "report beginner": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.451
-			          }
 			        }
 			      ]
 			    },
-			    "gold_demographics.sex_reports_known": {
+			    "gold_demographics.gender_reports_known": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "gold_demographics",
@@ -4926,12 +4950,32 @@ cultureInfo en-PH
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "sex reports known": {
+			          "gender reports known": {
 			            "State": "Generated"
 			          }
 			        },
 			        {
-			          "sex intelligence known": {
+			          "sexuality report known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.609
+			          }
+			        },
+			        {
+			          "sex report known": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        },
+			        {
+			          "gender intelligence known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -4941,7 +4985,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "sex gossip known": {
+			          "gender gossip known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -4951,7 +4995,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "sex rumor known": {
+			          "gender rumor known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -4961,7 +5005,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "sex hearsay known": {
+			          "gender hearsay known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -4971,7 +5015,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "sex tales known": {
+			          "gender tales known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -4981,7 +5025,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "sex statement known": {
+			          "gender statement known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -4991,7 +5035,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "sex description known": {
+			          "gender description known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -5001,27 +5045,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "sex testimony known": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.482
-			          }
-			        },
-			        {
-			          "sex commentary known": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.482
-			          }
-			        },
-			        {
-			          "sex version known": {
+			          "gender testimony known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
@@ -5032,7 +5056,7 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
-			    "gold_demographics.sex_female_share_of_known": {
+			    "gold_demographics.female_share_of_known": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "gold_demographics",
@@ -5042,78 +5066,78 @@ cultureInfo en-PH
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "sex female share of known": {
+			          "female share of known": {
 			            "State": "Generated"
 			          }
 			        },
 			        {
-			          "sex female part of known": {
+			          "female part of known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.504
+			            "Weight": 0.499
 			          }
 			        },
 			        {
-			          "sex female portion of known": {
+			          "female portion of known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.504
+			            "Weight": 0.499
 			          }
 			        },
 			        {
-			          "sex female segment of known": {
+			          "female segment of known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.504
+			            "Weight": 0.499
 			          }
 			        },
 			        {
-			          "sex female cut of known": {
+			          "female cut of known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.504
+			            "Weight": 0.499
 			          }
 			        },
 			        {
-			          "sex female stake of known": {
+			          "female stake of known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.504
+			            "Weight": 0.499
 			          }
 			        },
 			        {
-			          "sex female bit of known": {
+			          "female bit of known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.504
+			            "Weight": 0.499
 			          }
 			        },
 			        {
-			          "sex female piece of known": {
+			          "female piece of known": {
 			            "Type": "Noun",
 			            "State": "Suggested",
 			            "Source": {
 			              "Agent": "Thesaurus"
 			            },
-			            "Weight": 0.504
+			            "Weight": 0.499
 			          }
 			        }
 			      ]
@@ -6595,9 +6619,268 @@ cultureInfo en-PH
 			          }
 			        }
 			      ]
+			    },
+			    "entity__text.report": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "evans_min_reports"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "report": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "information": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "commentary": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "description": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "presentation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "statement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "forecast": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.714
+			          }
+			        },
+			        {
+			          "account": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.714
+			          }
+			        },
+			        {
+			          "article": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.714
+			          }
+			        },
+			        {
+			          "narrative": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.714
+			          }
+			        },
+			        {
+			          "paper": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.714
+			          }
+			        }
+			      ]
+			    },
+			    "entity__text.prr": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "evans_min_prr"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "prr": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "entity__text.chisquare_yates": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_TEXT",
+			          "ConceptualProperty": "evans_min_chi_sq"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "chi-square (yates)": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "chi-square": {
+			            "State": "Generated",
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "chi square (yates)": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        }
+			      ]
 			    }
 			  },
 			  "Relationships": {
+			    "entity__text_has_chisquare_yates": {
+			      "Binding": {
+			        "ConceptualEntity": "_TEXT"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "entity__text": {
+			          "Target": {
+			            "Entity": "entity__text"
+			          }
+			        },
+			        "entity__text.chisquare_yates": {
+			          "Target": {
+			            "Entity": "entity__text.chisquare_yates"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "entity__text"
+			            },
+			            "Object": {
+			              "Role": "entity__text.chisquare_yates"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "Phrasing_texts_have_chisquare_yates"
+			        }
+			      ]
+			    },
+			    "entity__text_has_prr": {
+			      "Binding": {
+			        "ConceptualEntity": "_TEXT"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "entity__text": {
+			          "Target": {
+			            "Entity": "entity__text"
+			          }
+			        },
+			        "entity__text.prr": {
+			          "Target": {
+			            "Entity": "entity__text.prr"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "entity__text"
+			            },
+			            "Object": {
+			              "Role": "entity__text.prr"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "Phrasing_texts_have_prrs"
+			        }
+			      ]
+			    },
+			    "entity__text_has_report": {
+			      "Binding": {
+			        "ConceptualEntity": "_TEXT"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "entity__text": {
+			          "Target": {
+			            "Entity": "entity__text"
+			          }
+			        },
+			        "entity__text.report": {
+			          "Target": {
+			            "Entity": "entity__text.report"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "entity__text"
+			            },
+			            "Object": {
+			              "Role": "entity__text.report"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "Phrasing_texts_have_reports"
+			        }
+			      ]
+			    },
 			    "gold_outcome_has_entity__text_source_hcp_share_of_known": {
 			      "Binding": {
 			        "ConceptualEntity": "gold_outcomes"
@@ -7126,7 +7409,7 @@ cultureInfo en-PH
 			        }
 			      ]
 			    },
-			    "gold_demographics_has_sex_female_share_of_known": {
+			    "gold_demographics_has_female_share_of_known": {
 			      "Binding": {
 			        "ConceptualEntity": "gold_demographics"
 			      },
@@ -7137,9 +7420,9 @@ cultureInfo en-PH
 			            "Entity": "gold_demographics"
 			          }
 			        },
-			        "gold_demographics.sex_female_share_of_known": {
+			        "gold_demographics.female_share_of_known": {
 			          "Target": {
-			            "Entity": "gold_demographics.sex_female_share_of_known"
+			            "Entity": "gold_demographics.female_share_of_known"
 			          }
 			        }
 			      },
@@ -7150,16 +7433,16 @@ cultureInfo en-PH
 			              "Role": "gold_demographics"
 			            },
 			            "Object": {
-			              "Role": "gold_demographics.sex_female_share_of_known"
+			              "Role": "gold_demographics.female_share_of_known"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "gold_demographics_have_sex_female_share_of_known"
+			          "ID": "gold_demographics_have_female_share_of_known"
 			        }
 			      ]
 			    },
-			    "gold_demographics_has_sex_reports_known": {
+			    "gold_demographics_has_gender_reports_known": {
 			      "Binding": {
 			        "ConceptualEntity": "gold_demographics"
 			      },
@@ -7170,9 +7453,9 @@ cultureInfo en-PH
 			            "Entity": "gold_demographics"
 			          }
 			        },
-			        "gold_demographics.sex_reports_known": {
+			        "gold_demographics.gender_reports_known": {
 			          "Target": {
-			            "Entity": "gold_demographics.sex_reports_known"
+			            "Entity": "gold_demographics.gender_reports_known"
 			          }
 			        }
 			      },
@@ -7183,16 +7466,16 @@ cultureInfo en-PH
 			              "Role": "gold_demographics"
 			            },
 			            "Object": {
-			              "Role": "gold_demographics.sex_reports_known"
+			              "Role": "gold_demographics.gender_reports_known"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "gold_demographics_have_sex_reports_known"
+			          "ID": "gold_demographics_have_gender_reports_known"
 			        }
 			      ]
 			    },
-			    "gold_demographics_has_sex_reports_unknown": {
+			    "gold_demographics_has_gender_reports_unknown": {
 			      "Binding": {
 			        "ConceptualEntity": "gold_demographics"
 			      },
@@ -7203,9 +7486,9 @@ cultureInfo en-PH
 			            "Entity": "gold_demographics"
 			          }
 			        },
-			        "gold_demographics.sex_reports_unknown": {
+			        "gold_demographics.gender_reports_unknown": {
 			          "Target": {
-			            "Entity": "gold_demographics.sex_reports_unknown"
+			            "Entity": "gold_demographics.gender_reports_unknown"
 			          }
 			        }
 			      },
@@ -7216,16 +7499,16 @@ cultureInfo en-PH
 			              "Role": "gold_demographics"
 			            },
 			            "Object": {
-			              "Role": "gold_demographics.sex_reports_unknown"
+			              "Role": "gold_demographics.gender_reports_unknown"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "gold_demographics_have_sex_reports_unknown"
+			          "ID": "gold_demographics_have_gender_reports_unknown"
 			        }
 			      ]
 			    },
-			    "gold_demographics_has_sex_reports_total": {
+			    "gold_demographics_has_gender_reports_total": {
 			      "Binding": {
 			        "ConceptualEntity": "gold_demographics"
 			      },
@@ -7236,9 +7519,9 @@ cultureInfo en-PH
 			            "Entity": "gold_demographics"
 			          }
 			        },
-			        "gold_demographics.sex_reports_total": {
+			        "gold_demographics.gender_reports_total": {
 			          "Target": {
-			            "Entity": "gold_demographics.sex_reports_total"
+			            "Entity": "gold_demographics.gender_reports_total"
 			          }
 			        }
 			      },
@@ -7249,12 +7532,12 @@ cultureInfo en-PH
 			              "Role": "gold_demographics"
 			            },
 			            "Object": {
-			              "Role": "gold_demographics.sex_reports_total"
+			              "Role": "gold_demographics.gender_reports_total"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "gold_demographics_have_sex_reports_total"
+			          "ID": "gold_demographics_have_gender_reports_total"
 			        }
 			      ]
 			    },

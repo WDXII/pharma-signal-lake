@@ -126,6 +126,24 @@ table _TEXT
 
 		annotation SummarizationSetBy = Automatic
 
+	column evans_min_reports = "≥ 3"
+		lineageTag: aaa20303-4b96-4dd5-b84f-ea1fb7f31614
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column evans_min_prr = "≥ 2.0"
+		lineageTag: 238ddd1e-cde6-4511-9eb2-ef97bedb301a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column evans_min_chi_sq = "≥ 4.0"
+		lineageTag: 1c73a37a-e734-415c-b88f-bd9afcea3c15
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
 	partition _TEXT = m
 		mode: import
 		source =

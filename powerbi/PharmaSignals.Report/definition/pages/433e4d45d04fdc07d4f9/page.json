@@ -2,8 +2,8 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
   "name": "433e4d45d04fdc07d4f9",
   "displayName": "Signal Leaderboard",
-  "displayOption": "FitToPage",
-  "height": 1300,
+  "displayOption": "ActualSize",
+  "height": 1400,
   "width": 1920,
   "objects": {
     "background": [
@@ -73,6 +73,36 @@
     {
       "source": "3154a1c034acf4a34a06",
       "target": "40cc82169e59c03098ac",
+      "type": "NoFilter"
+    },
+    {
+      "source": "e1d72bacb8f98a098d2f",
+      "target": "d5ae9af99fdcc4500102",
+      "type": "NoFilter"
+    },
+    {
+      "source": "e1d72bacb8f98a098d2f",
+      "target": "ceea96e6e343563052a6",
+      "type": "NoFilter"
+    },
+    {
+      "source": "e1d72bacb8f98a098d2f",
+      "target": "3154a1c034acf4a34a06",
+      "type": "NoFilter"
+    },
+    {
+      "source": "3154a1c034acf4a34a06",
+      "target": "e1d72bacb8f98a098d2f",
+      "type": "NoFilter"
+    },
+    {
+      "source": "d5ae9af99fdcc4500102",
+      "target": "e1d72bacb8f98a098d2f",
+      "type": "NoFilter"
+    },
+    {
+      "source": "ceea96e6e343563052a6",
+      "target": "e1d72bacb8f98a098d2f",
       "type": "NoFilter"
     }
   ]
