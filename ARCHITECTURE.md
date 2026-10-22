@@ -418,7 +418,7 @@ Power BI Desktop reads from exported CSV/Parquet files from the Gold layer.
 - KPI cards: reports analysed (N = 397,209 on 2026Q1: cases with a primary-suspect drug; `silver_cases` holds 397,224), drug–event pairs, `SIGNAL` pairs, leaderboard pairs, exclusive reports, Haldane applied
 
 **Page 2 — Patient Demographics**
-- Charts: Age group distribution (bar), Sex distribution (donut), Top 10 reporter countries (bar), excluding `EU` and `COUNTRY NOT SPECIFIED` with a footnote (D11; `is_country` is derived in Power BI)
+- Charts: Age group distribution (bar), Gender distribution (donut), Top 10 reporter countries (bar), excluding `EU` and `COUNTRY NOT SPECIFIED` with a footnote (D11; `is_country` is derived in Power BI)
 - No drug filter: `gold_demographics` has no drug dimension, so drug-level demographics is out of scope (D12). The visuals do not cross-filter each other (Edit interactions: None)
 
 **Page 3 — Case Outcomes**
