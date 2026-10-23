@@ -103,7 +103,7 @@ Light background with a pastel palette: `#9ADBCC`, `#C7F2D1`, `#E3FFD6`, `#FFFBF
 - **Leaderboard is ranked by report count, top 10** (D13), not by PRR.
 - **Haldane-corrected rows are flagged** with an `H` column in the leaderboard, not a tooltip (D15, a deliberate deviation from FR-21).
 - **Top 10 countries excludes `EU` and `COUNTRY NOT SPECIFIED`** and says so in a footnote (D11).
-- **Optional Drug Name slicer on the leaderboard only.** No drug filter on the other pages, and no cross-filtering between visuals on the Demographics and Outcomes pages (D12).
+- **No drug filter or slicer on any page,** and no cross-filtering between visuals on the Demographics and Outcomes pages (D12).
 
 ## Build status
 

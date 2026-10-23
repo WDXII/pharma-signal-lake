@@ -384,7 +384,7 @@ Power BI Desktop reads from exported CSV/Parquet files from the Gold layer.
 - Main leaderboard: `SIGNAL` pairs where NOT `is_exclusive`, top 10 ranked by report count, PRR breaks ties (D13; 49,878 pairs on 2026Q1). `is_exclusive` is derived in Power BI as `case_count = event_total`
 - Columns: Rank, Drug Name, Reaction (PT), Case Count, PRR, ROR, and an `H` column that flags Haldane-corrected rows (D15; this deviates from BRD FR-21, which says tooltip)
 - Separate "Exclusive reports" panel: `SIGNAL` AND `is_exclusive` (106 on 2026Q1), without PRR, because Haldane-corrected magnitudes are not interpretable (D8, amended)
-- Filter: Drug Name slicer (optional). No Signal Flag filter, because the main leaderboard is fixed to `SIGNAL` (BRD FR-21)
+- No filters or slicers (BRD FR-21 requires none). No Signal Flag filter, because the main leaderboard is fixed to `SIGNAL` (BRD FR-21)
 - KPI cards: reports analysed (N = 397,209 on 2026Q1: cases with a primary-suspect drug; `silver_cases` holds 397,224), drug–event pairs, `SIGNAL` pairs, leaderboard pairs, exclusive reports, Haldane applied
 
 **Page 2 — Patient Demographics**
