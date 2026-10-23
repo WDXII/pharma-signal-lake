@@ -3,10 +3,13 @@
 **Project:** PharmaSignalLake  
 **Full Title:** PharmaSignalLake: A Pharmacovigilance Signal Detection Lakehouse  
 **Author:** Will  
-**Version:** 2.5  
-**Date:** May 2026 (Revised 2026-10-06)  
+**Version:** 2.6  
+**Date:** May 2026 (Revised 2026-10-23)  
 **Status:** Draft
 
+> **Revision 2.6** — FR-21: the main leaderboard shows the top 10 non-exclusive `SIGNAL` pairs ranked by report
+> count with PRR breaking ties (D13), and `haldane_applied` appears as an `H` column, not a tooltip (D15).
+>
 > **Revision 2.5** — NFR-01: records that per-stage start, end and duration are written in UTC to the
 > `99_run_pipeline.py` output (in-memory, not persisted); the 60-minute limit is unchanged. Verified in a
 > Databricks run on 2026-10-06 (DEVELOPER Issue 25, DECISIONS D10).
@@ -194,7 +197,7 @@ This project addresses all three problems with a structured, reproducible, scala
 |----|-------------|
 | FR-19 | Gold layer data shall be exported to CSV or Parquet for Power BI Desktop consumption |
 | FR-20 | The Power BI report shall contain three pages: Signal Leaderboard, Patient Demographics, and Case Outcomes |
-| FR-21 | Power BI shall derive `is_exclusive` as `case_count = event_total`. The main Signal Leaderboard shall display `SIGNAL` pairs where NOT `is_exclusive` (49,878 on 2026Q1), ranked by PRR, with ROR and case count as secondary columns and `haldane_applied` as a tooltip flag. Exclusive pairs (`SIGNAL` AND `is_exclusive`, 106 on 2026Q1) shall appear in a separate "Exclusive reports" panel, not in the main leaderboard, and PRR shall not be shown for them (D8, amended 2026-09-30). No pipeline change is needed: the export already carries `case_count` and `event_total` |
+| FR-21 | Power BI shall derive `is_exclusive` as `case_count = event_total`. The main Signal Leaderboard shall show the top 10 of the `SIGNAL` pairs where NOT `is_exclusive` (49,878 on 2026Q1), ranked by report count (`case_count`) with PRR breaking ties (D13), with PRR and ROR as columns beside the rank and `haldane_applied` as an `H` column, not a tooltip (D15). Exclusive pairs (`SIGNAL` AND `is_exclusive`, 106 on 2026Q1) shall appear in a separate "Exclusive reports" panel, not in the main leaderboard, and PRR shall not be shown for them (D8, amended 2026-09-30; D13, D15). No pipeline change is needed: the export already carries `case_count` and `event_total` |
 
 ---
 
@@ -285,7 +288,7 @@ This project addresses all three problems with a structured, reproducible, scala
 
 ---
 
-*End of BRD — Version 2.5 — PharmaSignalLake*
+*End of BRD — Version 2.6 — PharmaSignalLake*
 
 ---
 
@@ -299,3 +302,4 @@ This project addresses all three problems with a structured, reproducible, scala
 | 2.3 | 2026-09-30 | FR-21: implements the amended D8. Power BI derives `is_exclusive` (`case_count = event_total`); exclusive panel = `SIGNAL` AND `is_exclusive` (106); main leaderboard = `SIGNAL` AND NOT `is_exclusive` (49,878), `haldane_applied` as a tooltip flag. Scope: patient-level (cross-report) duplicate detection added to Out of Scope; new Future Enhancements list. Footer version corrected. Success metrics unchanged | Filtering the exclusive panel on `haldane_applied` would have mislabeled 53 `SIGNAL` pairs that are not exclusive (`b = 0`, not `c = 0`; source query not saved, see DEVELOPER Issue 22). The case-level review showed `case_count` counts reports, not patients (D9). See DECISIONS.md D8 (amended) and D9 |
 | 2.4 | 2026-10-05 | Executive Summary and Success Metrics: extensibility reworded to "designed for; verified on 2026Q1 only"; Scope bullet and Constraints "Scope" row note the same. OBJ-03, Scope bullet and Success Metrics: PRR/ROR computed for all pairs, the Evans minimum applies to classification. Key Relationships and glossary: `primaryid` for joins, `caseid` is the dedup key (D4). Assumptions and Risks: schema validation marked planned, not implemented. Constraints: added "Unit of count" row (D9). | Second-quarter verification is deferred until after release, and the BRD must not claim it. Schema validation (I4) is not implemented |
 | 2.5 | 2026-10-06 | NFR-01: per-stage start, end and duration are recorded in UTC in the `99_run_pipeline.py` output (in-memory, not persisted). The 60-minute limit is unchanged. | T6 verified in a Databricks run on 2026-10-06; see DEVELOPER Issue 25, DECISIONS D10 |
+| 2.6 | 2026-10-23 | FR-21: the main leaderboard shows the top 10 non-exclusive `SIGNAL` pairs ranked by report count, with PRR breaking ties (D13), instead of all non-exclusive pairs ranked by PRR. `haldane_applied` is shown as an `H` column, not a tooltip (D15). | Ranked by PRR, the first Power BI render put 3-to-7-report pairs on top, three of them Haldane-corrected with PRRs of 53,000 to 77,000 (D13). The `H` column is visible without a hover (D15). See DECISIONS D13, D15 |
