@@ -23,7 +23,7 @@ powerbi/
 ├── PharmaSignals.pbip              ← open this in Power BI Desktop
 ├── PharmaSignals.Report/           ← pages and visuals (text files)
 ├── PharmaSignals.SemanticModel/    ← tables, columns, measures (TMDL text files)
-├── screenshots/                    ← page images for the main README (added when pages are done)
+├── screenshots/                    ← page images for the main README
 └── README.md
 ```
 
@@ -116,12 +116,12 @@ Light background with a pastel palette: `#9ADBCC`, `#C7F2D1`, `#E3FFD6`, `#FFFBF
 | `is_country` column on `gold_demographics` | Not yet added. The Top 10 countries chart needs it (D11) |
 | Theme and page header | Done (header band, page navigator) |
 | Signal Leaderboard page | Done: top 10 leaderboard, six KPI cards, Exclusive reports panel (106 pairs), note, page navigator |
-| Patient Demographics page | Not started |
-| Case Outcomes page | Not started |
-| Counts verified against "Expected" | Leaderboard page: checked in Power BI (leaderboard 49,878; exclusive 106; exclusive reports sum 1,075 matches the CSV; row selection leaves cards and note unchanged). Demographics and Outcomes pages: not yet |
-| Screenshots | Not started |
+| Patient Demographics page | Done: age group bar, gender donut, top 10 reporter countries |
+| Case Outcomes page | Done: outcome distribution and report source distribution |
+| Counts verified against "Expected" | Done on all three pages: leaderboard 49,878; exclusive 106 (reports sum 1,075 matches the CSV); 34 and 11 gold rows; 397,224 reports in both the age group and gender totals; top 10 countries start with US at 268,928 |
+| Screenshots | Done: `screenshots/` (one per page, plus the Case Outcomes tooltip) |
 
-Update this table as each item is finished. Screenshots go in `screenshots/` only after the counts match.
+Update this table as each item is finished. Screenshots were taken after the counts in the "Counts verified" row matched.
 
 ## Known limitations
 
