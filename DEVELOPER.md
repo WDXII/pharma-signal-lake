@@ -253,6 +253,20 @@ Edit notebooks locally and sync them to Databricks. No local Python environment 
 - **Addendum (2026-10-21):** The numeric cards need the Display units alternative named above, set per field; the exact steps are in Issue 34. The verified count for the `Cases` card is now 397,209 (N, cases with a primary-suspect drug), not 397,224; see the build steps, section 4.
 - **Addendum (2026-10-21, later):** The `FORMAT` fix above is superseded. `Cases` is now numeric: `Cases = MAX ( gold_signals[total_reports] )`, format Whole number, with the card's Display units set per field (Custom, `#,0`; Issue 34). The card reads 397,209 in full, so no `FORMAT` is needed. The Rule above now applies only to text label measures; see DECISIONS D14.
 
+### Issue 27 — Power BI Model Hard-Coded a Local CSV Path
+*Logged · 2026-10-23 (found 2026-10-14; inserted here once, an exception to append-only) · Power BI Desktop, semantic model (not a pipeline change)*
+- **Symptom:** Opening `PharmaSignals.pbip` on any other machine failed to refresh with a file-not-found error on all three tables.
+- **Cause:** Each table's `Source` step held the literal path `C:\Projects\Claude\pharma-signal-lake\exports\<file>.csv`.
+- **Fix:** Added a text parameter, `ExportsFolder`, and changed each source to `File.Contents(ExportsFolder & "\<file>.csv")`. Users set one value under Transform data, then Edit parameters.
+- **Rule:** Never hard-code a local path in a committed model. Put it behind a parameter and document the default.
+
+### Issue 28 — "Cases" Card Showed N (397,209), Not the Silver Case Count (397,224)
+*Logged · 2026-10-23 (found 2026-10-14; inserted here once, an exception to append-only) · Power BI Desktop, measure `Cases` (not a pipeline change)*
+- **Symptom:** The card read 397,209 while the HTML preview and Issue 26 said 397,224.
+- **Cause:** `Cases` is `MAX ( gold_signals[total_reports] )`, which is N, the signal denominator (cases with a primary-suspect drug). `silver_cases` has 397,224 cases, and 15 have no PS drug and never enter the signal math (validation V8). Issue 26 recorded the wrong expected value.
+- **Fix:** Relabelled the card "Reports analysed" and set its expected value to 397,209. The 397,224 reconciliation is in the README and in the build steps section 9, check 13.
+- **Rule:** Name a card for what its measure computes, and check it against the count for its own layer: 397,209 for N, 397,224 for `silver_cases`.
+
 ### Issue 29 — Power BI Error: "Cannot convert value '' of type Text to type Number" on `Haldane %`
 *Logged · 2026-10-20 · Power BI Desktop, measure `Haldane %` (not a pipeline change)*
 - **Symptom:** A visual using `[Haldane %]` failed with `Cannot convert value '' of type Text to type Number`.
