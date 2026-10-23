@@ -23,6 +23,10 @@ PharmaSignalLake is an end-to-end **data lakehouse pipeline** that:
 4. **Classifies signals** using Evans Criteria — the same threshold used in real pharma signal detection
 5. **Surfaces results** through a Power BI executive dashboard
 
+![Signal Leaderboard page of the Power BI dashboard](powerbi/screenshots/01-signal-leaderboard.png)
+
+*Signal Leaderboard on 2026Q1: top 10 signals ranked by report count, with the 106 exclusive reports in a separate panel. More pages in [Power BI Dashboard](#power-bi-dashboard).*
+
 ---
 
 ## Architecture
@@ -253,13 +257,29 @@ Verified on 2026Q1 only. The notebooks write with `mode("overwrite")` partitione
 
 ## Power BI Dashboard
 
-**Status: in progress. The Signal Leaderboard page is built; Patient Demographics and Case Outcomes are next.** The dashboard has three pages, each reading from a Gold export CSV:
+**Status: built. All three pages are done and their counts were checked in Power BI against the Gold tables (2026Q1).** The dashboard has three pages, each reading from a Gold export CSV:
 
 | Page | Source Table | Key Visuals |
 |------|-------------|-------------|
 | **Signal Leaderboard** | `gold_signals.csv` | Main leaderboard = non-exclusive `SIGNAL` pairs, top 10 ranked by report count (PRR breaks ties, D13), with report count, PRR and ROR columns and an `H` column that flags Haldane-corrected rows (D15). The main leaderboard filter is `SIGNAL` AND NOT `is_exclusive` (49,878 pairs on 2026Q1); a separate "Exclusive reports" panel shows the 106 `SIGNAL` pairs where the drug is the only reporter of the event (D8, amended). `is_exclusive` is derived in Power BI as `case_count = event_total` |
 | **Patient Demographics** | `gold_demographics.csv` | Age group bar chart; gender donut chart; top 10 reporter countries bar chart (`EU` and unspecified excluded, D11) |
 | **Case Outcomes** | `gold_outcomes.csv` | Outcome distribution (death, hospitalization, etc.); report source distribution |
+
+### Screenshots
+
+![Signal Leaderboard](powerbi/screenshots/01-signal-leaderboard.png)
+
+*Signal Leaderboard: top 10 non-exclusive `SIGNAL` pairs by report count, and the 106 exclusive reports.*
+
+![Patient Demographics](powerbi/screenshots/02-patient-demographics.png)
+
+*Patient Demographics: reports by age group and gender, and the top 10 reporter countries.*
+
+![Case Outcomes](powerbi/screenshots/03-case-outcomes.png)
+
+*Case Outcomes: share of the 397,224 reports by outcome, and by report source.*
+
+Page by page notes are in [powerbi/README.md](powerbi/README.md).
 
 ---
 
