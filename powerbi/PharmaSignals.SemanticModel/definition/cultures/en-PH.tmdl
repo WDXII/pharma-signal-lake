@@ -1937,6 +1937,26 @@ cultureInfo en-PH
 			            },
 			            "Weight": 0.571
 			          }
+			        },
+			        {
+			          "CASE OUTCOME": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "REPORT SOURCE": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
 			        }
 			      ]
 			    },
@@ -3531,12 +3551,6 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "share": {
-			            "State": "Generated",
-			            "Weight": 0.97
-			          }
-			        },
-			        {
 			          "information share": {
 			            "Type": "Noun",
 			            "State": "Suggested",
@@ -4457,7 +4471,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "percent": {
+			          "Share": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -5391,7 +5405,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "pct": {
+			          "Share": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -5603,7 +5617,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "pct": {
+			          "Share": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -6097,7 +6111,7 @@ cultureInfo en-PH
 			          }
 			        },
 			        {
-			          "percent": {
+			          "Share": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",

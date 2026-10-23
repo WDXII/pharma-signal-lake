@@ -47,8 +47,8 @@
                 }
               },
               "queryRef": "gold_demographics.Country Share Of All",
-              "nativeQueryRef": "percent",
-              "displayName": "percent"
+              "nativeQueryRef": "Share",
+              "displayName": "Share"
             }
           ]
         },

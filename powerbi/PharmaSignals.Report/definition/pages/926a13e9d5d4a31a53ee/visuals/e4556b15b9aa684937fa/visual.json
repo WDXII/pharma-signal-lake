@@ -27,8 +27,9 @@
                 }
               },
               "queryRef": "gold_outcomes.label",
-              "nativeQueryRef": "label",
-              "active": true
+              "nativeQueryRef": "REPORT SOURCE",
+              "active": true,
+              "displayName": "REPORT SOURCE"
             }
           ]
         },
@@ -51,8 +52,8 @@
                 }
               },
               "queryRef": "Sum(gold_outcomes.case_count)",
-              "nativeQueryRef": "report",
-              "displayName": "report"
+              "nativeQueryRef": "Reports",
+              "displayName": "Reports"
             }
           ]
         },
@@ -70,8 +71,8 @@
                 }
               },
               "queryRef": "gold_outcomes.Source Share Of Known",
-              "nativeQueryRef": "pct",
-              "displayName": "pct"
+              "nativeQueryRef": "Share",
+              "displayName": "Share"
             }
           ]
         }

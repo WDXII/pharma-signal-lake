@@ -27,9 +27,9 @@
                 }
               },
               "queryRef": "gold_demographics.dimension_label",
-              "nativeQueryRef": " AGE GROUP",
+              "nativeQueryRef": "AGE GROUP",
               "active": true,
-              "displayName": " AGE GROUP"
+              "displayName": "AGE GROUP"
             }
           ]
         },
@@ -47,8 +47,8 @@
                 }
               },
               "queryRef": "gold_demographics.Age Share Of All",
-              "nativeQueryRef": "percent",
-              "displayName": "percent"
+              "nativeQueryRef": "Share",
+              "displayName": "Share"
             }
           ]
         },

@@ -2,8 +2,8 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "de91d5631d1b46c9b6fa",
   "position": {
-    "x": 60.000000000000007,
-    "y": 288.57142857142861,
+    "x": 59.975062344139651,
+    "y": 288.52867830423941,
     "z": 4001,
     "height": 482.85714285714289,
     "width": 871.42857142857144,
@@ -27,8 +27,9 @@
                 }
               },
               "queryRef": "gold_outcomes.label",
-              "nativeQueryRef": "label",
-              "active": true
+              "nativeQueryRef": "CASE OUTCOME",
+              "active": true,
+              "displayName": "CASE OUTCOME"
             }
           ]
         },
@@ -51,8 +52,8 @@
                 }
               },
               "queryRef": "Sum(gold_outcomes.case_count)",
-              "nativeQueryRef": "reports",
-              "displayName": "reports"
+              "nativeQueryRef": "Reports",
+              "displayName": "Reports"
             }
           ]
         },
@@ -70,8 +71,8 @@
                 }
               },
               "queryRef": "gold_outcomes.Outcome Share Of All",
-              "nativeQueryRef": "pct",
-              "displayName": "pct"
+              "nativeQueryRef": "Share",
+              "displayName": "Share"
             }
           ]
         }

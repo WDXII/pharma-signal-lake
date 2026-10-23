@@ -2,8 +2,8 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
   "name": "433e4d45d04fdc07d4f9",
   "displayName": "Signal Leaderboard",
-  "displayOption": "ActualSize",
-  "height": 1400,
+  "displayOption": "FitToPage",
+  "height": 1300,
   "width": 1920,
   "objects": {
     "background": [
