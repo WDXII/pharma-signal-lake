@@ -2,14 +2,14 @@
 
 The Power BI report for PharmaSignalLake. It reads the three Gold-layer CSV exports and presents drug–reaction safety signals from FDA FAERS adverse-event reports (2026Q1).
 
-> **Status: in progress.** The project file, data model and measures are in place. The Signal Leaderboard page is built and checked. Patient Demographics and Case Outcomes are next. The table at the bottom shows what is done.
+> **Status: built.** The project file, data model, measures and all three pages are done, and their counts were checked in Power BI against the Gold tables (2026Q1). The table at the bottom shows what is done.
 
 ## What the dashboard shows
 
 | Page | Source table | What it answers |
 |---|---|---|
 | **Signal Leaderboard** | `gold_signals` | Which `SIGNAL` drug–reaction pairs have the most reports (PRR only breaks ties), plus a separate panel for pairs where every report of the event names this drug |
-| **Patient Demographics** | `gold_demographics` | Who the reports describe: age group, sex, top 10 reporter countries (`EU` and unspecified excluded) |
+| **Patient Demographics** | `gold_demographics` | Who the reports describe: age group, gender, top 10 reporter countries (`EU` and unspecified excluded) |
 | **Case Outcomes** | `gold_outcomes` | What happened in the reported cases and who reported them |
 
 Signals are binary: `SIGNAL` or `NO SIGNAL` (Evans criteria: n ≥ 3, PRR ≥ 2.0 and Yates chi-square ≥ 4.0). There is no "weak signal" tier.
@@ -113,7 +113,7 @@ Light background with a pastel palette: `#9ADBCC`, `#C7F2D1`, `#E3FFD6`, `#FFFBF
 | Three tables loaded with types | Done |
 | Measures defined | Done (including `Rank` and the `_TEXT` label measures) |
 | `is_exclusive` column | Done |
-| `is_country` column on `gold_demographics` | Not yet added. The Top 10 countries chart needs it (D11) |
+| `is_country` column on `gold_demographics` | Done. The Top 10 countries chart uses it (D11) |
 | Theme and page header | Done (header band, page navigator) |
 | Signal Leaderboard page | Done: top 10 leaderboard, six KPI cards, Exclusive reports panel (106 pairs), note, page navigator |
 | Patient Demographics page | Done: age group bar, gender donut, top 10 reporter countries |

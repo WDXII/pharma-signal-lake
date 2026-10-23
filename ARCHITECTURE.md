@@ -1,10 +1,13 @@
 # ARCHITECTURE.md
 
 **Project:** PharmaSignalLake  
-**Version:** 1.2  
-**Date:** May 2026 (Revised 2026-10-05)  
+**Version:** 1.3  
+**Date:** May 2026 (Revised 2026-10-23)  
 **Stack:** Databricks Free Edition · PySpark · Delta Lake · Power BI Desktop
 
+> **Revision 1.3** — Duplicate sections replaced by pointers: the repository file tree now lives in the README,
+> and the key-code tables now live in `docs/data_dictionary.md` (sections 4.1 to 4.5). Section numbers are unchanged.
+>
 > **Revision 1.2** — Dashboard section aligned to D8 (main leaderboard = `SIGNAL` AND NOT `is_exclusive`;
 > separate "Exclusive reports" panel); repository tree now lists `sql/` and `validation_queries.sql`; D8/D9 added to the design-decisions table; new-quarter wording no longer claims
 > append behavior (verified on 2026Q1 only).
@@ -184,40 +187,7 @@ FDA FAERS ZIP (public download)
 
 ### GitHub Repository Structure
 
-```
-pharma-signal-lake/
-├── README.md
-├── BRD.md
-├── ARCHITECTURE.md
-├── SETUP.md
-├── DEVELOPER.md              ← Dev environment notes and known issues
-├── DECISIONS.md              ← Architecture and correctness decisions, as made
-├── databricks.yml            ← Databricks Asset Bundle config (sync target + workspace host)
-├── notebooks/
-│   ├── 00_config.py
-│   ├── 01_bronze_ingest.py
-│   ├── 02_silver_clean.py
-│   ├── 03_gold_signals.py
-│   ├── 04_export.py
-│   ├── 05_profile.py        ← Read-only: before/after profiling (not part of 99_run_pipeline)
-│   ├── 06_validate_fix.py   ← Read-only: independent signal-correctness validation
-│   ├── 99_run_pipeline.py
-│   └── validation_queries.sql
-├── src/
-│   └── signal_math.py       ← Pure PRR/ROR/chi_sq/dedup functions, unit-testable
-├── sql/
-│   ├── verify_signal_fix.sql           ← Independent verification (read-only for the assistant, D6)
-│   └── case_review_rescued_signals.sql ← Manual case-level review of rescued signals (D9)
-├── tests/
-│   ├── conftest.py
-│   ├── test_signals.py
-│   └── run_unit_tests.py
-├── docs/
-│   ├── data_dictionary.md
-│   └── validation-results.md
-└── powerbi/
-    └── PharmaSignals.pbip        ← Power BI project (text files; see powerbi/README.md)
-```
+The repository file tree is in the README: [Repository Structure](README.md#repository-structure).
 
 ---
 
@@ -469,67 +439,13 @@ At the end of the run the notebook prints a stage / start_utc / end_utc / durati
 
 ## 13. Data Dictionary
 
-### Key Codes and Their Meanings
-
-**DRUG.role_cod**
-
-| Code | Meaning |
-|------|---------|
-| PS | Primary Suspect — the drug most likely associated with the adverse event |
-| SS | Secondary Suspect |
-| C | Concomitant — taken at the same time but not suspected |
-| I | Interacting — suspected drug interaction |
-
-**OUTC.outc_cod**
-
-| Code | Meaning |
-|------|---------|
-| DE | Death |
-| LT | Life-Threatening |
-| HO | Hospitalization — Initial or Prolonged |
-| DS | Disability |
-| CA | Congenital Anomaly |
-| RI | Required Intervention to Prevent Permanent Impairment |
-| OT | Other Serious |
-
-**RPSR.rpsr_cod**
-
-| Code | Meaning |
-|------|---------|
-| HP | Healthcare Professional |
-| CSM | Consumer |
-| FGN | Foreign |
-| LIT | Literature |
-| UF | User Facility |
-| DDR | Drug Distributor |
-
-**DEMO.occp_cod**
-
-| Code | Meaning |
-|------|---------|
-| MD | Physician |
-| PH | Pharmacist |
-| HP | Other Healthcare Professional |
-| LW | Lawyer |
-| CN | Consumer |
-| OT | Other |
-
-**DEMO.age_cod**
-
-| Code | Meaning |
-|------|---------|
-| YR | Years |
-| MON | Months |
-| WK | Weeks |
-| DY | Days |
-| HR | Hours |
-| DEC | Decades |
+Code tables for `DRUG.role_cod`, `OUTC.outc_cod`, `RPSR.rpsr_cod`, `DEMO.occp_cod` and `DEMO.age_cod` are in [docs/data_dictionary.md](docs/data_dictionary.md), sections 4.1 to 4.5.
 
 ---
 
 ## 14. Design Decisions and Why
 
-These rationales are worth memorizing — they are real interview questions.
+These are the main design choices and the reason for each.
 
 | Decision | Why |
 |----------|-----|
@@ -576,4 +492,4 @@ results are recorded in [docs/validation-results.md](docs/validation-results.md)
 
 ---
 
-*End of ARCHITECTURE.md — Version 1.2 — PharmaSignalLake*
+*End of ARCHITECTURE.md — Version 1.3 — PharmaSignalLake*
