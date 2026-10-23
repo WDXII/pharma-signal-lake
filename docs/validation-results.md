@@ -195,8 +195,10 @@ Two exclusive pairs outside the top ten by χ² were checked at case level with 
 
 | Drug | Reaction (PT) | n | χ² | Fingerprints | Senders | Lit. | Case-level evidence (data facts only) | Final group (Will) |
 |------|---------------|---|----|--------------|---------|------|---------------------------------------|--------------------|
-| DUPIXENT | REBOUND ECZEMA | 58 | 641.7006 | 52 | 2 | 0 | See combined listing below | TODO (Will) |
-| DUPIXENT | REBOUND ATOPIC DERMATITIS | 39 | 427.4938 | 35 | 1 | 0 | See combined listing below | TODO (Will) |
+| DUPIXENT | REBOUND ECZEMA | 58 | 641.7006 | 52 | 2 | 0 | See combined listing below | Confounding by indication |
+| DUPIXENT | REBOUND ATOPIC DERMATITIS | 39 | 427.4938 | 35 | 1 | 0 | See combined listing below | Confounding by indication |
+
+Rebound after stopping treatment is consistent with recurrence of the treated condition. The label (read 2026-10-21) does not list it, and a dechallenge check has not been run.
 
 **Combined P2 listing (97 reports):** 97 distinct `primaryid`; no `caseid` is shared between the two pairs. 54 of the 97 `event_dt` values end in 0101 (year-only dates), and every fingerprint collapse is explained by missing fields or year-only event dates, so no duplicates are evident. 96 reports are from SANOFI AVENTIS and 1 from SANOFI PASTEUR. Reporters are mostly HP and MD, with 3 consumers and no lawyers. Label search: see A.10.
 
